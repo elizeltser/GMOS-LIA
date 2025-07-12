@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "GMOS_LIA_Setup"
+version = "0.0.1"
+description = "Setup to control and test GMOS gas sensor"
+authors = [
+  { name = "Eli Zeltser", email = "elizeltser97@gmail.com" }
+]
+readme = "README.rst"
+requires-python = ">=3.8"
+
+dependencies = [
+  "pyvisa",
+  "numpy",
+  "matplotlib",
+  "pytest"
+]
+
+[project.scripts]
+LIATesterCLI = "GMOS_LIA.entry_points:cli"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]

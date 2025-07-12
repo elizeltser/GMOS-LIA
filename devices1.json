@@ -1,0 +1,5 @@
+{
+  "Drain SMU": "GPIB0::22::INSTR",
+  "Heater SMU": "GPIB0::23::INSTR",
+  "LIA": "GPIB0::4::INSTR"
+}

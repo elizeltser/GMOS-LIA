@@ -1,0 +1,8 @@
+{
+  "Required SMU" 	: "Heater SMU",
+  "sweep type" 		: "linear",
+  "output list" 	: [0, 5, 0.1],
+  "compliance"		: 10e-3,
+  "output mode"		: "VOLT",
+  "default sleep" 	: 0.2
+}
