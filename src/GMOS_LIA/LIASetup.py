@@ -10,7 +10,6 @@ from GMOS_LIA.LabDevices import *
 class BaseSetup():
     _project_dir = os.path.join(os.getcwd(), "..")
     _measuremet_results_dir = os.path.join(_project_dir, "measuremet_results")
-    _devices = {}
     
     def __init__(self, res_man):
         self.res_man = res_man
@@ -18,6 +17,7 @@ class BaseSetup():
         self._result_file = None
         self._start_time = timestr = time.strftime("%Y%m%d-%H%M%S")
         self._o_list = None
+        self._devices = {}
         
         with open("setup_3T.json", 'r') as file:
             setup = json.load(file)
@@ -37,23 +37,47 @@ class BaseSetup():
                 raise Exception("Not all devices are connected")
             self._tester_info = setup[setup["tester name"]]
     
+    @classmethod
+    def genResultFileName(cls):
+        result_index = 0
+        while True:
+            if result_index == 0:
+                yield cls.__name__
+            else:
+                yield f"{cls.__name__}_{result_index}"
+            result_index += 1
+    
     @staticmethod
     def setup_fixture(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-            print(kwargs)
+            tester_name = self.__class__.__name__
+            self._results_dir = os.path.join(self._measuremet_results_dir, tester_name, self._start_time)
             
             if "filename" in kwargs:
                 filename = kwargs["filename"]
-                if "abspath" in kwargs and kwargs["abspath"] == True:
-                    self._result_file = filename
+                if ("abspath" in kwargs) and (kwargs["abspath"] == True):
+                    sep_index = filename.rfind(os.sep)
+                    if sep_index != -1:
+                        self._result_file = filename
+                        self._results_dir, _ = filename[:sep_index-1]
+                    else:
+                        raise Exception("Invalid absolute path filename given")
                 else:
-                    self._result_file = os.path.join(self._results_dir, filename)
+                    if wrapper.result_file_idx == 0:
+                        self.__class__.__name__
+                    else:
+                        f"{self.__class__.__name__}_{result_index}"
+                    self._result_file = os.path.join(self._results_dir, filename) ##not working yet
+            else:
+                cls = self.__class__
+                filename_generator = cls.genResultFileName()
+                self._result_file = os.path.join(self._results_dir, next(filename_generator))
                 
-            os.makedirs(self._result_file, exist_ok=True)
-            
-            result = func(self, *args, **kwargs)
-            return result
+            os.makedirs(self._results_dir, exist_ok=True)
+            wrapper.result_file_idx += 1
+            return func(self, *args, **kwargs)
+        wrapper.result_file_idx = 0
         return wrapper
         
     #def getOutputs(self, ):
@@ -94,7 +118,8 @@ class BaseSetup():
         raise NotImplementedError
         
     def __exit__(self, exc_type, exc_val, exc_tb):
-        raise NotImplementedError
+        for device in self._devices.values():
+            device.setOff()
     
     def execute(self, *args, **kwargs):
         raise NotImplementedError
@@ -134,9 +159,6 @@ class IVTester(BaseSetup):
         
         self.smu.setOutputFloating()
         return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.smu.setOff()
         
     def setOutput(self, out):
         if self._mode == "VOLT":
@@ -146,14 +168,8 @@ class IVTester(BaseSetup):
         else:
             raise Exception(f"Output mode not supported: {self._mode}")
     
+    @BaseSetup.setup_fixture
     def execute(self, filename : str = None, output_list : np.ndarray = None):
-        if filename != None:
-            if abspath:
-                res_file = filename
-            else:
-                res_file = os.path.join(self._results_dir, filename)
-        else:
-            res_file = self._results_file
             
         if output_list != None:
             o_list = output_list
@@ -171,7 +187,7 @@ class IVTester(BaseSetup):
                 [V_meas, I_meas] = self.smu.getMeasurement()
                 writer.writerow([O_set, V_meas, I_meas])
         
-class Tester3T(BaseSetup):
+class ThreeTTester(BaseSetup):
     def __init__(self, res_man):
         super().__init__(res_man)
         self._heater_icomp  = self._tester_info["heater Icomp"]
@@ -198,11 +214,6 @@ class Tester3T(BaseSetup):
         self.drain.setFunctionCurrentFixed()
         self.drain.setVoltageCompliance(self._drain_vcomp)
         return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.heater.setOff()
-        self.drain.setOff()
-        self.lia.setOff()
     
     @BaseSetup.setup_fixture
     def execute(self, frequency : float = None,amplitude : float = None, offset : float = None, filename : str = None, abspath=False, output_list : np.ndarray = None):
@@ -210,7 +221,7 @@ class Tester3T(BaseSetup):
         if output_list is not None:
             o_list = output_list
         else:
-            o_list = np.arange(self._gate_sweep)
+            o_list = np.arange(*self._gate_sweep)
         
         if frequency is not None:
             self._lia_frequency = frequency
@@ -231,7 +242,7 @@ class Tester3T(BaseSetup):
         self.heater.setOn()
         time.sleep(self._heater_sleep)
         
-        with open(f"{res_file}.csv", 'w', newline='') as file:
+        with open(f"{self._result_file}.csv", 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Heater [V]", "LIA.X [V]", "LIA.R [V]"])
             for hv in o_list:

@@ -14,12 +14,12 @@
 		"heater Icomp"		: 100e-3,
 		"drain Vcomp"		: 2.5,
 		"drain Idc"			: 1e-6,
-		"heater sleep" 		: 5,
+		"heater sleep" 		: 0,
 		"lia frequency"		: 200,
 		"lia amplitude"		: 20e-3,
 		"lia offset"		: 800e-3,
 		"gate sweep"		: [90e-3, 120e-3, 10e-3],
-		"default sleep" 	: 0.2
+		"default sleep" 	: 0
 	},
 	
 	"2D printer" :

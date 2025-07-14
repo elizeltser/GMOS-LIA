@@ -4,7 +4,7 @@ import os
 from itertools import product
 from pyvisa import ResourceManager
 from GMOS_LIA.LabDevices import SMU, LIA
-from GMOS_LIA.LIASetup import IVTester, Tester3T
+from GMOS_LIA.LIASetup import IVTester, ThreeTTester
 
 def resource_manager(func):
     def wrapper(*args):
@@ -17,7 +17,7 @@ def resource_manager(func):
 
 @resource_manager
 def GMOS_3T_NOCATALIST(visa_manager):
-    with Tester3T(visa_manager) as t3t:
+    with ThreeTTester(visa_manager) as t3t:
         freq_list   = [200, 500, 800,1e3]
         amp_list    = [20e-3, 50e-3, 80e-3, 100e-3]
         off_list    = [800e-3, 900e-3, 1, 1.1]

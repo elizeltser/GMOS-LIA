@@ -105,7 +105,3 @@ class SMU(Instrument):
     def setOutputFloating(self):
         """ Set SMU output to floating when off """
         self.inst.write("OUTP:LOW FLO")
-    
-    def __del__(self):
-        self.setOff()
-        super().__del__()

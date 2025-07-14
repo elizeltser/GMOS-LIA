@@ -20,6 +20,10 @@ class MockLIA(BaseMocker):
         self.amplitude = 0.0
         self.offset = 0.0
         self.channel_functions.clear()
+        self.X = 1
+        self.Y = 2
+        self.R = 3
+        self.theta = 4
 
     @scpi("*CLS")
     def clear(self) -> None:
@@ -41,6 +45,10 @@ class MockLIA(BaseMocker):
     def set_offset(self, offset: float) -> None:
         self.offset = offset
 
+    @scpi("SNAPD?")
+    def  get_all_measurments(self) -> str:
+        return f"{self.X}, {self.Y}, {self.R}, {self.theta}"
+        
     @scpi("APHS")
     def auto_phase(self) -> str:
         return "0"  # dummy response
