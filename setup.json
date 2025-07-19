@@ -1,11 +1,9 @@
 {
-	"tester name"			: "ThreeTTester",
 	"IVTester" :
 	{
 		"sweep type" 		: "linear",
-		"smu sweep" 		: [0, 5, 0.1],
+		"smu voltage" 		: [0, 5, 0.1],
 		"compliance"		: 10e-3,
-		"output mode"		: "VOLT",
 		"default sleep" 	: 0.2
 	},
 	

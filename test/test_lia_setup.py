@@ -13,9 +13,10 @@ def test_lia_wrapper(resource_manager):
 def test_smu_init(resource_manager):
     smu = SMU(resource_manager, "MOCK0::SMU::INSTR", "test SMU")
     
-#def test_ivtester_init(resource_manager):
-#    with IVTester(resource_manager) as iv_tester:
-#        iv_tester.perform_measurements()
+def test_ivtester_init(resource_manager):
+    with IVTester(resource_manager) as iv_tester:
+        iv_tester.perform_measurements()
+
 @pytest.mark.parametrize("heater_voltage, frequency, amplitude, offset",
     [(1, 2, 3, [4,6,1]),
     (None, 2, [5,7,1], 3)])

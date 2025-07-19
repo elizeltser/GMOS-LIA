@@ -81,7 +81,8 @@ class BaseSetup():
             raise Exception("Not all devices are connected")
         
         self._sleep_time    = setup["default sleep"]
-        self._tester_info   = setup[setup["tester name"]]
+        tester_name = self.__class__.__name__
+        self._tester_info   = setup[tester_name]
         for key, value in self._tester_info.items():
             setattr(self, f"_{key.replace(' ','_')}", value)
             
@@ -136,7 +137,7 @@ class BaseSetup():
         self._csv_writer.writerow(measurment)
     
     def __enter__(self):
-        raise NotImplementedError
+        os.makedirs(self._results_dir, exist_ok=True)
         
     def __exit__(self, exc_type, exc_val, exc_tb):
         for device in self._devices.values():
@@ -151,66 +152,28 @@ class BaseSetup():
         
 class IVTester(BaseSetup):
     def __init__(self, res_man):
-        super().__init__(res_man)
-        self._o_list_def     = self._tester_info["output list"]
-        self._compliance     = self._tester_info["compliance"]
-        self._mode           = self._tester_info["output mode"]
-        self._sleep_time     = self._tester_info["default sleep"]
-        self._sweep_type     = self._tester_info["sweep type"]
+        tester_parameter_dict = {
+            "smu_voltage"    : "smu voltage"
+        }
+        super().__init__(res_man, tester_parameter_dict)
+        self.smu = self._devices["Heater SMU"]
 
     def __enter__(self):
-        self._results_dir = os.path.join(self._measuremet_results_dir, "IVTester", self._start_time)
-        os.makedirs(self._results_dir, exist_ok=True)
-        self._result_file = os.path.join(self._results_dir, "IV")
-        
-        if self._sweep_type == "linear":
-            self.O_list = np.arange(*self._o_list_def)
-            
-        elif self._sweep_type == "log":
-            O_list = np.logspace(*self._o_list_def)
-            
-        else:
-            raise Exception(f"Invalid sweep time selected {self._sweep_type}")
-        
-        if self._mode == "VOLT":
-            self.smu.setFunctionVoltageFixed()
-            self.smu.setCurrentCompliance(self._compliance)
-            
-        elif self._mode == "CURR":
-            self.smu.setFunctionCurrentFixed()
-            self.smu.setVoltageCompliance(self._compliance)
-        else:
-            raise Exception(f"Invalid output mode selected {self._mode}")
-        
-        self.smu.setOutputFloating()
+        super().__enter__()
+        self.smu.setFunctionVoltageFixed()
+        self.smu.setCurrentCompliance(self._compliance)
         return self
         
     def setOutput(self, out):
-        if self._mode == "VOLT":
-            self.smu.setVoltage(out)
-        elif self._mode == "CURR":
-            self.smu.setCurrent(out)
-        else:
-            raise Exception(f"Output mode not supported: {self._mode}")
+        self.smu.setVoltage(out)
     
     @BaseSetup.setup_fixture
-    def execute(self, filename : str = None, output_list : np.ndarray = None):
-            
-        if output_list != None:
-            o_list = output_list
-        else:
-            o_list = self.O_list
-            
-        self.smu.setOn()
-        
-        with open(f"{res_file}.csv", 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([f"Set {self._mode}","V (V)" , "I (A)"])
-            for O_set in o_list:
-                self.setOutput(O_set)
-                time.sleep(self._sleep_time)
-                [V_meas, I_meas] = self.smu.getMeasurement()
-                writer.writerow([O_set, V_meas, I_meas])
+    def perform_measurements(self, smu_voltage = None, filename:str = None, abspath:bool = False):
+        for v_out in self._smu_voltage:
+            self.setOutput(v_out)
+            time.sleep(self._sleep_time)
+            [V_meas, I_meas] = self.smu.getMeasurement()
+            self.record_measurement([v_out, V_meas, I_meas])
         
 class ThreeTTester(BaseSetup):
     def __init__(self, res_man):
@@ -229,7 +192,7 @@ class ThreeTTester(BaseSetup):
         self.lia                = self._devices["LIA"]
             
     def __enter__(self):
-        os.makedirs(self._results_dir, exist_ok=True)
+        super().__enter__()
         self.heater.setFunctionVoltageFixed()
         self.heater.setCurrentCompliance(self._heater_Icomp)
         self.drain.setFunctionCurrentFixed()

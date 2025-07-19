@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "GMOS_LIA_Setup"
-version = "0.0.1"
+version = "0.0.5"
 description = "Setup to control and test GMOS gas sensor"
 authors = [
   { name = "Eli Zeltser", email = "elizeltser97@gmail.com" }
