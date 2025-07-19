@@ -1,8 +1,0 @@
-{
-	"address dictionary" :
-		{
-			"Drain SMU": "MOCK0::SMU::INSTR",
-			"Heater SMU": "MOCK1::SMU::INSTR",
-			"LIA": "MOCK0::LIA::INSTR"
-		}
-}

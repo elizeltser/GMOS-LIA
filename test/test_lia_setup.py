@@ -15,8 +15,14 @@ def test_smu_init(resource_manager):
     
 #def test_ivtester_init(resource_manager):
 #    with IVTester(resource_manager) as iv_tester:
-#        iv_tester.execute()
-    
-def test_GMOS_fixture(resource_manager):
+#        iv_tester.perform_measurements()
+@pytest.mark.parametrize("heater_voltage, frequency, amplitude, offset",
+    [(1, 2, 3, [4,6,1]),
+    (None, 2, [5,7,1], 3)])
+def test_ThreeTTester(resource_manager, heater_voltage, frequency, amplitude, offset):
     with ThreeTTester(resource_manager) as t3t:
-        t3t.execute()
+        t3t.perform_measurements(
+                    heater_voltage=heater_voltage,
+                    lia_frequency=frequency,
+                    lia_amplitude=amplitude,
+                    lia_offset=offset)

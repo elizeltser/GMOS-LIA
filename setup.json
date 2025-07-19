@@ -1,8 +1,61 @@
 {
-  "Required SMU" 	: "Heater SMU",
-  "sweep type" 		: "linear",
-  "output list" 	: [0, 5, 0.1],
-  "compliance"		: 10e-3,
-  "output mode"		: "VOLT",
-  "default sleep" 	: 0.2
+	"tester name"			: "ThreeTTester",
+	"IVTester" :
+	{
+		"sweep type" 		: "linear",
+		"smu sweep" 		: [0, 5, 0.1],
+		"compliance"		: 10e-3,
+		"output mode"		: "VOLT",
+		"default sleep" 	: 0.2
+	},
+	
+	"ThreeTTester" :
+	{
+		"heater Icomp"		: 100e-3,
+		"drain Vcomp"		: 2.5,
+		"drain Idc"			: 1e-6,
+		"heater sleep" 		: 2,
+		"lia frequency"		: 1e3,
+		"heater voltage" 	: 3.5,
+		"lia amplitude"		: 50e-3,
+		"lia offset"		: [800e-3, 1.2, 10e-3],
+		"sweep type"		: "linear"
+	},
+	
+	"default sleep" 		: 500e-3,
+	"plotter"				: "plot_2d",
+	
+	"plot_2d" :
+	{
+		"X column index"	: 0,
+		"Y column index"	: 2,
+		"X label"			: "Vgate [V]",
+		"Y label"			: "LIA.R [V]",
+		"X scale"			: "linear",
+		"Y scale"			: "linear",
+		"Plot title"		: "3T no catalist"
+	},
+	
+	"required devices" :
+	[
+		"Drain SMU",
+		"Heater SMU",
+		"LIA"
+	],
+	
+	"connected devices" 	: "Mock devices",
+	
+	"Setup devices" :
+	{
+		"Drain SMU"		: "GPIB0::22::INSTR",
+		"Heater SMU"	: "GPIB0::23::INSTR",
+		"LIA"			: "GPIB0::4::INSTR"
+	},
+	
+	"Mock devices" :
+	{
+		"Drain SMU"		: "MOCK0::SMU::INSTR",
+		"Heater SMU"	: "MOCK1::SMU::INSTR",
+		"LIA"			: "MOCK0::LIA::INSTR"
+	}	
 }

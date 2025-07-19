@@ -1,137 +1,162 @@
+import os
 import csv
 import json
 import time
+from itertools import product
 from functools import wraps
 import numpy as np
-import matplotlib.pyplot as plt
-import os
+from pyvisa import ResourceManager
 from GMOS_LIA.LabDevices import *
+from GMOS_LIA.ResultPlotter import Plotter
 
 class BaseSetup():
     _project_dir = os.path.join(os.getcwd(), "..")
-    _measuremet_results_dir = os.path.join(_project_dir, "measuremet_results")
+    _measurement_results_dir = os.path.join(_project_dir, "measuremet_results")
     
-    def __init__(self, res_man):
-        self.res_man = res_man
-        self._results_dir = None
-        self._result_file = None
+    def __init__(self, res_man:ResourceManager, test_param_dict: dict):
+        self._res_man = res_man
+        tester_name = self.__class__.__name__
         self._start_time = timestr = time.strftime("%Y%m%d-%H%M%S")
-        self._o_list = None
+        self._results_dir = os.path.join(
+                        self._measurement_results_dir,
+                        tester_name,
+                        self._start_time)
+        self._result_file = None
         self._devices = {}
-        
-        with open("setup_3T.json", 'r') as file:
+        with open("setup.json", 'r') as file:
             setup = json.load(file)
-            connected_devices = setup[setup["connected devices"]]
-            required_devices = setup["required devices"]
-            
-            for dev in required_devices:
-                dev_address = connected_devices[dev]
-                if "SMU" in dev:
-                    self._devices[dev] = SMU(self.res_man, dev_address, dev)
-                elif "LIA" in dev:
-                    self._devices[dev] = LIA(self.res_man, dev_address, dev)
-                else:
-                    raise NotImplementedError(f"Unsupported device name {dev}")
-    
-            if len(self._devices) != len(required_devices):
-                raise Exception("Not all devices are connected")
-            self._tester_info = setup[setup["tester name"]]
+            self.initialize_tester_info(setup, test_param_dict)
     
     @classmethod
-    def genResultFileName(cls):
+    def genResultFileName(cls, filename: str = None):
         result_index = 0
+        if filename is not None:
+            new_filename = filename
+        else:
+            new_filename = cls.__name__
         while True:
             if result_index == 0:
-                yield cls.__name__
+                yield new_filename
             else:
-                yield f"{cls.__name__}_{result_index}"
+                yield f"{new_filename}_{result_index}"
             result_index += 1
     
     @staticmethod
     def setup_fixture(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-            tester_name = self.__class__.__name__
-            self._results_dir = os.path.join(self._measuremet_results_dir, tester_name, self._start_time)
-            
-            if "filename" in kwargs:
-                filename = kwargs["filename"]
-                if ("abspath" in kwargs) and (kwargs["abspath"] == True):
-                    sep_index = filename.rfind(os.sep)
-                    if sep_index != -1:
-                        self._result_file = filename
-                        self._results_dir, _ = filename[:sep_index-1]
-                    else:
-                        raise Exception("Invalid absolute path filename given")
-                else:
-                    if wrapper.result_file_idx == 0:
-                        self.__class__.__name__
-                    else:
-                        f"{self.__class__.__name__}_{result_index}"
-                    self._result_file = os.path.join(self._results_dir, filename) ##not working yet
-            else:
-                cls = self.__class__
-                filename_generator = cls.genResultFileName()
-                self._result_file = os.path.join(self._results_dir, next(filename_generator))
-                
-            os.makedirs(self._results_dir, exist_ok=True)
-            wrapper.result_file_idx += 1
-            return func(self, *args, **kwargs)
-        wrapper.result_file_idx = 0
+            self.update_sweep_parameters(kwargs)
+            with self.prepare_result_file(
+                filename=kwargs.get("filename"),
+                abspath=kwargs.get("abspath", False)
+            ) as file:
+                self._csv_writer = csv.writer(file)
+                return func(self, *args, **kwargs)
         return wrapper
         
-    #def getOutputs(self, ):
-    
-    def plot_2d(self, filename : str = None, abspath=False):
-        if filename != None:
-            if abspath:
-                res_file_path = filename
-            else:
-                res_file_path = os.path.join(self._results_dir, filename)
-        else:
-            res_file_path = self._result_file
-            
-        with open(f"{res_file_path}.csv", 'r') as file:
-            reader = csv.reader(file)
-            header = next(reader)
-            header = [h.strip() for h in header]
-            Xcol_idx = header.index('Heater [V]')
-            Ycol_idx = header.index('LIA.R [V]')
-            data = []
-            for row in reader:
-                y_data = float(row[Ycol_idx])
-                x_data = float(row[Xcol_idx])
-                data.append((y_data,x_data))
-                
-        [Y, X] = list(zip(*data))
-        fig, ax = plt.subplots()
-        ax.plot(X, Y, marker='o')
-        #ax.set_yscale('log')
-        plt.title(file_title)
-        plt.xlabel('Heater [V]')
-        plt.ylabel('LIA.R [V]')
-        plt.grid(True)
-        plt.savefig(f"{res_file_path}.png")
-        plt.close()
+    def prepare_result_file(self, filename: str = None, abspath: bool = False):
+        self.result_file = (filename, abspath)
+        return open(f"{self._result_file}.csv", 'w', newline='')
 
+    def update_sweep_parameters(self, parameters):
+        for name, value in parameters.items():
+            if name == "filename" or name == "abspath":
+                continue
+            elif value is not None:
+                self.set_variable_parameter(value, name)
+    
+    def initialize_tester_info(self, setup, test_param_dict):
+        connected_devices = setup[setup["connected devices"]]
+        required_devices = setup["required devices"]
+        for dev in required_devices:
+            dev_address = connected_devices[dev]
+            if "SMU" in dev:
+                self._devices[dev] = SMU(self._res_man, dev_address, dev)
+            elif "LIA" in dev:
+                self._devices[dev] = LIA(self._res_man, dev_address, dev)
+            else:
+                raise NotImplementedError(f"Unsupported device name {dev}")
+
+        if len(self._devices) != len(required_devices):
+            raise Exception("Not all devices are connected")
+        
+        self._sleep_time    = setup["default sleep"]
+        self._tester_info   = setup[setup["tester name"]]
+        for key, value in self._tester_info.items():
+            setattr(self, f"_{key.replace(' ','_')}", value)
+            
+        for name, param in test_param_dict.items():
+            value = self._tester_info[param]
+            self.set_variable_parameter(value, name)
+                    
+        plot_settings = setup["plotter"]
+        self._plotter = Plotter(self._results_dir, plot_settings)
+    
+    def set_variable_parameter(self, value, param_name):
+        sweep_type = self._tester_info["sweep type"]
+        if not isinstance(value, list):
+            value = [value]     # ensure iterable for product()
+            setattr(self, f"_{param_name}", value)
+        else:
+            if sweep_type == "linear":
+                setattr(self, f"_{param_name}", np.arange(*value))
+            elif sweep_type == "log":
+                setattr(self, f"_{param_name}", np.logspace(*value))
+            else:
+                raise Exception(f"Invalid sweep type {sweep_type}")
+    
+    @property
+    def result_file(self) -> str:
+        return self._result_file
+    
+    @result_file.setter
+    def result_file(self, filename_and_abspath:tuple):
+        cls = self.__class__
+        filename, abspath = filename_and_abspath
+        if filename is not None:
+            if abspath is not None and abspath == True:
+                sep_index = filename.rfind(os.sep)
+                if sep_index != -1:
+                    self._results_dir, _ = filename[:sep_index-1]
+                    filename, _          = filename[sep_index+1:]
+                    result_file_name = next(cls.genResultFileName(filename))
+                else:
+                    raise Exception("Invalid absolute path filename given")
+            else:
+                result_file_name = filename
+        else:
+            result_file_name = next(cls.genResultFileName())
+        self._result_file = os.path.join(self._results_dir, result_file_name)
+    
+    @property
+    def results_directory(self) -> str:
+        return self._results_dir
+
+    def record_measurement(self, measurment):
+        self._csv_writer.writerow(measurment)
+    
     def __enter__(self):
         raise NotImplementedError
         
     def __exit__(self, exc_type, exc_val, exc_tb):
         for device in self._devices.values():
             device.setOff()
+        try:
+            os.rmdir(self._results_dir)
+        except OSError:
+            pass
     
     def execute(self, *args, **kwargs):
         raise NotImplementedError
         
 class IVTester(BaseSetup):
     def __init__(self, res_man):
-        ivtester_info = super().__init__(res_man)
-        self._o_list_def     = ivtester_info["output list"]
-        self._compliance     = ivtester_info["compliance"]
-        self._mode           = ivtester_info["output mode"]
-        self._sleep_time     = ivtester_info["default sleep"]
-        self._sweep_type     = ivtester_info["sweep type"]
+        super().__init__(res_man)
+        self._o_list_def     = self._tester_info["output list"]
+        self._compliance     = self._tester_info["compliance"]
+        self._mode           = self._tester_info["output mode"]
+        self._sleep_time     = self._tester_info["default sleep"]
+        self._sweep_type     = self._tester_info["sweep type"]
 
     def __enter__(self):
         self._results_dir = os.path.join(self._measuremet_results_dir, "IVTester", self._start_time)
@@ -189,65 +214,47 @@ class IVTester(BaseSetup):
         
 class ThreeTTester(BaseSetup):
     def __init__(self, res_man):
-        super().__init__(res_man)
-        self._heater_icomp  = self._tester_info["heater Icomp"]
-        self._drain_vcomp   = self._tester_info["drain Vcomp"]
-        self._drain_idc     = self._tester_info["drain Idc"]
-        self._heater_sleep  = self._tester_info["heater sleep"]
-        self._lia_frequency = self._tester_info["lia frequency"]
-        self._lia_amplitude = self._tester_info["lia amplitude"]
-        self._lia_offset    = self._tester_info["lia offset"]
-        self._gate_sweep     = self._tester_info["gate sweep"]
-        
-        self._sleep_time    = self._tester_info["default sleep"]
-        
-        self.heater         = self._devices["Heater SMU"]
-        self.drain          = self._devices["Drain SMU"]
-        self.lia            = self._devices["LIA"]
+        tester_parameter_dict = {
+            #"heater_Icomp"      : "heater Icomp",
+            #"drain_Vcomp"       : "drain Vcomp",
+            #"drain_Idc"         : "drain Idc",
+            "heater_voltage"    : "heater voltage",
+            "lia_frequency"     : "lia frequency",
+            "lia_amplitude"     : "lia amplitude",
+            "lia_offset"        : "lia offset"
+        }
+        super().__init__(res_man, tester_parameter_dict)
+        self.heater             = self._devices["Heater SMU"]
+        self.drain              = self._devices["Drain SMU"]
+        self.lia                = self._devices["LIA"]
             
     def __enter__(self):
-        self._results_dir = os.path.join(self._measuremet_results_dir, "Tester3T", self._start_time)
-        
+        os.makedirs(self._results_dir, exist_ok=True)
         self.heater.setFunctionVoltageFixed()
-        self.heater.setCurrentCompliance(self._heater_icomp)
-    
+        self.heater.setCurrentCompliance(self._heater_Icomp)
         self.drain.setFunctionCurrentFixed()
-        self.drain.setVoltageCompliance(self._drain_vcomp)
+        self.drain.setVoltageCompliance(self._drain_Vcomp)
         return self
     
+    def setOutput(self, heater_voltage:float ,frequency:float, amplitude:float, offset:float):
+        self.heater.setVoltage(heater_voltage)
+        self.lia.setOutputFrequency(frequency)
+        self.lia.setOutputAmplitude(amplitude)
+        self.lia.setOutputOffset(offset)
+        self.drain.setCurrent(self._drain_Idc)
+    
     @BaseSetup.setup_fixture
-    def execute(self, frequency : float = None,amplitude : float = None, offset : float = None, filename : str = None, abspath=False, output_list : np.ndarray = None):
-        
-        if output_list is not None:
-            o_list = output_list
-        else:
-            o_list = np.arange(*self._gate_sweep)
-        
-        if frequency is not None:
-            self._lia_frequency = frequency
-            
-        if amplitude is not None:
-            self._lia_amplitude = amplitude
-            
-        if offset is not None:
-            self._lia_offset = offset
-        
-        self.lia.setOutputFrequency(self._lia_frequency)
-        self.lia.setOutputAmplitude(self._lia_amplitude)
-        self.lia.setOutputOffset(self._lia_offset)
-        
-        self.drain.setCurrent(self._drain_idc)
-        self.drain.setOn()
-        
-        self.heater.setOn()
+    def perform_measurements(self, heater_voltage = None ,lia_frequency = None, lia_amplitude = None, lia_offset = None, filename: str = None, abspath: bool = False):        
+        for hv, f, amp, off in product(self._heater_voltage, self._lia_frequency, self._lia_amplitude, self._lia_offset):
+            self.setOutput(hv, f, amp, off)
+            time.sleep(self._sleep_time)
+            lia_meas = self.lia.getLIAMeasurment()
+            self.record_measurement([hv, lia_meas.X ,lia_meas.R])
         time.sleep(self._heater_sleep)
-        
-        with open(f"{self._result_file}.csv", 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Heater [V]", "LIA.X [V]", "LIA.R [V]"])
-            for hv in o_list:
-                self.heater.setVoltage(hv)
-                time.sleep(self._sleep_time)
-                lia_meas = self.lia.getLIAMeasurment()
-                print(f"heater = {hv}, liaX = {lia_meas.X}, liaR = {lia_meas.R}")
-                writer.writerow([hv, lia_meas.X ,lia_meas.R])
+
+    def plot(self, plot_filename:str = None):
+        if plot_filename is  None:
+            self._plotter.plot_2d(self._result_file)
+        else:
+            res_file_path = os.path.join(self._results_dir, plot_filename)
+            self._plotter.plot_2d(res_file_path)
