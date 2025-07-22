@@ -23,6 +23,7 @@ class BaseSetup():
                         self._start_time)
         self._result_file = None
         self._devices = {}
+        #load_setup_config(path="setup.json")
         with open("setup.json", 'r') as file:
             setup = json.load(file)
             self.initialize_tester_info(setup, test_param_dict)
@@ -106,6 +107,10 @@ class BaseSetup():
             else:
                 raise Exception(f"Invalid sweep type {sweep_type}")
     
+    #def load_setup_config(path="setup.json") -> FullConfig:
+    #    with open(path, "r") as f:
+    #        return FullConfig.parse_raw(f.read())
+
     @property
     def result_file(self) -> str:
         return self._result_file
@@ -147,7 +152,7 @@ class BaseSetup():
         except OSError:
             pass
     
-    def execute(self, *args, **kwargs):
+    def perform_measurements(self, *args, **kwargs):
         raise NotImplementedError
         
 class IVTester(BaseSetup):
