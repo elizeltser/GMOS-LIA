@@ -10,13 +10,13 @@
 	"ThreeTTester" :
 	{
 		"heater Icomp"		: 100e-3,
-		"drain Vcomp"		: 2.5,
-		"drain Idc"			: 1e-6,
+		"drain Vcomp"		: 2.5, #5
+		"drain Idc"			: 1e-6, #8.2e-6
 		"heater sleep" 		: 2,
 		"lia frequency"		: 1e3,
-		"heater voltage" 	: 3.5,
+		"heater voltage" 	: 3,
 		"lia amplitude"		: 50e-3,
-		"lia offset"		: [800e-3, 1.2, 10e-3],
+		"lia offset"		: [800e-3, 1100e-3, 50e-3],
 		"sweep type"		: "linear"
 	},
 	
@@ -30,7 +30,7 @@
 		"X label"			: "Vgate [V]",
 		"Y label"			: "LIA.R [V]",
 		"X scale"			: "linear",
-		"Y scale"			: "linear",
+		"Y scale"			: "log",
 		"Plot title"		: "3T no catalist"
 	},
 	
@@ -41,7 +41,7 @@
 		"LIA"
 	],
 	
-	"connected devices" 	: "Mock devices",
+	"connected devices" 	: "Setup devices",
 	
 	"Setup devices" :
 	{

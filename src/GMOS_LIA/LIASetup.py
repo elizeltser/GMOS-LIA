@@ -13,7 +13,7 @@ class BaseSetup():
     _project_dir = os.path.join(os.getcwd(), "..")
     _measurement_results_dir = os.path.join(_project_dir, "measuremet_results")
     
-    def __init__(self, res_man:ResourceManager, test_param_dict: dict):
+    def __init__(self, res_man:ResourceManager):
         self._res_man = res_man
         tester_name = self.__class__.__name__
         self._start_time = timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -26,7 +26,7 @@ class BaseSetup():
         #load_setup_config(path="setup.json")
         with open("setup.json", 'r') as file:
             setup = json.load(file)
-            self.initialize_tester_info(setup, test_param_dict)
+            self.initialize_tester_info(setup)
     
     @classmethod
     def genResultFileName(cls, filename: str = None):
@@ -64,9 +64,9 @@ class BaseSetup():
             if name == "filename" or name == "abspath":
                 continue
             elif value is not None:
-                self.set_variable_parameter(value, name)
+                self.set_variable_parameter(name, value)
     
-    def initialize_tester_info(self, setup, test_param_dict):
+    def initialize_tester_info(self, setup):
         connected_devices = setup[setup["connected devices"]]
         required_devices = setup["required devices"]
         for dev in required_devices:
@@ -84,26 +84,23 @@ class BaseSetup():
         self._sleep_time    = setup["default sleep"]
         tester_name = self.__class__.__name__
         self._tester_info   = setup[tester_name]
-        for key, value in self._tester_info.items():
-            setattr(self, f"_{key.replace(' ','_')}", value)
             
-        for name, param in test_param_dict.items():
-            value = self._tester_info[param]
-            self.set_variable_parameter(value, name)
+        for name, param in self._tester_info.items():
+            self.set_variable_parameter(name, param)
                     
-        plot_settings = setup["plotter"]
+        plot_settings = setup[setup["plotter"]]
         self._plotter = Plotter(self._results_dir, plot_settings)
     
-    def set_variable_parameter(self, value, param_name):
+    def set_variable_parameter(self, name, value):
         sweep_type = self._tester_info["sweep type"]
-        if not isinstance(value, list):
-            value = [value]     # ensure iterable for product()
-            setattr(self, f"_{param_name}", value)
-        else:
+        name = name.replace(" ", "_")
+        if isinstance(value, (int, float)):
+            setattr(self, f"_{name}", value)
+        elif isinstance(value, list):
             if sweep_type == "linear":
-                setattr(self, f"_{param_name}", np.arange(*value))
+                setattr(self, f"_{name}", np.arange(*value))
             elif sweep_type == "log":
-                setattr(self, f"_{param_name}", np.logspace(*value))
+                setattr(self, f"_{name}", np.logspace(*value))
             else:
                 raise Exception(f"Invalid sweep type {sweep_type}")
     
@@ -157,10 +154,7 @@ class BaseSetup():
         
 class IVTester(BaseSetup):
     def __init__(self, res_man):
-        tester_parameter_dict = {
-            "smu_voltage"    : "smu voltage"
-        }
-        super().__init__(res_man, tester_parameter_dict)
+        super().__init__(res_man)
         self.smu = self._devices["Heater SMU"]
 
     def __enter__(self):
@@ -182,26 +176,20 @@ class IVTester(BaseSetup):
         
 class ThreeTTester(BaseSetup):
     def __init__(self, res_man):
-        tester_parameter_dict = {
-            #"heater_Icomp"      : "heater Icomp",
-            #"drain_Vcomp"       : "drain Vcomp",
-            #"drain_Idc"         : "drain Idc",
-            "heater_voltage"    : "heater voltage",
-            "lia_frequency"     : "lia frequency",
-            "lia_amplitude"     : "lia amplitude",
-            "lia_offset"        : "lia offset"
-        }
-        super().__init__(res_man, tester_parameter_dict)
+        super().__init__(res_man)
         self.heater             = self._devices["Heater SMU"]
         self.drain              = self._devices["Drain SMU"]
         self.lia                = self._devices["LIA"]
+        self._drain_Vcomp = 2.5
+        self._drain_Idc = 1e-6
+        self._lia_offset = 800e-3
             
     def __enter__(self):
         super().__enter__()
         self.heater.setFunctionVoltageFixed()
         self.heater.setCurrentCompliance(self._heater_Icomp)
         self.drain.setFunctionCurrentFixed()
-        self.drain.setVoltageCompliance(self._drain_Vcomp)
+        
         return self
     
     def setOutput(self, heater_voltage:float ,frequency:float, amplitude:float, offset:float):
@@ -211,13 +199,38 @@ class ThreeTTester(BaseSetup):
         self.lia.setOutputOffset(offset)
         self.drain.setCurrent(self._drain_Idc)
     
+    def acquire_operation_point(self):
+
+        operation_point_aquired = False
+        for _ in range(10):
+            self.drain.setVoltageCompliance(self._drain_Vcomp)
+            self.drain.setCurrent(self._drain_Idc)
+            self.lia.setOutputOffset(self._lia_offset)
+            v_drain, i_drain = self.drain.getMeasurement()
+            if v_drain > 2 and v_drain < 4:
+                operation_point_aquired = True
+                break
+            elif self.drain.inVoltageCompliance():
+                self._drain_Idc = (self._drain_Idc + 15e-6) / 2
+                
+        return operation_point_aquired
+    
     @BaseSetup.setup_fixture
     def perform_measurements(self, heater_voltage = None ,lia_frequency = None, lia_amplitude = None, lia_offset = None, filename: str = None, abspath: bool = False):        
+        for attr_name in ("_heater_voltage", "_lia_frequency", "_lia_amplitude", "_lia_offset"):
+            value = getattr(self, attr_name)
+            if isinstance(value, (int, float)):
+                setattr(self, attr_name, [value])
+        self.drain.setOn()
+        self.heater.setOn()
+        self.heater.setVoltage(self._heater_voltage[0])
+        time.sleep(self._heater_sleep)
+        self.acquire_operation_point()
         for hv, f, amp, off in product(self._heater_voltage, self._lia_frequency, self._lia_amplitude, self._lia_offset):
             self.setOutput(hv, f, amp, off)
             time.sleep(self._sleep_time)
             lia_meas = self.lia.getLIAMeasurment()
-            self.record_measurement([hv, lia_meas.X ,lia_meas.R])
+            self.record_measurement([off, lia_meas.X ,lia_meas.R])
         time.sleep(self._heater_sleep)
 
     def plot(self, plot_filename:str = None):

@@ -96,6 +96,12 @@ class SMU(Instrument):
         """ Set SMU output current compliance """
         self.inst.write(f'SENS:CURR:PROT {comp}')
     
+    def inVoltageCompliance(self):
+        return self.inst.query(":SENS:VOLT:PROT:TRIP?").strip() == '1'
+        
+    def inCurrentCompliance(self):
+        return self.inst.query(":SENS:CURR:PROT:TRIP?").strip() == '1'
+    
     def getMeasurement(self):
         """ Read SMU current and voltage """
         current = float(self.inst.query('MEAS:CURR:DC?').strip())
