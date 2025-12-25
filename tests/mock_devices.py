@@ -62,8 +62,8 @@ class MockSMU(BaseMocker):
         self.voltage = 0.0
         self.current = 0.0
         self.output_on = False
-        self.v_compliance = None
-        self.c_compliance = None
+        self.voltage_compliance = None
+        self.current_compliance = None
  
     @scpi("*IDN?")
     def idn(self) -> str:
@@ -76,8 +76,8 @@ class MockSMU(BaseMocker):
         self.voltage = 0.0
         self.current = self.voltage // self.resistance
         self.output_on = False
-        self.v_compliance = None
-        self.c_compliance = None
+        self.voltage_compliance = None
+        self.current_compliance = None
         self.low_state = "GND"
 
     @scpi("*CLS")
@@ -104,17 +104,19 @@ class MockSMU(BaseMocker):
     def set_voltage(self, value: str) -> None:
         if self.source_type == "VOLT":
             self.voltage = float(value)
-            self.current = min(self.voltage // self.resistance, self.c_compliance)
-            self.voltage = self.current * self.resistance if self.current == self.c_compliance else self.voltage
+            assert isinstance(self.current_compliance, float)
+            self.current = min(self.voltage // self.resistance, self.current_compliance)
+            self.voltage = self.current * self.resistance if self.current == self.current_compliance else self.voltage
         else:
             raise ValueError("Setting voltage when in current mode")
 
     @scpi("SOUR:CURR <value>")
     def set_current(self, value: str) -> None:
         if self.source_type == "CURR":
-            self.current = float(value) 
-            self.voltage = min(self.current * self.resistance, self.v_compliance)
-            self.current = self.voltage // self.resistance if self.voltage == self.v_compliance else self.current
+            self.current = float(value)
+            assert isinstance(self.voltage_compliance, float)
+            self.voltage = min(self.current * self.resistance, self.voltage_compliance)
+            self.current = self.voltage // self.resistance if self.voltage == self.voltage_compliance else self.current
         else:
             raise ValueError("Setting current when in voltage mode")
 
@@ -137,11 +139,11 @@ class MockSMU(BaseMocker):
 
     @scpi("SENS:VOLT:PROT <value>")
     def set_voltage_compliance(self, value: float) -> None:
-        self.v_compliance = value
+        self.voltage_compliance = value
 
     @scpi("SENS:CURR:PROT <value>")
     def set_current_compliance(self, value: float) -> None:
-        self.c_compliance = value
+        self.current_compliance = value
 
     @scpi("MEAS:CURR:DC?")
     def measure_current(self) -> str:

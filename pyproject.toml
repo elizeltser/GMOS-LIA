@@ -16,8 +16,16 @@ dependencies = [
   "pyvisa",
   "numpy",
   "matplotlib",
-  "pytest"
+  "pytest",
+  "pyright",
+  "ruff",
+  "black",
+  "debugpy"
 ]
+
+[project.optional-dependencies]
+lint = ["ruff>=0.11.11"]
+typecheck = ["pyright"]
 
 [project.scripts]
 LIATesterCLI = "GMOS_LIA.entry_points:cli"
@@ -30,3 +38,9 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+ignore = ["F405"]
