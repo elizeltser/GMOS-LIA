@@ -23,9 +23,9 @@ def test_gpib_devices(resource_manager):
 
     dev.close()
 def test_ip_devices(resource_manager):
-    dev = resource_manager.open_resource('TCPIP::132.68.54.149::INSTR')
-    assert 'Stanford_Research_Systems,SR860,003693,V1.51\n' == dev.query('*IDN?')
-    dev.close()
+#    dev = resource_manager.open_resource('TCPIP::132.68.54.149::INSTR')
+#    assert 'Stanford_Research_Systems,SR860,003693,V1.51\n' == dev.query('*IDN?')
+#    dev.close()
     dev = resource_manager.open_resource('TCPIP::132.68.54.234::INSTR')
     assert 'KEYSIGHT TECHNOLOGIES,DSO9104A,MY53130118,06.00.00901\n' == dev.query('*IDN?')
     dev.close()

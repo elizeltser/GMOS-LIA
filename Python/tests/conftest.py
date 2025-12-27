@@ -1,7 +1,5 @@
 import pytest
 from pyvisa import ResourceManager
-from pyvisa_mock.base.register import register_resource
-from mock_devices import MockLIA, MockSMU
 from GMOS_LIA.hp_6624a import PSU
 from GMOS_LIA.keysight_b2962a import SMU
 from GMOS_LIA.stanford_research_sr860 import LIA
@@ -10,17 +8,8 @@ import re
 import csv
 from _csv import Writer
 
-from typing import Generator
+from typing import Generator    
 
-@pytest.fixture(scope="session")
-def mock_resource_manager():
-    register_resource("MOCK0::LIA::INSTR", MockLIA())
-    register_resource("MOCK0::SMU::INSTR", MockSMU())   
-    register_resource("MOCK1::SMU::INSTR", MockSMU())
-    rm = ResourceManager(visa_library="@mock")
-    yield rm
-    rm.close()
-    
     
 @pytest.fixture(scope="session")
 def resource_manager():

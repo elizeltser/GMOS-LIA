@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "GMOS_LIA_Setup"
-version = "0.0.5"
+version = "0.0.7"
 description = "Setup to control and test GMOS gas sensor"
 authors = [
   { name = "Eli Zeltser", email = "elizeltser97@gmail.com" }
@@ -24,20 +24,17 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-lint = ["ruff>=0.11.11"]
+lint = ["ruff"]
 typecheck = ["pyright"]
 
-[project.scripts]
-LIATesterCLI = "GMOS_LIA.entry_points:cli"
-
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = {"" = "Python/src"}
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["Python/src"]
 
 [tool.pytest.ini_options]
-testpaths = ["test"]
+testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 79

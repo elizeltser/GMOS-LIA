@@ -65,10 +65,11 @@ inst.timeout = 20_000   # 20 seconds
 #    print("First 10:", currents[:10])
 
 def main():
-    psu = PSU(inst)
-    psu.enable_setup(start_power=True)
-    time.sleep(5)
-    psu.disable_setup()
+    pass
+#    psu = PSU(inst)
+#    psu.enable_setup(start_power=True)
+#    time.sleep(5)
+#    psu.disable_setup()
 
 if __name__ == "__main__":
     main()    
