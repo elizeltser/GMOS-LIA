@@ -22,6 +22,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "mcp4726.h"
+#include "stm32f3xx_hal.h"
+#include "stm32f3xx_hal_adc.h"
+#include "stm32f3xx_hal_adc_ex.h"
 #include "stm32f3xx_hal_def.h"
 #include <stdio.h>
 #include <string.h>
@@ -44,25 +47,43 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
+
 I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-MCP4725_HandleTypeDef dac1;
-MCP4725_HandleTypeDef dac2;
+uint8_t adc_conv_complete_flag = 0;
+MCP4725_HandleTypeDef gate1A;
+MCP4725_HandleTypeDef gate2B;
+MCP4725_HandleTypeDef gate4B;
+MCP4725_HandleTypeDef gate5A;
+MCP4725_HandleTypeDef heater1A;
+MCP4725_HandleTypeDef heater2B;
+MCP4725_HandleTypeDef heater4B;
+MCP4725_HandleTypeDef heater5A;
+
+volatile uint16_t adc_buffer[4];
+volatile uint16_t *p_heater_1A_V = adc_buffer;
+volatile uint16_t *p_heater_1A_I = adc_buffer + 1;
+volatile uint16_t *p_heater_5A_I = adc_buffer + 2;
+volatile uint16_t *p_heater_5A_V = adc_buffer + 3;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 static void I2C_ScanAndPrint(void);
 static void UART_WaitForString(const char *target);
-static void MCP4725_Demo(void);
+static void UART_ReceiveAndProcess(void);
 
 /* USER CODE END PFP */
 
@@ -100,25 +121,57 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  /* Scan I2C bus and print found addresses */
-  I2C_ScanAndPrint();
-
-  /* Wait for host to send "GMOS-ST Ready?" before proceeding */
-  UART_WaitForString("GMOS-ST Ready?");
+  /* Initialize MCP4725 devices */
+  MCP4725_Init(&gate1A, &hi2c1, MCP4725_ADDR_000);
+  MCP4725_Init(&gate2B, &hi2c1, MCP4725_ADDR_001);
+  MCP4725_Init(&gate4B, &hi2c1, MCP4725_ADDR_010);
+  MCP4725_Init(&gate5A, &hi2c1, MCP4725_ADDR_011);
+  MCP4725_Init(&heater1A, &hi2c1, MCP4725_ADDR_100);
+  MCP4725_Init(&heater2B, &hi2c1, MCP4725_ADDR_101);
+  MCP4725_Init(&heater4B, &hi2c1, MCP4725_ADDR_110);
+  MCP4725_Init(&heater5A, &hi2c1, MCP4725_ADDR_111);
+  
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_buffer, 4) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  int voltage_mv = 0;
+  HAL_StatusTypeDef res;
+  char buf[64];
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    /* Main loop empty for now */
-    __NOP();
+
+    res = MCP4725_SetVoltage_mV(&heater1A, 0, MCP4725_DEFAULT_VREF_MV);
+    HAL_Delay(1000);
+    res = MCP4725_SetVoltage_mV(&heater1A, 2500, MCP4725_DEFAULT_VREF_MV);
+    for (volatile int i = 0; i < 1000; ++i)
+    {
+      while (adc_conv_complete_flag != 1) {}
+      
+      adc_conv_complete_flag = 0;
+      
+      int n = snprintf(buf, sizeof(buf), "H1A V: %u | I: %u\r\n", *p_heater_1A_V, *p_heater_1A_I);
+      if (n > 0) HAL_UART_Transmit(&huart2, (uint8_t *)buf, (uint16_t)n, HAL_MAX_DELAY);
+  }
+    
+    /* Main loop: wait for and process incoming UART messages */
+    //UART_ReceiveAndProcess();
   }
   /* USER CODE END 3 */
 }
@@ -165,6 +218,99 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_MultiModeTypeDef multimode = {0};
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 4;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
+  hadc1.Init.LowPowerAutoWait = DISABLE;
+  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure the ADC multi-mode
+  */
+  multimode.Mode = ADC_MODE_INDEPENDENT;
+  if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
+  sConfig.SamplingTime = ADC_SAMPLETIME_19CYCLES_5;
+  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+  sConfig.Offset = 0;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_2;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_6;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_7;
+  sConfig.Rank = ADC_REGULAR_RANK_4;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -251,6 +397,22 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -310,8 +472,6 @@ static void UART_WaitForString(const char *target)
   size_t len = strlen(target);
   size_t pos = 0;
   uint8_t c;
-  const char waiting_msg[] = "Waiting for: GMOS-ST Ready?\r\n";
-  HAL_UART_Transmit(&huart2, (uint8_t *)waiting_msg, sizeof(waiting_msg) - 1, HAL_MAX_DELAY);
 
   while (pos < len) {
     if (HAL_UART_Receive(&huart2, &c, 1, HAL_MAX_DELAY) != HAL_OK) {
@@ -332,46 +492,95 @@ static void UART_WaitForString(const char *target)
   HAL_UART_Transmit(&huart2, (uint8_t *)ok_msg, sizeof(ok_msg) - 1, HAL_MAX_DELAY);
 }
 
-/* Move existing MCP4725 demo/initialization code here so it can be called later if needed.
-   This function is not called at startup per request. */
-static void MCP4725_Demo(void)
+/* Simple UART receiver with timeout: waits indefinitely for first byte, then expects CRLF within UART_RX_TIMEOUT_MS milliseconds. */
+static void UART_ReceiveAndProcess(void)
 {
-  uint8_t msg2[] = "MCP4725 DAC Test\r\n";
+  uint8_t buf[128];
+  size_t idx = 0;
+  uint8_t c;
 
-  /* Initialize MCP4725 devices (A0 = low -> 0x60, A0 = high -> 0x61) */
-  MCP4725_Init(&dac1, &hi2c1, MCP4725_ADDR_00);
-  MCP4725_Init(&dac2, &hi2c1, MCP4725_ADDR_01);
+  /* Wait indefinitely for first byte of a message */
+  if (HAL_UART_Receive(&huart2, &c, 1, HAL_MAX_DELAY) != HAL_OK) {
+    return;
+  }
+  buf[idx++] = c;
+  if (idx >= sizeof(buf) - 1) idx = 0;
 
-  HAL_UART_Transmit(&huart2, msg2, sizeof(msg2) - 1, HAL_MAX_DELAY);
+  uint32_t start = HAL_GetTick();
 
-  int ok = MCP4725_ConnectivityTest(&dac1); // 1 == OK, 0 == fail
-  if (ok) {
-    HAL_UART_Transmit(&huart2, (uint8_t *)"DAC1 Read OK\r\n", 14, HAL_MAX_DELAY);
-  } else {
-    HAL_UART_Transmit(&huart2, (uint8_t *)"DAC1 Read FAIL\r\n", 16, HAL_MAX_DELAY);
-    while (1) {};
+  /* Read remaining bytes, but if CRLF isn't received within UART_RX_TIMEOUT_MS, abort */
+  while (1) {
+    if (HAL_UART_Receive(&huart2, &c, 1, 100) == HAL_OK) {
+      buf[idx++] = c;
+      if (idx >= sizeof(buf) - 1) {
+        /* buffer overflow - reset to avoid OOB */
+        idx = 0;
+      }
+      if (idx >= 2 && buf[idx - 1] == 'E') {
+        break;
+      }
+      /* reset timeout after successful reception of a byte */
+      start = HAL_GetTick();
+    } else {
+      /* no byte received within 100 ms; check overall timeout */
+      if ((HAL_GetTick() - start) >= UART_RX_TIMEOUT_MS) {
+        /* Abort message reception and notify host */
+        HAL_UART_Transmit(&huart2, (uint8_t *)"TIMEOUT\r\n", 9, HAL_MAX_DELAY);
+        return;
+      }
+      /* otherwise, loop and keep waiting */
+    }
   }
 
-  MCP4725_Reset(&dac1); // attempt software reset
-  uint16_t dac = 0;
-  uint16_t eeprom14 = 0;
-  MCP4725_PDMode_t pd_cur = MCP4725_PD_NORMAL;
-  MCP4725_PDMode_t pd_eeprom = MCP4725_PD_NORMAL;
-  MCP4725_PORState_t por = MCP4725_POR_OFF;
-  MCP4725_RDYState_t rdy = MCP4725_RDY_BUSY;
+  if (idx < 2) return; /* must have at least CRLF */
 
-  if (MCP4725_Read(&dac1, &dac, &eeprom14, &pd_cur, &pd_eeprom, &por, &rdy) == HAL_OK) {
-    char dbg[128];
-    int n = snprintf(dbg, sizeof(dbg), "dac=%u, eeprom14=%u, pd_cur=%u, pd_eeprom=%u, POR=%u, RDY=%u\r\n",
-                     (unsigned)dac, (unsigned)eeprom14, (unsigned)pd_cur, (unsigned)pd_eeprom, (unsigned)por, (unsigned)rdy);
-    if (n > 0) HAL_UART_Transmit(&huart2, (uint8_t *)dbg, (uint16_t)n, HAL_MAX_DELAY);
+  /* Null-terminate before CRLF */
+  buf[idx - 1] = '\0';
+
+  /* Type is first byte, payload follows */
+  char type = (char)buf[0];
+  char *payload = (char *)&buf[1];
+
+  if (type == 'Q') {
+    if (strcmp(payload, "version") == 0)
+    {
+      char resp[64];
+      int n = snprintf(resp, sizeof(resp), "%s\r\n", FIRMWARE_VERSION);
+      if (n > 0) HAL_UART_Transmit(&huart2, (uint8_t *)resp, (uint16_t)n, HAL_MAX_DELAY);
+    }
+    else
+    {
+      HAL_UART_Transmit(&huart2, (uint8_t *)"ERR\r\n", 5, HAL_MAX_DELAY);
+    }
   }
+  else if (type == 'C')
+  {
+    if (strcmp(payload, "PING") == 0)
+    {
+      HAL_UART_Transmit(&huart2, (uint8_t *)"PONG\r\n", 6, HAL_MAX_DELAY);
+    }
+    else if (strcmp(payload, "I2C_SCAN") == 0)
+    {
+      I2C_ScanAndPrint();
+    }
+    else
+    {
+      HAL_UART_Transmit(&huart2, (uint8_t *)"OK\r\n", 4, HAL_MAX_DELAY);
+    }
+  }
+  else
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t *)"ERR\r\n", 5, HAL_MAX_DELAY);
+  }
+}
 
-  /* Example short pulses (blocking): */
-  /* dac1: brief full-scale pulse */
-  MCP4725_Pulse(&dac1, 4095U, 50U); /* 50 ms pulse to Vref */
-  /* dac2: brief 0V pulse */
-  MCP4725_Pulse(&dac2, 0U, 20U);    /* 20 ms pulse to 0V */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+ 	if(hadc->Instance==ADC1)
+    {
+        /* Set flag to indicate that ADC conversion is complete */
+        adc_conv_complete_flag = 1;
+    }
 }
 
 /* USER CODE END 4 */

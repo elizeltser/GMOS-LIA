@@ -2,6 +2,8 @@
  * Uses fast write (2-byte) to set DAC output.
  */
 #include "mcp4726.h"
+#include <stdio.h>
+#include <string.h>
 
 HAL_StatusTypeDef MCP4725_Init(MCP4725_HandleTypeDef *dev, I2C_HandleTypeDef *hi2c, uint8_t address)
 {
@@ -45,13 +47,9 @@ HAL_StatusTypeDef MCP4725_WriteRaw(MCP4725_HandleTypeDef *dev, uint16_t value)
 
 HAL_StatusTypeDef MCP4725_SetVoltage_mV(MCP4725_HandleTypeDef *dev, uint32_t millivolts, uint32_t vref_mv)
 {
-  if (dev == NULL)
+  if (dev == NULL || vref_mv == 0)
   {
     return HAL_ERROR;
-  }
-  if (vref_mv == 0)
-  {
-    vref_mv = MCP4725_DEFAULT_VREF_MV;
   }
 
   uint64_t tmp = (uint64_t)millivolts * 4095U;
@@ -174,3 +172,40 @@ int MCP4725_ConnectivityTest(MCP4725_HandleTypeDef *dev)
   return (HAL_I2C_IsDeviceReady(dev->hi2c, (uint16_t)(dev->addr << 1), 3, 100) == HAL_OK) ? 1 : 0;
 }
 
+/* Move existing MCP4725 demo/initialization code here so it can be called later if needed.
+   This function is not called at startup per request. */
+static void MCP4725_Demo(MCP4725_HandleTypeDef *dev, UART_HandleTypeDef *huart)
+{
+  uint8_t msg2[] = "MCP4725 DAC Test\r\n";
+
+  HAL_UART_Transmit(huart, msg2, sizeof(msg2) - 1, HAL_MAX_DELAY);
+
+  int ok = MCP4725_ConnectivityTest(dev); // 1 == OK, 0 == fail
+  if (ok) {
+    HAL_UART_Transmit(huart, (uint8_t *)"DAC Read OK\r\n", 14, HAL_MAX_DELAY);
+  } else {
+    HAL_UART_Transmit(huart, (uint8_t *)"DAC Read FAIL\r\n", 16, HAL_MAX_DELAY);
+    while (1) {};
+  }
+
+  MCP4725_Reset(dev); // attempt software reset
+  uint16_t dac = 0;
+  uint16_t eeprom14 = 0;
+  MCP4725_PDMode_t pd_cur = MCP4725_PD_NORMAL;
+  MCP4725_PDMode_t pd_eeprom = MCP4725_PD_NORMAL;
+  MCP4725_PORState_t por = MCP4725_POR_OFF;
+  MCP4725_RDYState_t rdy = MCP4725_RDY_BUSY;
+
+  if (MCP4725_Read(dev, &dac, &eeprom14, &pd_cur, &pd_eeprom, &por, &rdy) == HAL_OK) {
+    char dbg[128];
+    int n = snprintf(dbg, sizeof(dbg), "dac=%u, eeprom14=%u, pd_cur=%u, pd_eeprom=%u, POR=%u, RDY=%u\r\n",
+                     (unsigned)dac, (unsigned)eeprom14, (unsigned)pd_cur, (unsigned)pd_eeprom, (unsigned)por, (unsigned)rdy);
+    if (n > 0) HAL_UART_Transmit(huart, (uint8_t *)dbg, (uint16_t)n, HAL_MAX_DELAY);
+  }
+
+  /* Example short pulses (blocking): */
+  /* dac1: brief full-scale pulse */
+  MCP4725_Pulse(dev, 4095U, 50U); /* 50 ms pulse to Vref */
+  /* dac2: brief 0V pulse */
+  MCP4725_Pulse(dev, 0U, 20U);    /* 20 ms pulse to 0V */
+}

@@ -4,6 +4,13 @@ import numpy as np
 from GMOS_LIA.stanford_research_sr860 import LIA_channel, LIA_function
 from GMOS_LIA.keysight_b2962a import SMU
 
+def test_stm32_connection(stm32_device):
+    stm32_device.send_command('PING')
+    
+def test_stm32_version(stm32_device):
+    version = stm32_device.send_query('version')
+    assert version == "1.0.0", f"Unexpected STM32 version: {version}"
+
 @pytest.mark.usefixtures("power_supply")
 def test_sample():
     time.sleep(10)

@@ -12,10 +12,15 @@ extern "C" {
 #include "stm32f3xx_hal.h"
 
 #define MCP4725_DEFAULT_VREF_MV 3300U
-#define MCP4725_ADDR_00  0x61U
-#define MCP4725_ADDR_01 0x62U
-#define MCP4725_ADDR_10  0x65U
-#define MCP4725_ADDR_11 0x66U
+#define MCP4725_ADDR_000  0x60U
+#define MCP4725_ADDR_001  0x61U
+#define MCP4725_ADDR_010  0x62U
+#define MCP4725_ADDR_011  0x63U
+#define MCP4725_ADDR_100  0x64U
+#define MCP4725_ADDR_101  0x65U
+#define MCP4725_ADDR_110  0x66U
+#define MCP4725_ADDR_111  0x67U
+
 /* Additional helpers */
 #define MCP4725_SOFT_RESET_CMD 0x06U  /* Software reset command (General Call or device) */
 
@@ -95,6 +100,11 @@ HAL_StatusTypeDef MCP4725_Reset(MCP4725_HandleTypeDef *dev);
 
 /* Connectivity test helper: returns 1 if ACK received (device ready), 0 otherwise */
 int MCP4725_ConnectivityTest(MCP4725_HandleTypeDef *dev);
+
+/* Move existing MCP4725 demo/initialization code here so it can be called later if needed.
+   This function is not called at startup per request.
+*/
+static void MCP4725_Demo(MCP4725_HandleTypeDef *dev, UART_HandleTypeDef *huart);
 
 #ifdef __cplusplus
 }

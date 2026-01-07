@@ -7,9 +7,24 @@ from pathlib import Path
 import re
 import csv
 from _csv import Writer
+from typing import Generator
+from GMOS_LIA.stm32 import STM32, reset, hreset
 
-from typing import Generator    
+import pytest
+import sys
+import os
 
+@pytest.fixture(autouse=False)
+def reset_stm32_per_test():
+    """
+    This fixture runs automatically before every single test.
+    """
+    print("\n[Hardware] Resetting STM32...")
+    try:
+        reset()
+    except Exception as e:
+        pytest.fail(f"Failed to reset STM32 via CLI: {e}")
+    yield
     
 @pytest.fixture(scope="session")
 def resource_manager():
@@ -35,6 +50,14 @@ def power_supply(resource_manager):
     psu.enable_setup(start_power=True)
     yield
     psu.disable_setup()
+
+@pytest.fixture(scope="class")
+def stm32_device() -> Generator[STM32, None, None]:
+    stm32 = STM32(port='COM5')
+    #response = stm32.sync_start()
+    #assert response == 'Expected message received', "STM32 not ready, are you sure it's connected?"
+    yield stm32
+    stm32.close()
 
     
 @pytest.fixture(scope="function")

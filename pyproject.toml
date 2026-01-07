@@ -14,6 +14,7 @@ requires-python = ">=3.8"
 
 dependencies = [
   "pyvisa",
+  "pyserial",
   "numpy",
   "matplotlib",
   "pytest",

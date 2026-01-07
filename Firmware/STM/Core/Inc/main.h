@@ -42,7 +42,8 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+#define FIRMWARE_VERSION "1.0.0"
+#define UART_RX_TIMEOUT_MS 7000U /* milliseconds: timeout to receive message terminator (CRLF) after first byte */
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -60,6 +61,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define heater_5A_I_Pin GPIO_PIN_0
+#define heater_5A_I_GPIO_Port GPIOC
+#define heater_5A_V_Pin GPIO_PIN_1
+#define heater_5A_V_GPIO_Port GPIOC
+#define heater_1A_V_Pin GPIO_PIN_0
+#define heater_1A_V_GPIO_Port GPIOA
+#define heater_1A_I_Pin GPIO_PIN_1
+#define heater_1A_I_GPIO_Port GPIOA
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
