@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+// This import allows us to set Nanopb-specific options
+import "nanopb.proto";
+
+message GMOSBatch {
+    uint32 status_code = 1;
+    
+    // Limit string to 16 chars to avoid dynamic allocation
+    string device_name = 2 [(nanopb).max_size = 16];
+    
+    // Define a fixed-size array of floats
+    repeated float readings = 3 [(nanopb).max_count = 5];
+}

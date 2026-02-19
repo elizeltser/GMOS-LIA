@@ -10,8 +10,8 @@
 	"ThreeTTester" :
 	{
 		"heater Icomp"		: 100e-3,
-		"drain Vcomp"		: 2.5, #5
-		"drain Idc"			: 1e-6, #8.2e-6
+		"drain Vcomp"		: 2.5,
+		"drain Idc"			: 1e-6,
 		"heater sleep" 		: 2,
 		"lia frequency"		: 1e3,
 		"heater voltage" 	: 3,
