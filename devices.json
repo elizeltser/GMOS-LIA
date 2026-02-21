@@ -1,0 +1,8 @@
+{
+    "Scope" : "TCPIP::132.68.54.234::INSTR",
+    "LIA" : "TCPIP::132.68.54.194::INSTR",
+    "SCU1": "GPIB0::22::INSTR",
+    "SCU2": "GPIB0::23::INSTR",
+    "PSU": "GPIB0::14::INSTR",
+    "SG": "GPIB0::16::INSTR"
+}

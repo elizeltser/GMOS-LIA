@@ -18,10 +18,8 @@ dependencies = [
   "numpy",
   "matplotlib",
   "pytest",
-  "pyright",
   "ruff",
-  "black",
-  "debugpy"
+  "pyright"
 ]
 
 [project.optional-dependencies]
@@ -29,13 +27,13 @@ lint = ["ruff"]
 typecheck = ["pyright"]
 
 [tool.setuptools]
-package-dir = {"" = "Python/src"}
+package-dir = {"" = "python/sources"}
 
 [tool.setuptools.packages.find]
-where = ["Python/src"]
+where = ["python/sources"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["python/tests"]
 
 [tool.ruff]
 line-length = 79
