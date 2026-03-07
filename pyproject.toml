@@ -27,16 +27,21 @@ lint = ["ruff"]
 typecheck = ["pyright"]
 
 [tool.setuptools]
-package-dir = {"" = "python/sources"}
+package-dir = {"" = "Python/sources"}
 
 [tool.setuptools.packages.find]
-where = ["python/sources"]
+where = ["Python/sources"]
 
 [tool.pytest.ini_options]
-testpaths = ["python/tests"]
+testpaths = ["Python/tests"]
 
 [tool.ruff]
-line-length = 79
+line-length = 88
+select = ["E", "F", "I"] # Basic errors, formatting, and import sorting
 
-[tool.ruff.lint]
-ignore = ["F405"]
+[tool.pyright]
+include = ["Python"]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "basic" # Avoids "strict" mode which is way too loud for beginners
+pythonVersion = "3.10"
