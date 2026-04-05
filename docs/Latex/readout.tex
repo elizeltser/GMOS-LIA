@@ -1,0 +1,220 @@
+\documentclass{report}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[backend=biber, style=numeric]{biblatex}
+
+
+\begin{document}
+
+\subsection{GMOS Readout Circuit}
+
+\subsubsection{Measurement Principle}
+
+Methods for biasing and signal readout of CMOS-based thermal sensors were
+explored in detail in~\cite{TODO}. That work distinguishes two readout
+topologies: a diode-connected (2T) configuration and an amplification (3T)
+configuration, and derives the fundamental equations governing the electrical
+characteristics of the GMOS device. In our setup we adopt the 2T connection
+for its simplicity and reproducibility.
+
+In the 2T configuration the GMOS drain is shorted to its gate, forcing
+$V_{DS} = V_{GS}$. For $V_{GS} > V_{th}$ the transistor is in saturation,
+and in the subthreshold regime the drain current is
+
+\begin{equation}
+  I_D = I_0 \exp\!\left(\frac{V_{GS} - V_{th}}{n V_T}\right),
+  \label{eq:subthreshold}
+\end{equation}
+
+where $I_0$ is a process-dependent pre-exponential current, $V_{th}$ is the
+threshold voltage, $n$ is the subthreshold ideality factor, and
+$V_T = k_B T / q$ is the thermal voltage. Because the GMOS threshold voltage
+shifts with gas concentration via the catalytic reaction at the gate, the
+drain current encodes the chemical signal.
+
+\subsubsection{Differential Readout and Common-Mode Rejection}
+
+In analogy with the TMOS bolometer, the GMOS performs thermal-offset
+subtraction by reading the differential drain voltage between a blind and an
+active pixel. The active pixel is exposed to the analyte gas; the blind pixel
+is identical but sealed or passivated. Both pixels experience the same
+ambient temperature, supply noise, and heater-induced thermal background.
+Taking their difference therefore isolates only the additional
+threshold-voltage shift caused by the gas reaction:
+
+\begin{equation}
+  \Delta V_{\mathrm{out}} = V_A - V_B
+    = \bigl(V_{DD} - I_{D,\mathrm{act}} R_s\bigr)
+    - \bigl(V_{DD} - I_{D,\mathrm{bld}} R_s\bigr)
+    = \bigl(I_{D,\mathrm{bld}} - I_{D,\mathrm{act}}\bigr) R_s,
+  \label{eq:differential}
+\end{equation}
+
+where $V_A$ and $V_B$ are the drain voltages of the active and blind pixels,
+$R_s$ is the series bias resistor, and $V_{DD}$ is the supply voltage from
+the B2961A. The LIA's differential input mode (A$-$B) performs this
+subtraction in hardware, further suppressing any residual common-mode noise.
+
+\subsubsection{Bias Resistor and Current-Source Approximation}
+
+A large series resistor $R_s$ placed between the B2961A supply and each drain
+approximates a constant current source. For this approximation to hold the
+resistor must dominate over the transistor's small-signal output resistance:
+
+\begin{equation}
+  R_s \gg r_{ds} = \left.\frac{\partial V_{DS}}{\partial I_D}\right|_{Q}.
+  \label{eq:current_source_cond}
+\end{equation}
+
+Additionally, when a chemical reaction shifts $V_{th}$ and hence $I_D$, the
+resulting current variation must be small enough that the operating point does
+not move significantly. Using Eq.~\eqref{eq:subthreshold}, a threshold shift
+of $\delta V_{th}$ produces a fractional current change
+$\delta I_D / I_D = \delta V_{th} / (n V_T)$.
+Requiring this to remain small imposes
+
+\begin{equation}
+  R_s \gg \frac{n V_T}{I_D},
+  \label{eq:bias_stability}
+\end{equation}
+
+which is satisfied by using $R_s \geq 500\,\Omega$ at typical GMOS
+subthreshold bias levels. Both blind and active bias resistors must be of
+equal value so that Eq.~\eqref{eq:differential} is not corrupted by a
+resistor mismatch.
+
+\subsubsection{AC Heater Excitation and Lock-In Detection}
+
+\paragraph{Heater drive.}
+Rather than applying a DC bias to the integrated heater resistors, the LIA
+reference output applies a sinusoidal voltage at frequency $f_{\mathrm{ref}}$:
+
+\begin{equation}
+  V_H(t) = V_{\mathrm{ref}} \sin(2\pi f_{\mathrm{ref}}\, t).
+  \label{eq:heater_drive}
+\end{equation}
+
+The instantaneous power dissipated in each heater is
+
+\begin{equation}
+  P_H(t) = \frac{V_H^2(t)}{R_H}
+          = \frac{V_{\mathrm{ref}}^2}{2 R_H}
+            \Bigl[1 - \cos(4\pi f_{\mathrm{ref}}\, t)\Bigr],
+  \label{eq:heater_power}
+\end{equation}
+
+so the thermal modulation of the transistor occurs at twice the drive
+frequency $2f_{\mathrm{ref}}$.
+% TODO: confirm whether the LIA reference is locked to f_ref or 2*f_ref.
+Both heater resistors, $R_{H,\mathrm{act}}$ and $R_{H,\mathrm{bld}}$, are
+driven in parallel and are assumed to have equal values and equal temperature
+coefficients of resistance (TCR). Imbalances between the two heater resistors
+will be addressed separately.
+% TODO: add reference to heater imbalance correction section.
+
+\paragraph{Lock-in detection.}
+The LIA demodulates the differential drain signal $\Delta V_{\mathrm{out}}(t)$
+at the reference frequency, extracting the in-phase ($X$) and quadrature ($Y$)
+components:
+
+\begin{align}
+  X &= \frac{2}{T}\int_0^T \Delta V_{\mathrm{out}}(t)\,
+        \sin(2\pi f_{\mathrm{ref}}\, t)\, \mathrm{d}t,
+  \label{eq:lia_x} \\
+  Y &= \frac{2}{T}\int_0^T \Delta V_{\mathrm{out}}(t)\,
+        \cos(2\pi f_{\mathrm{ref}}\, t)\, \mathrm{d}t.
+  \label{eq:lia_y}
+\end{align}
+
+The magnitude $R = \sqrt{X^2 + Y^2}$ is the primary readout quantity and
+is correlated with gas concentration. Using AC excitation and narrow-band
+demodulation moves the signal of interest away from DC, where flicker
+($1/f$) noise is largest, to a frequency band where the amplifier noise
+floor is much lower.
+
+\subsubsection{Noise Considerations}
+
+The dominant extrinsic noise source in this circuit is the Johnson (thermal)
+noise of the bias resistor $R_s$. Its one-sided voltage spectral density is
+
+\begin{equation}
+  S_{v,R_s}(f) = 4 k_B T R_s,
+  \label{eq:johnson}
+\end{equation}
+
+giving an RMS noise voltage over the LIA's effective noise bandwidth
+$\Delta f_{\mathrm{LIA}}$:
+
+\begin{equation}
+  v_{n,R_s} = \sqrt{4 k_B T R_s\, \Delta f_{\mathrm{LIA}}}.
+  \label{eq:johnson_rms}
+\end{equation}
+
+The LIA's effective noise bandwidth is determined by its time constant $\tau$
+and filter order; for a first-order filter
+$\Delta f_{\mathrm{LIA}} = 1/(4\tau)$, which can be reduced to sub-hertz
+values by increasing $\tau$. This narrow bandwidth is the primary mechanism
+by which the lock-in technique achieves a high signal-to-noise ratio.
+
+% TODO: add shot noise of MOSFET drain current if relevant at these bias
+%       levels.
+
+\subsection{Circuit Configuration and Instruments}
+
+\subsubsection{Required Instruments}
+
+\begin{itemize}
+  \item SR860 Lock-In Amplifier.
+  \item HP 8116A Signal Generator.
+  \item HP 6624A DC Power Supply.
+  \item Keysight B2961A Low Noise Power Supply.
+\end{itemize}
+
+\subsubsection{Electrical Schematic}
+
+Figure~\ref{fig:gmos_2t_schematic} shows the 2T differential readout
+connection for the active and blind GMOS pair. Each NMOS has its drain
+shorted to its gate (2T configuration). A series bias resistor $R_s$
+connects each drain to the B2961A supply $V_{DD}$, and the drain nodes feed
+the LIA differential input channels A and B. The heater resistors
+$R_{H,\mathrm{act}}$ and $R_{H,\mathrm{bld}}$ are connected in parallel and
+driven by the LIA sine reference output.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{differential_t2_readout.png}
+\caption{2T differential GMOS readout schematic. Each GMOS drain is shorted
+  to its gate (2T method). A series bias resistor $R_s$ connects each drain
+  to the B2961A supply. The drain nodes feed the LIA differential input
+  (A and B). The LIA reference sine output drives both heater resistors in
+  parallel.}
+\label{fig:gmos_2t_schematic}
+\end{figure}
+
+\subsubsection{Operating Point}
+
+% TODO: fill in measured / target values.
+\begin{table}[h]
+\centering
+\caption{Nominal operating conditions for the GMOS readout experiment.}
+\label{tab:op_point}
+\begin{tabular}{lll}
+\toprule
+Parameter & Symbol & Value \\
+\midrule
+B2961A supply voltage    & $V_{DD}$               & \ldots\,V \\
+Series bias resistor     & $R_s$                  & $\geq 500\,\Omega$ \\
+Quiescent drain voltage  & $V_{DS,Q}$             & \ldots\,V \\
+Quiescent drain current  & $I_{D,Q}$              & \ldots\,$\mu$A \\
+Heater drive amplitude   & $V_{\mathrm{ref}}$     & \ldots\,V$_{\mathrm{pp}}$ \\
+Heater drive frequency   & $f_{\mathrm{ref}}$     & \ldots\,Hz \\
+LIA time constant        & $\tau$                 & \ldots\,s \\
+LIA filter order         & ---                    & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\end{document}

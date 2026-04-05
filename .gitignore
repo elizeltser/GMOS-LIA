@@ -119,3 +119,12 @@ dmypy.json
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Latex stuff
+docs/Latex/*.pdf
+docs/Latex/*.aux
+docs/Latex/*.bcf
+docs/Latex/*.log
+docs/Latex/*.png
+docs/Latex/*.run.xml
+docs/Latex/*.docx

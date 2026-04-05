@@ -1,0 +1,65 @@
+\documentclass[tikz, border=12pt]{standalone}
+\usepackage{circuitikz}
+
+\begin{document}
+\begin{circuitikz}[american, scale=0.9, transform shape]
+
+  %% --- Active GMOS (left, center at (0,0)) ---
+  \draw (0,0) node[nmos, anchor=center] (Qa) {};
+  \node[font=\small, anchor=west] at (1.0, 0) {Active GMOS};
+
+  % Drain junction point
+  \draw (Qa.drain) -- ++(0,0.4) coordinate (Da);
+
+  % 2T: go left from Da, then drop to exact gate height via |-,
+  %     then go right to gate terminal
+  \draw (Da) -- ++(-1.5,0) coordinate (GaL)
+        -- (GaL |- Qa.gate) -- (Qa.gate);
+
+  % Bias resistor up to B2961A supply
+  \draw (Da) to[R, l_=${\geq}500\,\Omega$, *-] ++(0,2.2)
+        node[above, font=\small] {B2961A};
+
+  % Source to GND
+  \draw (Qa.source) -- ++(0,-0.3) node[ground] {};
+
+  % Drain junction to LIA Input A — routed right (avoids 2T loop going left)
+  \draw (Da) to[short, *-o] ++(2.2,0)
+        node[right, font=\small] {LIA\;Input\;A};
+
+  %% --- Blind GMOS (right, center at (9,0)) ---
+  \draw (9,0) node[nmos, anchor=center] (Qb) {};
+  \node[font=\small, anchor=west] at (10.0, 0) {Blind GMOS};
+
+  % Drain junction point
+  \draw (Qb.drain) -- ++(0,0.4) coordinate (Db);
+
+  % 2T: go left from Db (from left side of transistor, as requested),
+  %     then drop to exact gate height via |-, then go right to gate terminal
+  \draw (Db) -- ++(-1.5,0) coordinate (GbL)
+        -- (GbL |- Qb.gate) -- (Qb.gate);
+
+  % Bias resistor up to B2961A supply
+  \draw (Db) to[R, l=${\geq}500\,\Omega$, *-] ++(0,2.2)
+        node[above, font=\small] {B2961A};
+
+  % Source to GND
+  \draw (Qb.source) -- ++(0,-0.3) node[ground] {};
+
+  % Drain junction to LIA Input B — routed right (avoids 2T loop going left)
+  \draw (Db) to[short, *-o] ++(2.2,0)
+        node[right, font=\small] {LIA\;Input\;B};
+
+  %% --- Heater resistors in parallel (driven by LIA Ref Out) ---
+  % HL and HR are the shared rail nodes of the parallel combination
+  \draw (-1.5,-3.0) node[left, font=\small] {LIA\;Ref\;Out}
+        to[short, o-*] (3.0,-3.0) coordinate (HL)
+        to[R, l=$R_{H,\mathrm{act}}$] (6.5,-3.0) coordinate (HR)
+        to[short, *-] ++(1.5,0) node[ground] {};
+  % R_H,bld in parallel: drop from HL, run resistor, rise back to HR
+  \draw (HL) -- (3.0,-4.2)
+        to[R, l=$R_{H,\mathrm{bld}}$] (6.5,-4.2)
+        -- (HR);
+
+\end{circuitikz}
+\end{document}
