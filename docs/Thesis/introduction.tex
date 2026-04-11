@@ -1,0 +1,427 @@
+\section{Introduction}
+This chapter presents an overview of the motivation of this study, including
+the main goals and the current commercial scenario for the applications. The
+purpose of the chapter is to provide a conceptual technical background of the
+topics that are discussed in the following chapters.
+\pagebreak
+
+\subsection{Research Motivation and Challenges}
+Various industrial and agricultural applications require gas detection systems
+that are low-cost, mass-producible, and power-efficient. Depending on the use
+case, gas sensing may involve coarse detection for safety monitoring, accurate
+measurement of chemical composition, or continuous concentration tracking for
+process control. One critically important application domain is personnel
+safety: many hazardous gases are imperceptible to human senses yet toxic at
+trace concentrations. Gases such as $\mathrm{CO}$, $\mathrm{NO}_2$, and
+$\mathrm{H}_2\mathrm{S}$ are poisonous even at \text{ppm}-level
+concentrations, while flammable gases such as $\mathrm{CH}_4$ and
+$\mathrm{H}_2$, and asphyxiants such as $\mathrm{CO}_2$ and $\mathrm{N}_2$,
+pose life-threatening risks in confined spaces. Gas sensors can therefore
+provide \textbf{early warning before concentration levels reach dangerous
+thresholds}. Another major application area is air-quality monitoring: urban
+pollution networks track $\mathrm{NO}_x$ and $\mathrm{SO}_2$; indoor-air
+sensors measure volatile organic compound (VOC) and $\mathrm{CO}_2$ levels;
+and climate monitoring stations record greenhouse gases. Gas sensing is equally
+prominent in industrial settings, including $\mathrm{O}_2$ monitoring for
+combustion optimisation, trace-gas management in semiconductor cleanrooms, and
+process control in chemical reactors. One field that is continuously gaining
+importance is agricultural gas sensing.
+There are three main types of gas sensing:
+
+\begin{itemize}
+  \item Catalytic (combustion-based)
+  \item Optical---Non-Dispersive Infrared (NDIR)
+  \item Electrochemical
+\end{itemize}
+
+Today, ideal gas sensing remains an open research problem. Key challenges
+include selectivity (the ability to distinguish between chemically similar
+gases), sensitivity (detection at sub-\text{ppm} to \text{ppb} concentration
+levels), stability (resistance to drift and ageing), and power efficiency---all
+of which remain prominent difficulties in current sensor technology.
+
+\gls{mox} sensor technology is currently the most widely used method for electronic
+gas sensing. Their operating principle is based on a heated semiconducting
+metal-oxide layer whose electrical resistance varies with exposure to oxidizing
+or reducing gases. While \gls{mox} sensors are inexpensive and widely used, they
+typically require high operating temperatures, humidity compensation, and often
+suffer from long-term baseline drift. These limitations motivate the
+development of alternative gas-sensing technologies with improved stability,
+power consumption, and selectivity. Recent research trends emphasize highly
+sensitive, low-power gas sensors, especially those leveraging micro- and
+nano-scale structures. The \gls{gmos} is one such candidate. It is based on a
+thermal \gls{mox} (\gls{tmos}) device implemented in \gls{cmos}-\gls{soi}
+technology. \gls{tmos} is a suspended \gls{mosfet} operating in the
+subthreshold region, making it highly temperature-sensitive and
+low-power. This technology was adapted to create the GMOS gas sensor—a
+combustion-based device that uses a catalytic layer and an integrated tungsten
+heater. When heated and exposed to specific gases, catalytic reactions alter
+the local temperature, and this thermal change is measured through the
+subthreshold \gls{mosfet}. The GMOS device benefits from the
+\gls{cmos}-\gls{soi}-\gls{mems} process, which provides strong thermal
+isolation and allows a large-area \gls{mosfet} structure with enhanced
+responsivity. \\
+It is evident that R\&D activity in gas sensing is extensive. The present study
+focuses on GMOS-based detection of ethylene at low concentrations, motivated by
+its critical importance in agriculture and food safety.
+% TODO: add ethylene/agriculture reference here
+The GMOS gas sensor has been under active development since 2018, with progress
+reported in several publications.
+% TODO: add full publication list with \cite{}
+
+What distinguishes the present work is not only the sensing device but also its
+mode of operation and signal readout strategy. The key characteristics of the
+GMOS-based sensing system are:
+\begin{itemize}
+  \item \textbf{Low power consumption}: the GMOS sensor exploits MOSFET
+        subthreshold operation, enabling ultra-low quiescent power.
+  \item \textbf{Selective multi-gas sensing}: the sensor array contains
+        multiple pixels coated with different catalytic layers, each
+        selectively responsive to a specific target gas.
+  \item \textbf{CMOS-compatible fabrication}: the GMOS device is manufactured
+        using a standardised CMOS-compatible MEMS process, enabling
+        cost-effective mass production.
+\end{itemize}
+% TODO: fill more features
+
+\subsection{How to Improve GMOS Gas Sensor Performance}
+\subsubsection{GMOS theoretical background}
+The GMOS transistor detects gas via an exothermic combustion process. We 
+transform transistor into a gas sensing device by mechanically separating it 
+from its surrounding substrate using a micro-machining process, thus creating 
+a device that is thermally isolated. An additional catalytic layer is added on 
+top of the device. Catalysts are substances that speed up the reaction but are 
+not consumed by it and do not appear in the net reaction equation. An active
+pixel is one which has a layer of catalyst on the surface of the device,
+allowing the chemical reaction to occur at a temperature lower than
+the usual ignition threshold denoted by $T^*$ for the specific gas being sampled. 
+When a pixel is heated to a nominal temperature high enough to cause the
+exothermic chemical reaction with the catalyst, tiny explosions occur near the
+surface of the GMOS sensor, causing a slight shift in $V_{\mathrm{th}}$ and
+changing the transistor's drain
+current. To archive the ignition temperature, the catalytic layers temperature 
+is first increased by Joule heating dissipated by a resistor in contact with the 
+reaction plate. The value of the required resistor is determined by the following 
+heat flow equation:
+
+\begin{equation}
+  C_\mathrm{th} \frac{d \left T-T_0 \right}{dt} + G_\mathrm{th} \left T-T_0 \right = P_\mathrm{Joule-heating} + P_\mathrm{reaction}
+\end{equation}
+
+Where at steady state,
+
+\begin{equation}
+  T = T_0 + \Delta T_J + + \Delta T_R = T_0 + \frac{P_\mathrm{Joule-heating}}{G_\mathrm{th}} + \frac{P_\mathrm{reaction}}{G_\mathrm{th}}
+\end{equation}
+
+$T_0$ is the frame temperature which is determined by the ambient temperature 
+and the additional heat generated by the heating resistor:
+
+\begin{equation}
+  P_\mathrm{Joule-heating} = I^2 R(T) = \frac{V^2}{R(T)}
+\end{equation}
+
+$P_\mathrm{reaction}$ is the power released by the exothermic oxidation reaction 
+
+\begin{equation}
+  \Delta T_\mathrm{reaction} = \frac{P_\mathrm{reaction}}{G_\mathrm{th}}
+\end{equation}
+
+At steady state and in an absence of a combustive reaction, the Joule heating 
+increases the GMOS temperature according to the following relation:
+
+\begin{equation}
+  \Delta T_J = \frac{I \cdot V}{G_\mathrm{th}} = \frac{I^2 \cdot R(T)}{G_\mathrm{th}} = \frac{V_2}{R(T) \cdot G_\mathrm{th}}
+\end{equation}
+
+Where $R(T)$ is the resistor heating the reaction plate and $V$ is the applied 
+voltage to the heater.
+
+% TODO: Continue development
+
+A readout system must therefore be capable of extracting a $\approx 10\,\mu\text{V}$
+signal from a noise floor with an amplitude of $\approx 100\,\text{mV}$.
+
+The biasing and signal readout of CMOS-based thermal sensors have been
+explored in detail in \cite{lowpower_lia_placeholder}.
+% TODO: replace placeholder with proper 2T/3T readout topology citation
+That work distinguishes two readout topologies: a diode-connected (2T)
+configuration and an amplification (3T) configuration, and derives the
+fundamental equations governing the electrical behaviour of the GMOS device.
+In the present work, the 2T connection is adopted for its simplicity and
+measurement reproducibility.
+
+In the 2T configuration, the GMOS drain is shorted to its gate, enforcing
+$V_{\mathrm{DS}} = V_{\mathrm{GS}} = V$. In the subthreshold regime the
+drain current follows:
+
+\begin{equation}
+  I_{D} = I_0 \exp\left(\frac{V}{nV_T}\right)
+  \label{eq:subthreshold_current}
+\end{equation}
+
+where $V_T = k_BT/q$ is the thermal voltage, $n$ is the slope factor
+(typically $1.5$--$2.5$), and $I_0$ is a process-dependent pre-exponential
+constant.
+
+The pre-exponential factor $I_0$ depends on temperature as:
+
+\begin{equation}
+  I_0(T) = \mu(T)\,C_{\mathrm{ox}}\frac{W}{L}(n-1)\left(\frac{k_BT}{q}\right)^2
+  \label{eq:I0_temperature}
+\end{equation}
+
+A gas-induced exothermic reaction raises the local temperature of the active
+pixel, shifting $V_{\mathrm{th}}$ and producing a measurable change in drain
+current proportional to the gas concentration. The fractional current change
+is related to the temperature perturbation by $\Delta I/I = \alpha_T\,\Delta T$,
+where the thermal sensitivity coefficient is:
+
+\begin{equation}
+  \alpha_T = \frac{\partial \ln I}{\partial T} \approx \frac{E_a}{k_B T^2}
+  \label{eq:alpha_T}
+\end{equation}
+
+The amplitude of the drain-current modulation at angular frequency $\omega$,
+produced by a periodic thermal stimulus of amplitude $\Delta T$, is:
+
+\begin{equation}
+  \Delta I(\omega) = I_0\,\alpha_T\,\frac{K_H C}{G_{\mathrm{th}}(1-j\omega\tau)}
+  \label{eq:delta_I}
+\end{equation}
+
+The differential 2T readout circuit used to extract this signal is shown in
+Figure~\ref{fig:differential_t2}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\linewidth]{build/differential_t2_readout.png}
+  \caption[Differential 2T readout circuit]{Differential 2T readout
+           circuit for the GMOS sensor pair. The active pixel (with
+           catalyst) and the blind pixel (without catalyst) share the
+           same bias supply; their drain voltages form the differential
+           input to the \gls{lia}.}
+  \label{fig:differential_t2}
+\end{figure}
+
+Differentiating~\eqref{eq:subthreshold_current} with respect to temperature
+yields the normalised thermal sensitivity:
+
+\begin{equation}
+  \frac{1}{I_D}\frac{\mathrm{d}I_D}{\mathrm{d}T} = \frac{V}{nV_T^2}\frac{k_B}{q}
+  \label{eq:thermal_sensitivity}
+\end{equation}
+
+\subsubsection{Dynamic Operation Instead of Static Sensing}
+Accurate readout of the transistor response is challenged by low-frequency
+noise sources, particularly flicker noise, which hinders the signal-to-noise
+ratio for measurements in \gls{dc} mode. To address this, the present work
+investigates the incorporation of \gls{lia} techniques into the GMOS readout
+path. Lock-in amplifiers extract weak periodic signals from noise by performing
+synchronous detection at a known reference frequency. By shifting the
+measurement away from the low-frequency noise spectrum and using narrow-band
+filtering, \glspl{lia} can significantly improve signal-to-noise ratio and
+enable more reliable extraction of temperature-induced variations in the GMOS
+transistor. This thesis focuses on developing and demonstrating a lock-in-based
+readout method for the GMOS sensor, aiming to improve measurement stability,
+noise performance, and overall device usability.  Implementation of an
+environment sensing system based on the GMOS gas sensor has been explored in
+previous work, showing promising results. However, new experimental results
+that shed new light on the noise properties of the sensor have introduced new
+prospects of improvement. \\
+One key area for improvement is the implementation of the readout circuit. So
+far, measurements have been focused on differential measurements of the
+operation points of two NMOS transistors in the sub-threshold region. The
+operational point varies with temperature due to exposure to gas; one
+transistor has an active catalyst while the other has no catalytic layer.
+Subtracting the voltage drop of each transistor and amplifying the result
+yields a readout proportional to the gas concentration. As it turns out, the
+dominant noise in this kind of measurement method is the flicker noise.
+Previous results and experiments with the GMOS device have shown that the
+device is capable of sensing gas concentrations in the range of
+$10$--$50\,\text{ppm}$. While theoretical calculations have previously shown
+that the current sensor can theoretically detect concentrations as low as
+$0.5\,\text{ppm}$.
+
+\subsection{Lock-In (LIA) Operation Principles}
+\gls{cmos} technology is the most prominent technology in microelectronics used for
+various fields and applications such as analog circuits, digital logic, RF and
+sensing circuits. With the successful trend of miniaturization of integrated
+circuits, IC designers managed to increase operating frequency and decrease
+power consumption. While successful in these stated fields, the decreased device
+size comes at a cost of increased flicker noise. Low-frequency, high-amplitude
+noise limits the performance and functionality of analog and digital circuits,
+indirectly increasing the noise figure of amplifiers and voltage converters. Such
+noise degrades the \gls{snr} of \gls{cmos}-based sensors such as \gls{ir} and
+image sensors.
+Flicker noise, also widely known as $1/f$ noise, has a \gls{psd} proportional to
+$f^{-\gamma (f)}$ where $0.8 \leq \gamma (f) \leq 1.2$. Flicker noise tends to
+be the dominant noise factor in low-frequency measurements, where it is
+significantly higher than the background thermal white noise component. The
+physical source of flicker noise has been the subject of extensive research.
+Measurements conducted on semiconductors indicated that there is a relation between
+surface state and noise spectrum, while measurements of conducting materials
+exhibited an inverse relation between the noise spectrum and material volume.
+Lock-in amplifiers are used to detect and measure low-amplitude \gls{ac} signals even
+in the presence of strong background noise. The technique is based on
+phase-sensitive measurement, which enables detecting the frequency component of
+the signal and its relative phase while rejecting other noisy frequencies. The
+lock-in approach typically requires three elements: a waveform generator, a
+mixer, and a low-pass filter. The waveform generator produces a periodic signal
+of frequency $f_{\mathrm{ref}}$ that modulates the target signal and also serves as an
+internal reference signal.
+
+\begin{equation}
+  V_{\mathrm{ref}} = V \sin(2 \pi f_{\mathrm{ref}} t + \phi_{\mathrm{ref}} )
+  \label{eq:ref_signal}
+\end{equation}
+
+The mixer multiplies the target signal and the reference signal. The resulting
+signal is fed into a low-pass filter that rejects any non-\gls{dc} components of the
+mixed signal, leaving a slow-varying \gls{dc} signal that is proportional to the
+instantaneous amplitude of the target signal. In the following proposed
+architecture of a lock-in amplifier mentioned in \cite{lowpower_lia_placeholder}
+% TODO: "low power lock in for complex impedance measurements" (paper in downloads must add reference here)
+one may find an analog implementation of such a measurement.
+
+\begin{sidewaysfigure}[p]
+    \centering
+    \includegraphics[width=\textheight]{build/lia_schematic.png}
+    \caption[LIA block diagram]{Dual-channel lock-in amplifier block
+             diagram, structured analogously to a heterodyne receiver.
+             After pre-amplification and band-pass filtering, the signal
+             is split into two parallel phase-sensitive detection
+             channels. Each channel multiplies by one of two orthogonal
+             reference signals---$\sin(2\pi f_{\mathrm{ref}}t)$ for the
+             in-phase (I) channel and $\cos(2\pi f_{\mathrm{ref}}t)$ for
+             the quadrature (Q) channel---both derived from the reference
+             oscillator. Low-pass filtering then yields the DC components
+             $I_{\mathrm{DC}}$ and $Q_{\mathrm{DC}}$.}
+    \label{fig:lia_schematic}
+\end{sidewaysfigure}
+
+A current reference frequency is fed through an unknown impedance translated to
+a voltage through an op-amp based transconductance amplifier. The signal is
+then passed through a \gls{bpf} (which is optional and is mainly used to reject
+any frequencies that are higher or lower than the reference signal's
+frequency). The resulting signal is fed into two mixers with the same reference
+frequency (with $\pi / 2$ phase difference). Then the resulting signal is
+filtered through a \gls{lpf} to obtain the \gls{dc} component. We can analyze
+the result by denoting the mixer output signals as: 
+
+\begin{align}
+  I(t) &= V_\mathrm{sig}\sin(2\pi f_\mathrm{sig}t + \phi_\mathrm{sig})
+          \cdot\sin(2\pi f_\mathrm{ref}t + \phi_\mathrm{ref})
+          \nonumber\\
+       &= \frac{V_\mathrm{sig}}{2}\left[
+            \cos\left(2\pi(f_\mathrm{sig}-f_\mathrm{ref})t
+                      +\phi_\mathrm{sig}-\phi_\mathrm{ref}\right)
+          - \cos\left(2\pi(f_\mathrm{sig}+f_\mathrm{ref})t
+                      +\phi_\mathrm{sig}+\phi_\mathrm{ref}\right)
+          \right]
+          \label{eq:I_channel}\\
+  Q(t) &= V_\mathrm{sig}\sin(2\pi f_\mathrm{sig}t + \phi_\mathrm{sig})
+          \cdot\cos(2\pi f_\mathrm{ref}t + \phi_\mathrm{ref})
+          \nonumber\\
+       &= \frac{V_\mathrm{sig}}{2}\left[
+            \sin\left(2\pi(f_\mathrm{sig}+f_\mathrm{ref})t
+                      +\phi_\mathrm{sig}+\phi_\mathrm{ref}\right)
+          + \sin\left(2\pi(f_\mathrm{sig}-f_\mathrm{ref})t
+                      +\phi_\mathrm{sig}-\phi_\mathrm{ref}\right)
+          \right]
+          \label{eq:Q_channel}
+\end{align}
+When $f_\mathrm{sig} = f_\mathrm{ref}$, the difference-frequency argument
+$2\pi(f_\mathrm{sig}-f_\mathrm{ref})t$ vanishes, so the \gls{dc} terms reduce
+to constant phase offsets $\cos(\phi_\mathrm{sig}-\phi_\mathrm{ref})$ and
+$\sin(\phi_\mathrm{sig}-\phi_\mathrm{ref})$ respectively. The sum-frequency
+terms, oscillating at $2f_\mathrm{ref}$, are attenuated by the \gls{lpf},
+leaving the \gls{dc} outputs:
+\begin{align}
+  I_\mathrm{DC} &= \frac{V_\mathrm{sig}}{2}\cos(\phi_\mathrm{sig}-\phi_\mathrm{ref})
+                   \label{eq:I_dc}\\
+  Q_\mathrm{DC} &= \frac{V_\mathrm{sig}}{2}\sin(\phi_\mathrm{sig}-\phi_\mathrm{ref})
+                   \label{eq:Q_dc}
+\end{align}
+
+\subsection{LIA Performance parameters tailored to GMOS}
+Params tailored ...
+
+\subsubsection{The Actuators: How to Modulate The Heater Resistor}
+Rather than applying a DC bias to the integrated heater resistors, the LIA reference output applies a sinusoidal voltage at frequency $f_{\mathrm{ref}}$:
+
+\begin{equation}
+  V_H(t) = V_{\mathrm{ref}}\sin\left(2\pi f_{\mathrm{ref}} t\right)
+  \label{eq:heater_voltage}
+\end{equation}
+
+The instantaneous power dissipated in each heater is:
+
+\begin{equation}
+  P_H(t) = R_H \left(I_{\mathrm{DC}}^2 + 2I_{\mathrm{DC}}\,i\cos(\omega t)
+            + i^2\cos^2(\omega t)\right)
+  \label{eq:heater_power}
+\end{equation}
+
+Where $i$ is the amplitude of the AC modulation current. The $i^2$ term is assumed
+negligible. Both heater resistors, $R_{\mathrm{H,blind}}$ and $R_{\mathrm{H,active}}$,
+are driven in parallel and are assumed to have equal values and equal temperature
+coefficients of resistance (TCR). Imbalances between the two heater resistors will be
+addressed separately.
+
+
+\subsubsection{How to Optimize the Modulation Frequency of the Heater}
+how to optimize frequency of heater
+
+\subsection{The Sensing Thermal Sensor Mechanism}
+The GMOS performs thermal-offset subtraction by reading the differential drain
+voltage between a blind and an active pixel. A catalyst layer is applied to the
+active pixel, while both pixels experience the same ambient temperature, supply
+noise, and heater-induced thermal background. Taking their difference therefore
+isolates only the additional threshold-voltage shift caused by the gas
+reaction:
+
+\begin{align}
+  \Delta V_{\mathrm{out}} &= V_A - V_B
+                              \label{eq:diff_voltage_def}\\
+  \Delta V_{\mathrm{out}} &= \left(I_{\mathrm{D,blind}} - I_{\mathrm{D,active}}\right) R_s
+                              \label{eq:diff_voltage}
+\end{align}
+
+Where $V_A$ and $V_B$ are the drain voltages of the active and blind pixels,
+$R_s$ is the series resistor, and $V_{\mathrm{DD}}$ is the supply voltage.
+Sensing in differential mode suppresses the residual common-mode noise and
+thermal effects experienced by both transistors, leaving behind only the
+voltage change attributable to the catalytic reaction on the active pixel.
+
+The choice of the biasing resistor $R_s$ must satisfy the requirement that
+the voltage drop across it remains negligible relative to the transistor output
+impedance, formally:
+
+\begin{equation}
+  R_s \ll r_{ds} = \frac{\partial v_{\mathrm{ds}}}{\partial i_d}
+  \label{eq:bias_condition}
+\end{equation}
+
+Additionally, when a chemical reaction shifts $V_{\mathrm{th}}$ and hence $I_D$,
+the resulting current variation must be small enough that the operating point
+does not move significantly. As described by \eqref{eq:subthreshold_current},
+a threshold shift $\delta V_{\mathrm{th}}$ produces a fractional current change
+$\delta I_D / I_D = \delta V_{\mathrm{th}} / (nV_T)$. Requiring this to remain
+small imposes:
+
+\begin{equation}
+  R_s \gg \frac{nV_T}{I_D}
+  \label{eq:Rs_condition}
+\end{equation}
+
+This requirement is typically satisfied with $R_s \geq 500\,\mathrm{k\Omega}$ at
+typical GMOS subthreshold bias levels. Both blind and active resistors must
+match in value so that the differential output defined in \eqref{eq:diff_voltage}
+is not corrupted by a resistor mismatch.
+
+\subsubsection{How to Modulate the Gate of the Sensing GMOS transistor}
+so far we didn't need to...
+
+\subsubsection{How to Optimize Operation Point of the MOS}
+optimize operation point

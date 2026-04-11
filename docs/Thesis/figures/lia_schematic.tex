@@ -1,0 +1,97 @@
+\documentclass[tikz, border=24pt, 12pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}[
+    %% Rectangular block
+    block/.style={
+        rectangle, draw=black, line width=1.0pt, fill=white,
+        minimum width=3.4cm, minimum height=1.5cm,
+        align=center, font=\large
+    },
+    %% Circle block for phase-sensitive detector (multiplier)
+    mixer/.style={
+        circle, draw=black, line width=1.0pt, fill=white,
+        minimum size=2.1cm, align=center
+    },
+    >=Stealth,
+    line width=1.0pt
+]
+
+%─────────────────────────────────────────────────────────────────────────────
+%  COMMON INPUT PATH  — Pre-Amp and BPF on the central axis (y = 0)
+%─────────────────────────────────────────────────────────────────────────────
+\node[block] (preamp) at ( 4.5,  0) {Pre-Amp};
+\node[block] (bpf)    at (10.0,  0) {BPF};
+
+%  Junction where the signal splits into I and Q branches
+\coordinate (split) at (13.5, 0);
+
+%─────────────────────────────────────────────────────────────────────────────
+%  I BRANCH  (In-phase, top, y = +4)
+%─────────────────────────────────────────────────────────────────────────────
+\node[mixer] (psd_I) at (18.0,  4.0) {\LARGE$\times$};
+\node[block]  (lpf_I) at (23.5,  4.0) {LPF};
+
+%─────────────────────────────────────────────────────────────────────────────
+%  Q BRANCH  (Quadrature, bottom, y = -4)
+%─────────────────────────────────────────────────────────────────────────────
+\node[mixer] (psd_Q) at (18.0, -4.0) {\LARGE$\times$};
+\node[block]  (lpf_Q) at (23.5, -4.0) {LPF};
+
+%─────────────────────────────────────────────────────────────────────────────
+%  REFERENCE OSCILLATOR — centred between the two mixers
+%─────────────────────────────────────────────────────────────────────────────
+\node[block] (refOsc) at (18.0,  0)
+    {Ref.\ Oscillator\\[4pt]$\omega_\mathrm{ref}$};
+
+%─────────────────────────────────────────────────────────────────────────────
+%  SIGNAL PATH WIRES
+%─────────────────────────────────────────────────────────────────────────────
+%% Input
+\draw[->] (0.8, 0) -- (preamp.west)
+    node[pos=0, left] {$V_\mathrm{sig}(t)$};
+
+\draw[->] (preamp.east) -- (bpf.west);
+\draw[->] (bpf.east)    -- (split);
+
+%% Junction dot
+\fill (split) circle (3.5pt);
+
+%% split → I branch: up then right
+\draw      (split)     -- (13.5,  4.0);
+\draw[->]  (13.5, 4.0) -- (psd_I.west);
+
+%% split → Q branch: down then right
+\draw      (split)     -- (13.5, -4.0);
+\draw[->]  (13.5,-4.0) -- (psd_Q.west);
+
+%% I: mixer → LPF → output
+\draw[->] (psd_I.east) -- (lpf_I.west);
+\draw[->] (lpf_I.east) -- ++(1.8, 0) node[right] {$I_\mathrm{DC}$};
+
+%% Q: mixer → LPF → output
+\draw[->] (psd_Q.east) -- (lpf_Q.west);
+\draw[->] (lpf_Q.east) -- ++(1.8, 0) node[right] {$Q_\mathrm{DC}$};
+
+%─────────────────────────────────────────────────────────────────────────────
+%  REFERENCE WIRES — equations written on the wires (no phase-shifter block)
+%  Oscillator shares x = 18 with both mixers, so both wires are vertical.
+%─────────────────────────────────────────────────────────────────────────────
+\draw[->] (refOsc.north) -- (psd_I.south)
+    node[midway, right=8pt, font=\normalsize]
+    {$\sin\!\bigl(2\pi f_\mathrm{ref}\,t + \phi_\mathrm{ref}\bigr)$};
+
+\draw[->] (refOsc.south) -- (psd_Q.north)
+    node[midway, right=8pt, font=\normalsize]
+    {$\cos\!\bigl(2\pi f_\mathrm{ref}\,t + \phi_\mathrm{ref}\bigr)$};
+
+%─────────────────────────────────────────────────────────────────────────────
+%  CHANNEL LABELS  (on the vertical branch wires)
+%─────────────────────────────────────────────────────────────────────────────
+\node[left=4pt, font=\small\itshape, text=gray] at (13.5,  2.2) {I};
+\node[left=4pt, font=\small\itshape, text=gray] at (13.5, -2.2) {Q};
+
+\end{tikzpicture}
+\end{document}

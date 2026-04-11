@@ -1,0 +1,63 @@
+\documentclass{report}
+
+%─── Page geometry (wider text area; accepted by user as a global preference) ─
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=3cm]{geometry}
+
+%─── Core packages ────────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{rotating}           % sidewaysfigure for wide/landscape figures
+\usepackage[backend=biber, style=numeric]{biblatex}
+\usepackage[acronym]{glossaries}
+
+%─── List of Figures: "Figure N: Title  ...  page" format ────────────────────
+\usepackage{tocloft}
+\renewcommand{\cftfigpresnum}{Figure~}   % prefix before figure number
+\renewcommand{\cftfigaftersnum}{: }     % separator between number and title
+\setlength{\cftfignumwidth}{5em}        % column width for "Figure N: "
+
+%─── Suppress section/subsection numbering; keep TOC entries ─────────────────
+%    secnumdepth 0 = chapters only (none exist here), so nothing is numbered.
+\setcounter{secnumdepth}{0}
+
+%─── Simple figure numbering: 1, 2, 3 … (not 0.1, 0.2 … from report class) ──
+\renewcommand{\thefigure}{\arabic{figure}}
+
+%─── Acronyms ─────────────────────────────────────────────────────────────────
+\makeglossaries
+\input{acronyms.tex}
+
+\addbibresource{references.bib}
+
+\begin{document}
+
+\title{Improving GMOS Performance Using Lock In Amplifier}
+\author{Eli Zeltser}
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+\input{abstract.tex}
+
+\glsaddall
+% Acronym table: temporarily narrow margins (wider text) so each entry fits on
+% a single line; restore normal geometry immediately after.
+\newgeometry{left=1.5cm, right=1.5cm, top=2cm, bottom=2cm}
+\setlength{\glsdescwidth}{\dimexpr\textwidth-3.5cm\relax}
+\printglossary[type=\acronymtype, title=Acronyms, style=long, nonumberlist]
+\restoregeometry
+
+\input{introduction.tex}
+\input{method.tex}
+\input{results.tex}
+\input{conclusions.tex}
+
+\printbibliography
+
+\end{document}
