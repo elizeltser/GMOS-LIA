@@ -3,13 +3,16 @@ Noise Measurement using LIA setup.
 """
 
 import csv
+import logging
 import os
 import threading
 import time
 
 import ATE
 
-from . import SetupBase
+from .setup_base import SetupBase
+
+logger = logging.getLogger(__name__)
 
 
 class NoiseMeasurement(SetupBase):
@@ -19,6 +22,7 @@ class NoiseMeasurement(SetupBase):
 
     @SetupBase.setup_ate
     def run(self):
+        logger.info(f"Starting NoiseMeasurement (duration={self.duration*1e3:.0f} ms)")
         data_file = os.path.join(self.results_dir, 'noise_data.csv')
 
         with ATE.LIA(rm=self.rm) as lia, ATE.SCU('SCU1', rm=self.rm) as scu:
@@ -41,10 +45,12 @@ class NoiseMeasurement(SetupBase):
                         time.sleep(0.01)  # 100 Hz
 
             thread = threading.Thread(target=capture_data)
+            logger.info(f"Data capture started → {data_file}")
             thread.start()
 
             time.sleep(self.duration)
             stop_event.set()
             thread.join()
+            logger.info("Data capture complete.")
 
         # Process data for PSD, but for now just save

@@ -4,34 +4,54 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Setup
 
+The virtualenv lives at the **repo root** (`GMOS-LIA/.venv/`), not inside `python/`.
+
 ```bash
+# From repo root (GMOS-LIA/)
 python -m venv .venv
 source .venv/bin/activate
+cd python
 pip install -e .
 pip install -r ./requirements.txt
+```
+
+## IMPORTANT: Always use the virtual environment
+
+All dependencies (matplotlib, pyvisa, numpy, etc.) are installed only inside `.venv/`. The system `python`/`python3` will fail with `ModuleNotFoundError`. The venv is one level up from this directory — always use `../.venv/bin/python` (or activate first).
+
+```bash
+# Correct — use venv Python directly (from python/ directory)
+../.venv/bin/python sources/main.py --experiment <experiment_name>
+../.venv/bin/pytest tests/
+../.venv/bin/ruff check .
+../.venv/bin/pyright .
+
+# Or activate once from the repo root and use bare commands
+source ../.venv/bin/activate
+python sources/main.py ...
 ```
 
 ## Commands
 
 ```bash
 # Run all tests
-pytest tests/
+../.venv/bin/pytest tests/
 
 # Run a single test file
-pytest tests/test_iv_sweeps.py
+../.venv/bin/pytest tests/test_iv_sweeps.py
 
 # Run a specific test (including parametrized variants)
-pytest tests/test_iv_sweeps.py::test_linear_iv_sweep
-pytest tests/test_iv_sweeps.py::test_linear_iv_sweep[0-1-0.1]
+../.venv/bin/pytest tests/test_iv_sweeps.py::test_linear_iv_sweep
+../.venv/bin/pytest tests/test_iv_sweeps.py::test_linear_iv_sweep[0-1-0.1]
 
 # Lint
-ruff check .
+../.venv/bin/ruff check .
 
 # Type check
-pyright .
+../.venv/bin/pyright .
 
 # Run an experiment via CLI
-python sources/main.py --experiment <experiment_name> [args]
+../.venv/bin/python sources/main.py --experiment <experiment_name> [args]
 ```
 
 ## Architecture

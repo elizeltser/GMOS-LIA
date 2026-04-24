@@ -20,14 +20,14 @@ This document will include:
 For the correct usage of this project one must make sure the following programs are installed:
 
 - **Python** version at least 3.13
-- **NI-VISA** driver for GPIB devices
+- **NI-VISA** driver for GPIB devices (or **pyvisa-py** as a pure-Python alternative — no driver installation required, included as a project dependency)
 
 To install the project on the PC one must run the following commands:
 
 ```shell
 python -m venv .venv
 .\.venv\Scripts\activate
-# for Linux or Mac that will be source ./.venv/bin/activate
+# for Linux or Mac that will be `source ./.venv/bin/activate`
 git clone https://github.com/elizeltser/GMOS-LIA.git
 cd GMOS-LIA
 pip install .
@@ -136,6 +136,34 @@ python -m GMOS --SG-pulse-burst
 
 > pytest entry point TBD...
 
+#### CLI Reference
+
+Run from the repo root with `python python/sources/main.py <args>`.
+
+| Argument | Short | Description |
+| --- | :---: | --- |
+| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices` is used. Valid names: `IV-voltage-lin`, `IV-current-log`, `SG-pulse-burst`, `noise-measurement`, `lia`. |
+| `--list_devices` | — | Probe all visible VISA resources and print a summary grouped by interface type (GPIB, TCPIP, USB, Serial). For each resource the VISA address string, interface-specific details (GPIB primary address / IP host / USB serial number), and the `*IDN?` response are shown. Devices that do not respond to IDN (e.g. HP 6624A, HP 8116A) display `(no response)`. |
+| `--config <path>` | `-c` | Path to an optional config file (reserved for future use). |
+
+Example output of `--list_devices`:
+
+```
+==================================================
+  VISA Device Discovery  (4 resource(s) found)
+==================================================
+
+[GPIB]
+  GPIB0::22::INSTR
+    Board   : GPIB0   Primary address: 22
+    IDN     : Keysight Technologies,B2962A,MY52350661,2.2.1744.8725
+
+[TCPIP]
+  TCPIP0::132.68.54.194::inst0::INSTR
+    Host    : 132.68.54.194
+    IDN     : Stanford_Research_Systems,SR860,003693,V1.51
+```
+
 #### `ATE` Implementation Details
 
 ATE device wrappers will be written in the `python\sources\ATE\` folder. Most of the abstraction will be based on transferring GBIB commands and data using the **pyvisa** python library.
@@ -225,6 +253,7 @@ SR860 supports fully the IEEE488 as well as VXI-11 for streaming data.
 - Preffered package for python directory handling is pathlib. Any inputs from user (for example paths that are received via CLI arguments), are also supported so variables that are associated with user interraction should support in typecheck both **str** and **Path** types.
 - Preffered test result file format is `.csv` and the package for the handling of the file is using the python default **csv** package.
 - It can be assumed that the project will be always run from its root directory.
+- **Logging**: all modules obtain a logger with `logging.getLogger(__name__)`. No module configures the root logger — that is done once in `main.py` via `logging.basicConfig()` with format `%(asctime)s [%(levelname)-8s] %(name)s: %(message)s`. Use `logging.INFO` for normal progress messages and `logging.DEBUG` for VISA command traces. Never use `print()` for diagnostic output.
 
 ### `setups\` Implementation Details
 

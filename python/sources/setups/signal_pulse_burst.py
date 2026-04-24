@@ -1,6 +1,7 @@
 """
 Signal Generated Pulse Burst setup.
 """
+import logging
 from typing import List
 
 import time
@@ -8,7 +9,9 @@ import time
 import numpy as np
 import ATE
 
-from . import SetupBase
+from .setup_base import SetupBase
+
+logger = logging.getLogger(__name__)
 
 
 class SignalPulseBurst(SetupBase):
@@ -23,6 +26,7 @@ class SignalPulseBurst(SetupBase):
 
     @SetupBase.setup_ate
     def run(self):
+        logger.info("Starting SignalPulseBurst")
         frequencies = np.logspace(2, 5, 50)  # Example sweep
         x_data: List[float] = []
         y_data: List[float] = []
@@ -46,6 +50,7 @@ class SignalPulseBurst(SetupBase):
             sg.set_pulse_width(self.sg_width * 1e9, 'NS')  # Convert to ns
             sg.set_amplitude(self.sg_amp)
 
+            logger.info(f"Beginning frequency sweep ({len(frequencies)} points)")
             for freq in frequencies:
                 lia.set_frequency(freq)
                 time.sleep(1)  # Wait for settling
@@ -53,5 +58,6 @@ class SignalPulseBurst(SetupBase):
                 x_data.append(x)
                 y_data.append(y)
 
+        logger.info("Frequency sweep complete.")
         data = {'frequency': frequencies, 'X': x_data, 'Y': y_data}
         self.save_results(data, 'signal_pulse_burst')

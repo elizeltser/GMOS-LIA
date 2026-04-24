@@ -2,7 +2,7 @@
 HP 8116A Signal Generator wrapper.
 """
 
-from . import ATEBase
+from .ate_base import ATEBase
 from enum import Enum
 
 class TriggerMode(Enum):

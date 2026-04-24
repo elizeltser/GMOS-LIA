@@ -4,7 +4,7 @@ SR860 Lock-in Amplifier wrapper.
 
 from enum import Enum
 
-from . import ATEBase
+from .ate_base import ATEBase
 
 
 class Sensitivity(Enum):
@@ -64,6 +64,16 @@ class FilterSlope(Enum):
     DB12 = 1
     DB18 = 2
     DB24 = 3
+
+class InputSource(Enum):
+    A         = 0
+    A_MINUS_B = 1
+    I_1MEG    = 2
+    I_100MEG  = 3
+
+class InputCoupling(Enum):
+    AC = 0
+    DC = 1
 
 class SR860(ATEBase):
     def __init__(self, tag: str = 'LIA', rm=None) -> None:
@@ -145,3 +155,11 @@ class SR860(ATEBase):
     def auto_range(self):
         """Auto range"""
         self.write('ARNG')
+
+    def set_input_source(self, source: InputSource):
+        """Set input source (A, A-B, current)"""
+        self.write(f'ISRC {source.value}')
+
+    def set_input_coupling(self, coupling: InputCoupling):
+        """Set input coupling (AC or DC)"""
+        self.write(f'ICPL {coupling.value}')

@@ -5,13 +5,17 @@ Keysight B2962A Source Measure Unit wrapper.
 from enum import Enum
 from typing import List
 
-from . import ATEBase
+from .ate_base import ATEBase
 
 
 class SourceMode(Enum):
     FIXED = 'FIX'
     LIST = 'LIST'
     SWEEP = 'SWE'
+
+class SourceFunction(Enum):
+    VOLTAGE = 'VOLT'
+    CURRENT = 'CURR'
 
 class MeasurementFunction(Enum):
     VOLTAGE = 'VOLT'
@@ -27,6 +31,10 @@ class B2962A(ATEBase):
         """Set DC voltage level for channel"""
         self.write(f':SOUR{channel}:VOLT:LEV {voltage}')
 
+    def set_voltage_compliance(self, comp: float, channel: int = 1) -> None:
+        """Set SMU output voltage compliance"""
+        self.write(f':SENS{channel}:VOLT:PROT {comp}')
+
     def get_voltage(self, channel: int = 1) -> float:
         """Get DC voltage level"""
         return float(self.query(f':SOUR{channel}:VOLT:LEV?'))
@@ -35,9 +43,21 @@ class B2962A(ATEBase):
         """Set DC current level for channel"""
         self.write(f':SOUR{channel}:CURR:LEV {current}')
 
+    def set_current_compliance(self, comp: float, channel: int = 1) -> None:
+        """Set SMU output current compliance"""
+        self.write(f':SENS{channel}:CURR:PROT {comp}')
+
     def get_current(self, channel: int = 1) -> float:
         """Get DC current level"""
         return float(self.query(f':SOUR{channel}:CURR:LEV?'))
+
+    def set_source_function(self, func: SourceFunction, compliance: float, channel: int = 1) -> None:
+        """Set source function (voltage or current) and paired compliance limit."""
+        self.write(f':SOUR{channel}:FUNC:MODE {func.value}')
+        if func == SourceFunction.VOLTAGE:
+            self.set_current_compliance(compliance, channel)
+        else:
+            self.set_voltage_compliance(compliance, channel)
 
     def set_source_mode(self, mode: SourceMode, channel: int = 1) -> None:
         """Set source mode"""
@@ -68,6 +88,10 @@ class B2962A(ATEBase):
     def measure_spot(self) -> str:
         """Execute spot measurement"""
         return self.query(':MEAS?')
+
+    def measure_current(self, channel: int = 1) -> float:
+        """Spot-measure current on the given channel."""
+        return float(self.query(f':MEAS:CURR? (@{channel})'))
 
     def set_aperture_time(self, time: float, channel: int = 1, mode: str = 'VOLT') -> None:
         """Set measurement aperture time"""

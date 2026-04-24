@@ -2,7 +2,7 @@
 HP 6624A Power Supply wrapper.
 """
 
-from . import ATEBase
+from .ate_base import ATEBase
 
 
 class HP6624A(ATEBase):

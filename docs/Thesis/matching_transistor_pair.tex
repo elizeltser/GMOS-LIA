@@ -3,34 +3,79 @@ As was previously discussed, the planned GMOS connection scheme which was
 established so far consists of two 2T connected GMOS transistors, each connected
 in series to a fixed value resistor. This connection method was evaluated and
 it was established that a large offset readout in no gas measurements. This
-essentially hinders the ability of the readout circuit to extract the
+hinders the ability of the readout circuit to extract the
 relatively low signal fluctuations compared to the offset value. \\
-In this paper we will formalize the origins of the offset and explore ways
+In this chapter we will formalize the origins of the offset and explore ways
 minimize it.
 
-\subsection{Physical setup}
+\subsubsection{Necessity to Minimize Offset Voltage}
+The differential voltage signal resulting in the bridge topology can be fed
+to the LIA sub-circuit in either DC or AC coupling. The signal at the input
+of the LIA is sampled and then digitally processed to extract the required
+LIA outputs. An important point to keep in mind is that the sampling circuit
+has a finite and adjustable voltage range and a fixed ADC resolution. From
+that fact, we can deduce that the minimal voltage step, and thus
+sensitivity, is related to the selected voltage range. Another issue is
+related to the usage of AC coupling. As stated by the datasheet, AC coupling
+input filter applies a 1Hz HPF on the input signal. Since we are required to
+sample very low frequency signals (in the $mHz$ range) we are therefore
+required to use DC coupling sampling and minimize the offset effect as much
+as possible to not archive clamping.
+
+\subsection{Optimization of Current-Temperature Relation}
+As per previous experiments, the GMOS transistors were connected in 2T
+connection and in series to a resistors of similar value. This setup
+introduces several contributing factors to the eventual DC offset at the
+sampling input. For example, resistor mismatch causing the transistors to
+operate on different operation points. The GMOS transistors themselves may
+have slight process mismatch. \\
 Each branch is a separate NMOS transistor connected in series to a resistor and fed by $V_{DD, i}(i=blind, active)$. Since the operation point of interest for gas sensing GMOS is the subthreshold, the drain current holds the following relation:
 
+If we assume that each transistor is fed by an independent supply $V_{DD,i}$ we can write the value of the transistor current:
+
 \begin{equation}
- I_{D,i}(T) = I_{0,i}\exp\!\left(\dfrac{q\,(V_{GS,i}-V_{T,i}(T))}{n_i\,k\,T}\right) 
+    I_{D,i}(T) = I_{0,i}\exp\!\left(\dfrac{q\,(V_{GS,i}-V_{T,i}(T))}{n_i\,k\,T}\right) 
 \end{equation}
 
 With the prefactor:
 
 \begin{equation}
-  I_{0,i} = \mu_{0,i} C_{ox,i} \dfrac{W_i}{L_i}\!\left(\dfrac{kT}{q}\right)^{\!2}\!(n_i-1)\Big(\dfrac{T_0}{T}\Big)^{\!2}
+    I_{0,i} = \mu_{0,i} C_{ox,i} \dfrac{W_i}{L_i}\!\left(\dfrac{kT}{q}\right)^{\!2}\!(n_i-1)\Big(\dfrac{T_0}{T}\Big)^{\!2}
 \end{equation}
 
-The two current relations $I_blind(T)$ and $I_active(T)$ are exactly the same if all Taylor coefficients match. However, since we can always assume that for our case, we are operating on a small signal region, thus the only relevant coefficients to match are the first and second order coefficients:
+The voltage threshold may drift with temperature change according to the relation:
 
 \begin{equation}
-  I_{D,1}(T_0)=I_{D,2}(T_0),\quad \mathrm{TCC}_1(T_0)=\mathrm{TCC}_2(T_0)
+    V_{T,i}(T)=V_{T,i}(T_0)+\alpha_i(T-T_0),\quad \alpha_i\equiv \dfrac{dV_T}{dT}\Big|_i
+\end{equation}
+
+The two current relations $I_{blind}(T)$ and $I_{active}(T)$ are exactly the
+same if all Taylor coefficients match. However, since we can always assume
+that for our case, we are operating on a small signal region, thus the only
+relevant coefficients to match are the first and second order coefficients:
+
+\begin{equation}
+    I_{D,\mathrm{blind}}(T_0)=I_{D,\mathrm{active}}(T_0),\quad \mathrm{TCC}_{\mathrm{blind}}(T_0)=\mathrm{TCC}_\mathrm{active}(T_0)
 \end{equation}
 
 The temperature coefficient ($TCC$) at the operation point:
 
+Writing down the KVL equation for each transistor at $\mathbf{T_0}$:
+
 \begin{equation}
-  \mathrm{TCC}_i \equiv \dfrac{1}{I_{D,i}}\dfrac{dI_{D,i}}{dT} = -\dfrac{q}{n_i k T}\!\left[\dfrac{dV_{T,i}}{dT}+\dfrac{V_{GS,i}-V_{T,i}}{T}\right] - \dfrac{2}{T}
+    V_{DD,i} = I_{D,i}(u_i)\,R_i + V_{T,i}(T_0) + u_i
 \end{equation}
 
+Therefore, the TCC becomes:
 
+\begin{equation}
+    \mathrm{TCC}_i \approx -\dfrac{1}{I_{D,i}}\dfrac{dI_{D,i}}{dT} = -\dfrac{q}{n_i k T}\!\left[\dfrac{dV_{T,i}}{dT}+\dfrac{V_{GS,i}-V_{T,i}}{T}\right] - \dfrac{2}{T}
+\end{equation}
+
+So, the \textbf{TCC is set entirely by the overdrive voltage} and device specific parameters. Forcing $\mathrm{TCC}_{\mathrm{active}}=\mathrm{TCC}_{\mathrm{blind}}$ uniquely pins down the relation:
+
+\begin{equation}
+    \dfrac{1}{n_1}\!\left[\alpha_1+\dfrac{u_1}{T_0}\right]=\dfrac{1}{n_2}\!\left[\alpha_2+\dfrac{u_2}{T_0}\right]
+\end{equation}
+
+Once both $u_i$ are fixed, both currents $I_{D,i}(u_i)$ are also fixed. It follows that \textbf{its impossible to force the same bias current} at the same time as the TCC in a 2T connection. The choise of resistors in that case plays no role since they can only adjust the voltage drop on the transistor.

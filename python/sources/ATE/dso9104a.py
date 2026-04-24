@@ -2,7 +2,7 @@
 Keysight DSO9104A Oscilloscope wrapper.
 """
 
-from . import ATEBase
+from .ate_base import ATEBase
 
 
 class DSO9104A(ATEBase):
