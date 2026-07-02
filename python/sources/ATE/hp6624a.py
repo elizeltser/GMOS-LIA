@@ -43,23 +43,23 @@ class HP6624A(ATEBase):
 
     def get_output_voltage(self, channel):
         """Query measured output voltage"""
-        return float(self.query(f'VOUT? {channel},{channel}'))
+        return float(self.query(f'VOUT? {channel}'))
 
     def get_output_current(self, channel):
         """Query measured output current"""
-        return float(self.query(f'IOUT? {channel},{channel}'))
+        return float(self.query(f'IOUT? {channel}'))
 
     def get_programmed_voltage(self, channel):
         """Query programmed voltage"""
-        return float(self.query(f'VSET? {channel},{channel}'))
+        return float(self.query(f'VSET? {channel}'))
 
     def get_programmed_current(self, channel):
         """Query programmed current"""
-        return float(self.query(f'ISET? {channel},{channel}'))
+        return float(self.query(f'ISET? {channel}'))
 
     def get_status(self, channel):
         """Get status byte"""
-        return int(self.query(f'STS? {channel},{channel}'))
+        return int(self.query(f'STS? {channel}'))
 
     def get_error(self):
         """Get error code"""
