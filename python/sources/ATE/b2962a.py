@@ -47,6 +47,14 @@ class B2962A(ATEBase):
         """Set SMU output current compliance"""
         self.write(f':SENS{channel}:CURR:PROT {comp}')
 
+    def get_current_compliance(self, channel: int = 1) -> float:
+        """Get SMU output current compliance"""
+        return float(self.query(f':SENS{channel}:CURR:PROT?'))
+
+    def get_voltage_compliance(self, channel: int = 1) -> float:
+        """Get SMU output voltage compliance"""
+        return float(self.query(f':SENS{channel}:VOLT:PROT?'))
+
     def get_current(self, channel: int = 1) -> float:
         """Get DC current level"""
         return float(self.query(f':SOUR{channel}:CURR:LEV?'))

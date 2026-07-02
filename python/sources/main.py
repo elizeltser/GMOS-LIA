@@ -49,6 +49,9 @@ def main():
                         help="Path to noise evaluation summary file")
     parser.add_argument("--lia-digest", metavar="CSV",
                         help="Digest a single LIA snap CSV (avg X/Y/R, X/Y RMSE)")
+    parser.add_argument("--lia-baseline", action="store_true",
+                        help="With --lia-digest: treat as a baseline run and overlay a "
+                             "linear R-drift fit with the estimated drift rate")
     parser.add_argument("--lia-sweep-scatter", nargs="+", metavar="CSV",
                         help="LIA snap CSVs to scatter against a swept parameter")
     parser.add_argument("--lia-diff-baseline", nargs="+", metavar="CSV",
@@ -65,6 +68,9 @@ def main():
                         help="lia_snap_only: total measurement duration in seconds (default: 60)")
     parser.add_argument("--interval", type=float, default=1.0,
                         help="lia_snap_only: sample interval in seconds (default: 1)")
+    parser.add_argument("--sweep-folder", metavar="NAME",
+                        help="lia_snap_sweep: subfolder under Results/LIAMeasurementSetup/ "
+                             "for the per-frequency CSVs (default: date-stamped)")
     args = parser.parse_args()
 
     if args.list_devices:
@@ -96,7 +102,7 @@ def main():
         return
 
     if args.lia_digest:
-        digest = LIASnapDigest(args.lia_digest)
+        digest = LIASnapDigest(args.lia_digest, baseline=args.lia_baseline)
         out_path = digest.compile()
         print(f"Digest saved to: {out_path}")
         plot_path = digest.plot_timeseries()
@@ -146,6 +152,13 @@ def main():
         experiment = setups.LIAMeasurementSetup(
             output_name=args.output_name, mode="snap_only",
             duration=args.duration, sample_interval=args.interval,
+        )
+        experiment.run()
+    elif args.experiment == "lia_snap_sweep":
+        experiment = setups.LIAMeasurementSetup(
+            output_name=args.output_name, mode="snap_sweep",
+            duration=args.duration, sample_interval=args.interval,
+            sweep_folder=args.sweep_folder,
         )
         experiment.run()
     else:

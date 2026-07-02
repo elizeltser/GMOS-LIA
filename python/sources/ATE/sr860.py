@@ -75,6 +75,13 @@ class InputCoupling(Enum):
     AC = 0
     DC = 1
 
+class InputRange(Enum):
+    V1    = 0
+    MV300 = 1
+    MV100 = 2
+    MV30  = 3
+    MV10  = 4
+
 class SR860(ATEBase):
     def __init__(self, tag: str = 'LIA', rm=None) -> None:
         super().__init__(tag, rm)
@@ -163,3 +170,11 @@ class SR860(ATEBase):
     def set_input_coupling(self, coupling: InputCoupling):
         """Set input coupling (AC or DC)"""
         self.write(f'ICPL {coupling.value}')
+
+    def set_input_range(self, rng: InputRange):
+        """Set voltage input range"""
+        self.write(f'IRNG {rng.value}')
+
+    def get_input_range(self):
+        """Get voltage input range"""
+        return int(self.query('IRNG?'))

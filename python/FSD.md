@@ -111,6 +111,7 @@ The automation work included in this repository should be written in **Python**.
 │   ├── main.py           # Application entry point
 │   ├── sources/          # Core ATE (Automatic Test Equipment) logic
 │   │   ├── ATE/          # Hardware wrappers for GPIB & test devices
+│   │   └── plotting/     # Modules related to measurement output port-processing
 │   │   └── setups/       # Definitions for experiment scenarios
 │   └── testing/          # Unit tests and hardware mocks (TBD)
 ├── Firmware/
@@ -346,14 +347,14 @@ In this chapter some additional information regarding the python implementation 
 | 6624A | `OVSET <ch>, <val>` | ch is 1-4 integer, val is Float (Volts) | Sets the Overvoltage Protection (OVP) trip point. |
 | 6624A | `OCP <ch>, <state>` | ch is 1-4 integer, state 0 or 1 | Enables (1) or disables (0) Overcurrent Protection (OCP). |
 | 6624A | `OCRST <ch>` | ch is 1-4 integer | Resets an output that was disabled by OCP or OVP. |
-
+| | | | |
 | 6624A | `VOUT? <ch>,<ch>`| ch is 1-4 integer | Queries the actual measured output voltage. |
 | 6624A | `IOUT? <ch>,<ch>`| ch is 1-4 integer | Queries the actual measured output current. |
 | 6624A | `VSET? <ch>,<ch>`| ch is 1-4 integer | Queries the programmed voltage setting. |
 | 6624A | `ISET? <ch>,<ch>`| ch is 1-4 integer | Queries the programmed current setting. |
 | 6624A | `STS? <ch>,<ch>` | ch is 1-4 integer | Returns the status byte (0–255) for the channel. |
 | 6624A | `ERR?` | None | Returns the current programming or hardware error code. |
-|||||
+| | | | |
 | 8116A | `FRQ` | Set the frequency,"HZ, KZ, MZ",1 mHz to 50 MHz | None |
 | 8116A | `AMP` | Set the amplitude,"V, MV",10 mV to 16.0 Vpp (50Ω) | None |
 | 8116A | `OFS` | Set the DC Offset,"V, MV",0.00 to ±7.95 V | None |

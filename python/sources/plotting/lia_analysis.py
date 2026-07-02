@@ -41,19 +41,32 @@ def _output_path(csv_path: Path, suffix: str) -> Path:
 
 
 class LIASnapDigest:
-    """Digest a single SR860 snap CSV: avg X/Y/R and RMSE of X/Y."""
+    """Digest a single SR860 snap CSV: avg X/Y/R, RMSE of X/Y, and phase theta.
 
-    def __init__(self, csv_path: str):
+    The CSV starts with a setup snapshot written as nested rows (a device label
+    row such as ``LIA`` / ``PSU[ch1]`` / ``SCU1[ch1]`` followed by ``setting,value``
+    rows), then a ``time,X,Y,R`` header and the measurement rows. Only X, Y and R
+    are recorded by the SR860; the phase theta is reconstructed as atan2(Y, X).
+
+    When ``baseline`` is set, the R trace is fit to a linear drift model and the
+    estimated drift rate is reported and overlaid on the plot.
+    """
+
+    def __init__(self, csv_path: str, baseline: bool = False):
         self.csv_path = Path(csv_path).resolve()
-        self.params: dict[str, float] = {}
+        self.baseline = baseline
+        # setup snapshot: device label -> {setting: raw string value}
+        self.setup: dict[str, dict[str, str]] = {}
         self._t: np.ndarray | None = None
         self._x: np.ndarray | None = None
         self._y: np.ndarray | None = None
         self._r: np.ndarray | None = None
+        self._theta: np.ndarray | None = None
         self._parse()
 
     def _parse(self) -> None:
-        params: dict[str, float] = {}
+        setup: dict[str, dict[str, str]] = {}
+        current_device: str | None = None
         data_rows: list[list[str]] = []
         in_data = False
         with open(self.csv_path, newline="") as f:
@@ -62,15 +75,18 @@ class LIASnapDigest:
                 if not row:
                     continue
                 if not in_data:
-                    if row[0].strip().lower() == "time":
+                    first = row[0].strip()
+                    if first.lower() == "time":
                         in_data = True
                         continue
-                    key = row[0].strip()
-                    if key in _PARAM_KEYS and len(row) > 1 and row[1].strip():
-                        try:
-                            params[key] = float(row[1])
-                        except ValueError:
-                            pass
+                    rest = [c.strip() for c in row[1:]]
+                    if not any(rest):
+                        # device label row, e.g. "LIA,,," or "PSU[ch1],,,"
+                        current_device = first
+                        setup.setdefault(current_device, {})
+                    elif current_device is not None:
+                        # "setting,value" row belonging to the current device
+                        setup[current_device][first] = rest[0]
                     continue
                 if len(row) >= 4:
                     data_rows.append(row)
@@ -78,26 +94,63 @@ class LIASnapDigest:
             raise ValueError(f"{self.csv_path}: no 'time,X,Y,R' header found")
 
         arr = np.array([[float(c) for c in r[:4]] for r in data_rows])
-        self.params = params
+        self.setup = setup
         self._t = arr[:, 0]
         self._x = arr[:, 1]
         self._y = arr[:, 2]
         self._r = arr[:, 3]
+        # SR860 only reports 3 params at a time (X, Y, R here); reconstruct phase.
+        self._theta = np.degrees(np.arctan2(self._y, self._x))
+
+    def _setting(self, device: str, key: str) -> float | None:
+        """Return a numeric setup setting, or None if absent/non-numeric."""
+        try:
+            return float(self.setup[device][key])
+        except (KeyError, ValueError, TypeError):
+            return None
+
+    def _drift_fit(self) -> tuple[float, float]:
+        """Linear least-squares fit of R vs time; return (slope [V/s], intercept [V])."""
+        assert self._t is not None and self._r is not None
+        slope, intercept = np.polyfit(self._t, self._r, 1)
+        return float(slope), float(intercept)
 
     def digest(self) -> dict:
-        assert self._x is not None and self._y is not None and self._r is not None
+        assert (self._x is not None and self._y is not None
+                and self._r is not None and self._theta is not None)
         rmse_x = float(np.std(self._x))
         rmse_y = float(np.std(self._y))
+        slope, intercept = self._drift_fit()
         return {
             "avg_X": float(np.mean(self._x)),
             "avg_Y": float(np.mean(self._y)),
             "avg_R": float(np.mean(self._r)),
+            "avg_theta": float(np.mean(self._theta)),
             "rmse_X": rmse_x,
             "rmse_Y": rmse_y,
             "rmse_R": float(np.hypot(rmse_x, rmse_y)),
             "xcorr_XY": self._xcorr(),
+            "drift_R_slope": slope,
+            "drift_R_intercept": intercept,
             "params": dict(self.params),
         }
+
+    @property
+    def params(self) -> dict[str, float]:
+        """Flat map of the setup values of interest, for reporting/textbox."""
+        pairs = {
+            "freq": ("LIA", "frequency_Hz"),
+            "psu_ch1_V": ("PSU[ch1]", "voltage_V"),
+            "psu_ch3_V": ("PSU[ch3]", "voltage_V"),
+            "smu1_V": ("SCU1[ch1]", "voltage_V"),
+            "smu2_V": ("SCU2[ch1]", "voltage_V"),
+        }
+        out: dict[str, float] = {}
+        for name, (device, key) in pairs.items():
+            v = self._setting(device, key)
+            if v is not None:
+                out[name] = v
+        return out
 
     def _xcorr(self) -> float:
         """Pearson cross-correlation coefficient of the X and Y time traces."""
@@ -110,9 +163,11 @@ class LIASnapDigest:
         d = self.digest()
         out = _output_path(self.csv_path, "_digest.csv")
         out.parent.mkdir(parents=True, exist_ok=True)
-        keys = list(_PARAM_KEYS)
+        keys = ["freq", "psu_ch1_V", "psu_ch3_V", "smu1_V", "smu2_V"]
         stat_keys = [
-            "avg_X", "avg_Y", "avg_R", "rmse_X", "rmse_Y", "rmse_R", "xcorr_XY",
+            "avg_X", "avg_Y", "avg_R", "avg_theta",
+            "rmse_X", "rmse_Y", "rmse_R", "xcorr_XY",
+            "drift_R_slope", "drift_R_intercept",
         ]
         with open(out, "w", newline="") as f:
             w = csv.writer(f)
@@ -123,16 +178,35 @@ class LIASnapDigest:
         print(f"Digest for {self.csv_path.name}:")
         for k in keys:
             if k in d["params"]:
-                print(f"  {k:10s} = {d['params'][k]}")
+                print(f"  {k:18s} = {d['params'][k]}")
         for k in stat_keys:
-            print(f"  {k:10s} = {d[k]:.6g}")
+            print(f"  {k:18s} = {d[k]:.6g}")
         return str(out)
 
+    def _setup_textbox_lines(self) -> list[str]:
+        """Formatted table lines for the setup-settings textbox."""
+        rows = [
+            ("LIA freq", self.params.get("freq"), "Hz"),
+            ("PSU ch1", self.params.get("psu_ch1_V"), "V"),
+            ("PSU ch3", self.params.get("psu_ch3_V"), "V"),
+            ("SMU1", self.params.get("smu1_V"), "V"),
+            ("SMU2", self.params.get("smu2_V"), "V"),
+        ]
+        lines = ["setup:"]
+        for label, val, unit in rows:
+            val_str = f"{val:.4g} {unit}" if val is not None else "n/a"
+            lines.append(f"  {label:9s} {val_str}")
+        return lines
+
     def plot_timeseries(self) -> str:
-        """Plot X, Y and R as a function of time into a single PNG."""
+        """Plot X, Y, R and phase theta versus time into a single PNG.
+
+        A textbox in the top-left lists the key setup settings. When ``baseline``
+        is set, a linear drift fit of R is overlaid with its estimated drift rate.
+        """
         assert (
-            self._t is not None and self._x is not None
-            and self._y is not None and self._r is not None
+            self._t is not None and self._x is not None and self._y is not None
+            and self._r is not None and self._theta is not None
         )
         out = _output_path(self.csv_path, "_timeseries.png")
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -141,8 +215,9 @@ class LIASnapDigest:
             (self._x, "X (V)"),
             (self._y, "Y (V)"),
             (self._r, "R (V)"),
+            (self._theta, "θ = atan2(Y, X) (deg)"),
         ]
-        fig, axes = plt.subplots(len(traces), 1, sharex=True, figsize=(8, 9))
+        fig, axes = plt.subplots(len(traces), 1, sharex=True, figsize=(8, 11))
         fig.suptitle(self.csv_path.stem)
 
         fmt = ticker.FuncFormatter(PlotCompiler._smart_fmt)
@@ -151,6 +226,31 @@ class LIASnapDigest:
             ax.set_ylabel(label)
             ax.grid(True, linestyle="--", linewidth=0.5, alpha=0.7)
             ax.yaxis.set_major_formatter(fmt)
+
+        # Setup-settings table, top-left of the first (X) subplot.
+        axes[0].text(
+            0.02, 0.97, "\n".join(self._setup_textbox_lines()),
+            transform=axes[0].transAxes, va="top", ha="left",
+            fontsize=8, family="monospace",
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.85),
+        )
+
+        # Baseline drift analysis: linear fit of R vs time.
+        if self.baseline:
+            ax_r = axes[2]
+            slope, intercept = self._drift_fit()
+            ax_r.plot(self._t, slope * self._t + intercept, color="red",
+                      linewidth=1.2, linestyle="--", label="linear drift fit")
+            total = slope * (self._t[-1] - self._t[0])
+            txt = (f"R(t) = {slope:+.3e}·t + {intercept:.6g}\n"
+                   f"drift = {slope:+.3e} V/s ({slope * 3600:+.3e} V/hr)\n"
+                   f"ΔR over run = {total:+.3e} V")
+            ax_r.text(
+                0.98, 0.05, txt, transform=ax_r.transAxes, va="bottom", ha="right",
+                fontsize=8, family="monospace", color="darkred",
+                bbox=dict(boxstyle="round", facecolor="white", alpha=0.85),
+            )
+            ax_r.legend(loc="upper right", fontsize=8)
 
         axes[-1].set_xlabel("Time (s)")
         fig.tight_layout()

@@ -16,7 +16,7 @@ from .setup_base import SetupBase
 
 logger = logging.getLogger(__name__)
 
-_VALID_MODES = ("readout", "scan_noise", "snap_only")
+_VALID_MODES = ("readout", "scan_noise", "snap_only", "snap_sweep")
 
 # Discrete LIA time constants (seconds) paired with their enum values, sorted ascending.
 _TIME_CONSTANTS_S: list[tuple[float, "ATE.TimeConstant"]] = [
@@ -68,7 +68,8 @@ def _print_progress(elapsed: float, total: float, width: int = 30) -> None:
 
 class LIAMeasurementSetup(SetupBase):
     def __init__(self, output_name: str = None, mode: str = "readout",  # type: ignore
-                 duration: float = 60.0, sample_interval: float = 1.0) -> None:
+                 duration: float = 60.0, sample_interval: float = 1.0,
+                 sweep_folder: str = None) -> None:  # type: ignore
         super().__init__(output_name=output_name)
         if mode not in _VALID_MODES:
             raise ValueError(f"mode must be one of {_VALID_MODES}, got {mode!r}")
@@ -80,6 +81,8 @@ class LIAMeasurementSetup(SetupBase):
         # snap_only mode parameters
         self.duration: float = duration
         self.sample_interval: float = sample_interval
+        # snap_sweep mode: subfolder under results_dir to store per-frequency CSVs
+        self.sweep_folder: str = sweep_folder
 
     @SetupBase.setup_ate
     def run(self):
@@ -89,6 +92,8 @@ class LIAMeasurementSetup(SetupBase):
             self.noise_scan()
         if self.mode == "snap_only":
             self.snap_only()
+        if self.mode == "snap_sweep":
+            self.snap_sweep()
 
     def _run_readout(self, lia_frequency: float, csv_path: str, time_const: ATE.TimeConstant,
                      measurement_time: float, sample_interval: float,
@@ -167,28 +172,53 @@ class LIAMeasurementSetup(SetupBase):
                           settling_time=settling_time)
         logger.info("LIA measurement complete.")
 
-    def snap_only(self):
-        """Snap X, Y, R, Theta from the SR860 at fixed intervals for a given duration.
+    def _snap_capture(self, csv_path: str, duration: float, sample_interval: float,
+                      set_frequency: float = None, settle: float = 0.0) -> None:  # type: ignore
+        """Open the instruments without reset, capture a setup snapshot, then snap
+        X/Y/R at fixed intervals into ``csv_path``.
 
-        Does not reset or reconfigure any instrument — assumes the LIA is already set up.
+        Does not reconfigure any instrument except, optionally, the LIA reference
+        frequency (``set_frequency``), after which it waits ``settle`` seconds.
+        The live configuration is otherwise preserved, so the PSU keeps providing
+        ESD protection while its settings are read.
         """
-        duration = self.duration
-        sample_interval = self.sample_interval
-        logger.info(f"Starting LIA snap_only: duration={duration:g}s, dt={sample_interval:g}s → {self.data_file}")
         n_cycles = max(1, int(duration / sample_interval))
 
         # Bypass the context manager: ATEBase.__exit__ calls reset() (*RST).
-        # We open the VISA resource manually and close it without resetting,
-        # so the LIA's current configuration is preserved.
-        lia = ATE.LIA(rm=self.rm)
-        lia.resource = self.rm.open_resource(lia.address)  # pyright: ignore[reportAttributeAccessIssue]
-        lia.resource.timeout = 5000
+        # We open the VISA resources manually and close them without resetting.
+        lia = self.open_no_reset(ATE.LIA(rm=self.rm))
+        psu = self.open_no_reset(ATE.PSU(rm=self.rm))
+        scu1 = self.open_no_reset(ATE.SCU('SCU1', rm=self.rm))
+        scu2 = self.open_no_reset(ATE.SCU('SCU2', rm=self.rm))
         try:
             # *IDN? puts the SR860 into remote mode without altering its configuration.
             idn = lia.idn().strip()
             logger.info(f"LIA IDN: {idn}")
-            with open(self.data_file, 'w', newline='') as f:
+            # HP6624A has no IDN string (returns "\n"); the query still establishes
+            # remote communication without changing the PSU's configuration.
+            psu_idn = psu.idn().strip()
+            logger.info(f"PSU IDN: {psu_idn!r}")
+
+            if set_frequency is not None:
+                logger.info(f"Setting LIA reference frequency to {set_frequency:g} Hz")
+                lia.set_frequency(set_frequency)
+                if settle > 0:
+                    logger.info(f"Settling for {settle:g}s")
+                    time.sleep(settle)
+
+            # Capture the LIA config, all four PSU channels (ch2=ESD, ch4=fan),
+            # and both B2962 SMUs. Clear first so the snapshot reflects only this run.
+            self.snapshot.devices.clear()
+            self.snapshot_lia(lia)
+            for ch in (1, 2, 3, 4):
+                self.snapshot_psu(psu, channel=ch)
+            self.snapshot_scu(scu1)
+            self.snapshot_scu(scu2)
+            logger.info(f"Setup snapshot:\n{self.snapshot}")
+
+            with open(csv_path, 'w', newline='') as f:
                 writer = csv.writer(f)
+                writer.writerows(self.snapshot.as_rows(width=4))
                 writer.writerow(['time', 'X', 'Y', 'R'])
                 start = time.time()
                 for i in range(n_cycles):
@@ -204,7 +234,43 @@ class LIAMeasurementSetup(SetupBase):
                 print()
         finally:
             lia.resource.close()
+            psu.resource.close()
+            scu1.resource.close()
+            scu2.resource.close()
+
+    def snap_only(self):
+        """Snap X, Y, R from the SR860 at fixed intervals for a given duration.
+
+        Does not reset or reconfigure any instrument — assumes the LIA is already set up.
+        """
+        logger.info(f"Starting LIA snap_only: duration={self.duration:g}s, "
+                    f"dt={self.sample_interval:g}s → {self.data_file}")
+        self._snap_capture(self.data_file, self.duration, self.sample_interval)
         logger.info("LIA snap_only complete.")
+
+    def snap_sweep(self, frequencies: list[float] = None, folder: str = None,  # type: ignore
+                   settle: float = 20.0):
+        """Run a LIA snap capture at each reference frequency, saving one CSV per
+        frequency into ``Results/LIAMeasurementSetup/<folder>/``.
+
+        ``folder`` defaults to ``self.sweep_folder`` (set from the CLI), falling
+        back to a date-stamped name. Assumes the LIA (amplitude, sensitivity,
+        time constant, etc.) is already set up; only the reference frequency is
+        changed between captures.
+        """
+        if frequencies is None:
+            #frequencies = [1510.0, 1710.0, 1830.0, 720.0, 340.0, 510.0, 910.0]
+            frequencies = [340.0, 510.0, 910.0]
+        folder = folder or self.sweep_folder or f'snap_sweep_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+        out_dir = os.path.join(self.results_dir, folder)
+        os.makedirs(out_dir, exist_ok=True)
+        logger.info(f"Starting LIA snap sweep over {frequencies} Hz → {out_dir}")
+        for f in frequencies:
+            csv_path = os.path.join(out_dir, f"{f:g}Hz.csv")
+            logger.info(f"--- f={f:g} Hz → {csv_path} ---")
+            self._snap_capture(csv_path, self.duration, self.sample_interval,
+                               set_frequency=f, settle=settle)
+        logger.info("LIA snap sweep complete.")
 
     def noise_scan(self):
         logger.info("Starting LIAMeasurementSetup (noise scan)")

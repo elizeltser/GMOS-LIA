@@ -7,7 +7,7 @@ from .b2962a import B2962A, SourceMode, SourceFunction, MeasurementFunction
 from .dso9104a import DSO9104A
 from .hp6624a import HP6624A
 from .hp8116a import HP8116A, TriggerMode, TriggerSlope, WaveformType, PhaseMode
-from .sr860 import SR860, Sensitivity, TimeConstant, FilterSlope, InputSource, InputCoupling
+from .sr860 import SR860, Sensitivity, TimeConstant, FilterSlope, InputSource, InputCoupling, InputRange
 
 # Aliases
 LIA = SR860
@@ -34,4 +34,5 @@ __all__ = [
     'FilterSlope',
     'InputSource',
     'InputCoupling',
+    'InputRange',
     ]
