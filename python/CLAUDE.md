@@ -63,7 +63,6 @@ Each file wraps a specific GPIB/VISA instrument. All drivers extend `ATEBase`, w
 - `sr860.py` — Lock-in Amplifier (LIA): frequency, phase, sensitivity, snap measurements
 - `b2962a.py` — Source Measure Unit (SCU): voltage/current sourcing with compliance limits
 - `hp6624a.py` — Power Supply (PSU): 4-channel with OCP/OVP protection
-- `hp8116a.py` — Signal Generator (SG): frequency sweep, pulse/burst modes
 - `dso9104a.py` — Oscilloscope (stub)
 
 **`setups/` — Experiment implementations**
@@ -72,10 +71,15 @@ Each experiment extends `SetupBase`, which provides:
 - Results directory management
 - CSV data saving utilities
 
-Concrete experiments:
-- `IVSweep`: Voltage/current sweep (linear or log scale) using SCU
-- `NoiseMeasurement`: Multi-threaded 100 Hz data capture from LIA
-- `SignalPulseBurst`: Frequency sweep combining LIA, SCU bias, and SG signal
+Concrete experiments (CLI `--experiment` names in parentheses):
+- `IVSweep` (`IV-voltage-lin`, `IV-voltage-log`): Voltage sweep (linear or log scale) using SCU
+- `LIAMeasurementSetup`: the main working path. Modes:
+  - `lia_snap_only`: snap X/Y/R at fixed intervals for a duration (assumes LIA already configured)
+  - `lia_snap_sweep`: snap capture at each reference frequency, one CSV per frequency
+  - `lia_readout`, `lia_noise_scan`: configure the LIA/SCUs and read out (needs attention)
+
+Experimental / work-in-progress (not on the supported CLI path):
+- `NoiseMeasurement`: multi-threaded data capture from LIA (VISA thread-safety caveats)
 
 **Data flow:** `sources/main.py` (CLI) → `setups/` → `ATE/` → GPIB/Ethernet instruments
 

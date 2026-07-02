@@ -10,7 +10,6 @@ from datetime import datetime
 
 import ATE
 import numpy as np
-import pdb
 
 from .setup_base import SetupBase
 
@@ -76,8 +75,7 @@ class LIAMeasurementSetup(SetupBase):
         self.mode = mode
         stem = output_name if output_name else f'{mode}_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
         self.data_file = os.path.join(self.results_dir, f'{stem}.csv')
-#        self.f_lst = [round(n, 3) for n in np.logspace(start=np.log10(0.1), stop=np.log10(40), num=5)]
-        self.f_lst = [round(np.log(8.944), 3)]
+        self.f_lst = [round(n, 3) for n in np.logspace(start=np.log10(0.1), stop=np.log10(40), num=5)]
         # snap_only mode parameters
         self.duration: float = duration
         self.sample_interval: float = sample_interval
@@ -138,7 +136,6 @@ class LIAMeasurementSetup(SetupBase):
 
             logger.info(f"Letting signals to settle ({settling_time:g}s)")
             time.sleep(settling_time)
-            pdb.set_trace()
 
             logger.info(f"Measuring {n_cycles} samples @ {sample_interval:g}s "
                         f"(~{measurement_time:g}s) → {csv_path}")

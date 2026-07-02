@@ -129,9 +129,9 @@ Additionaly under the `python\sources\setups\` directory, the actual implementat
 The **main entry point for the project** (i.e `main.py`) will implement a CLI that will receive the name of the experiment as an argument and will implement the experiment. For example when executing:
 
 ```shell
-python -m GMOS --IV-voltage-lin
+python sources/main.py --experiment IV-voltage-lin
 # Executes linear Voltage force, current measure sweep, with start, stop, step triplet hard-coded in setup init.
-python -m GMOS --SG-pulse-burst
+python sources/main.py --experiment lia_snap_sweep
 # Here all of the configurations are hardcoded in the setup init.
 ```
 
@@ -143,7 +143,7 @@ Run from the repo root with `python python/sources/main.py <args>`.
 
 | Argument | Short | Description |
 | --- | :---: | --- |
-| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices` is used. Valid names: `IV-voltage-lin`, `IV-current-log`, `SG-pulse-burst`, `noise-measurement`, `lia`. |
+| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices`, `--repl`, or a `--compile-*` flag is used. Valid names: `IV-voltage-lin`, `IV-voltage-log`, `lia_readout`, `lia_noise_scan`, `lia_snap_only`, `lia_snap_sweep`. |
 | `--list_devices` | — | Probe all visible VISA resources and print a summary grouped by interface type (GPIB, TCPIP, USB, Serial). For each resource the VISA address string, interface-specific details (GPIB primary address / IP host / USB serial number), and the `*IDN?` response are shown. Devices that do not respond to IDN (e.g. HP 6624A, HP 8116A) display `(no response)`. |
 | `--config <path>` | `-c` | Path to an optional config file (reserved for future use). |
 
