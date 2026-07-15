@@ -18,6 +18,7 @@ dependencies = [
   "gpib-ctypes",
   "pyserial",
   "numpy",
+  "scipy",
   "matplotlib",
   "pytest",
   "ruff",

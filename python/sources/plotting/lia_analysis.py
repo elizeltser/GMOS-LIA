@@ -5,6 +5,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
+from scipy.optimize import curve_fit
 
 from .plot_compiler import PlotCompiler
 
@@ -259,6 +260,32 @@ class LIASnapDigest:
         return str(out)
 
 
+_DIGEST_PARAM_KEYS = ("freq", "psu_ch1_V", "psu_ch3_V", "smu1_V", "smu2_V")
+_DIGEST_STAT_KEYS = (
+    "avg_X", "avg_Y", "avg_R", "avg_theta",
+    "rmse_X", "rmse_Y", "rmse_R", "xcorr_XY",
+    "drift_R_slope", "drift_R_intercept",
+)
+
+
+def _load_digest(csv_path: Path) -> dict:
+    """Load a digest dict from an already-compiled ``*_digest.csv`` (fast path,
+    matching the columns written by ``LIASnapDigest.compile()``) or, failing
+    that, a raw snap CSV (recomputed via ``LIASnapDigest``).
+    """
+    with open(csv_path, newline="") as f:
+        header = next(csv.reader(f), [])
+    if header and header[0].strip() == "freq":
+        with open(csv_path, newline="") as f:
+            row = next(csv.DictReader(f))
+        params = {k: float(row[k]) for k in _DIGEST_PARAM_KEYS
+                  if row.get(k, "") not in ("", None)}
+        digest: dict = {k: float(row[k]) for k in _DIGEST_STAT_KEYS}
+        digest["params"] = params
+        return digest
+    return LIASnapDigest(str(csv_path)).digest()
+
+
 class LIASweepScatterCompiler:
     """Scatter plot of digest stats across many snap CSVs varying one parameter."""
 
@@ -275,7 +302,7 @@ class LIASweepScatterCompiler:
         self.out_name = out_name
 
     def compile(self) -> str:
-        digests = [LIASnapDigest(str(p)).digest() for p in self.csv_paths]
+        digests = [_load_digest(p) for p in self.csv_paths]
 
         if any(self.sweep_param not in d["params"] for d in digests):
             missing = [p.name for p, d in zip(self.csv_paths, digests)
@@ -356,7 +383,7 @@ class LIADiffSweepScatterCompiler:
     def _digests_by_value(self, paths: list[Path]) -> dict[float, dict]:
         by_value: dict[float, dict] = {}
         for p in paths:
-            d = LIASnapDigest(str(p)).digest()
+            d = _load_digest(p)
             if self.sweep_param not in d["params"]:
                 raise ValueError(
                     f"sweep param {self.sweep_param!r} missing in: {p.name}"
@@ -424,6 +451,195 @@ class LIADiffSweepScatterCompiler:
         anchor = self.signal_paths[0]
         out = _output_path(anchor, "").parent / f"{stem}.png"
         out.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(out, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        return str(out)
+
+
+class LIAFrequencyResponseCompiler:
+    """Summarize digest CSVs across a frequency sweep into R, theta, and R-drift plots.
+
+    Accepts either already-compiled ``*_digest.csv`` files or raw snap CSVs
+    (via ``_load_digest``). Produces three separate figures rather than one
+    combined subplot grid, since each is read independently: R (with error
+    bars from ``rmse_R`` conveying measurement noise), theta (optionally
+    shifted by a constant phase offset), and the linear R-drift rate.
+    """
+
+    def __init__(self, csv_paths: list[str], out_name: str | None = None,
+                 phase_shift_deg: float = 0.0):
+        if len(csv_paths) < 2:
+            raise ValueError("need at least 2 CSVs to plot a frequency response")
+        self.csv_paths = [Path(p).resolve() for p in csv_paths]
+        self.out_name = out_name
+        self.phase_shift_deg = phase_shift_deg
+
+    def compile(self) -> list[str]:
+        digests = [_load_digest(p) for p in self.csv_paths]
+
+        missing = [p.name for p, d in zip(self.csv_paths, digests)
+                   if "freq" not in d["params"]]
+        if missing:
+            raise ValueError(f"'freq' missing in: {missing}")
+
+        order = np.argsort([d["params"]["freq"] for d in digests])
+        digests = [digests[i] for i in order]
+        freqs = [d["params"]["freq"] for d in digests]
+
+        for freq, d in zip(freqs, digests):
+            logger.info(
+                "freq = %g Hz: avg_R = %.6g, rmse_R = %.6g, drift_R_slope = %.6g",
+                freq, d["avg_R"], d["rmse_R"], d["drift_R_slope"],
+            )
+
+        stem = self.out_name or "freq_response"
+        anchor = self.csv_paths[0]
+        out_dir = _output_path(anchor, "").parent
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        return [
+            self._plot_r(freqs, digests, out_dir / f"{stem}_R.png"),
+            self._plot_theta(freqs, digests, out_dir / f"{stem}_theta.png"),
+            self._plot_drift(freqs, digests, out_dir / f"{stem}_drift.png"),
+        ]
+
+    def _new_axes(self, ylabel: str, title: str):
+        fig, ax = plt.subplots(figsize=(8, 5))
+        fig.suptitle(title)
+        ax.set_xscale("log")
+        ax.set_xlabel("Frequency (Hz)")
+        ax.set_ylabel(ylabel)
+        ax.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.7)
+        fmt = ticker.FuncFormatter(PlotCompiler._smart_fmt)
+        ax.xaxis.set_major_formatter(fmt)
+        ax.yaxis.set_major_formatter(fmt)
+        return fig, ax
+
+    def _save(self, fig, out: Path) -> str:
+        fig.tight_layout()
+        fig.savefig(out, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        return str(out)
+
+    def _plot_r(self, freqs: list[float], digests: list[dict], out: Path) -> str:
+        title = f"R vs frequency ({len(digests)} points)"
+        fig, ax = self._new_axes("Average R (V)", title)
+        avg_r = [d["avg_R"] for d in digests]
+        rmse_r = [d["rmse_R"] for d in digests]
+        ax.errorbar(freqs, avg_r, yerr=rmse_r, fmt="o-", markersize=4,
+                    linewidth=1, capsize=3, ecolor="0.4", elinewidth=0.8)
+        return self._save(fig, out)
+
+    def _plot_theta(self, freqs: list[float], digests: list[dict], out: Path) -> str:
+        title = f"Theta vs frequency ({len(digests)} points)"
+        if self.phase_shift_deg:
+            title += f", shifted by {self.phase_shift_deg:+g} deg"
+        fig, ax = self._new_axes("Theta (deg)", title)
+        theta = [((d["avg_theta"] + self.phase_shift_deg + 180) % 360) - 180
+                 for d in digests]
+        ax.plot(freqs, theta, marker="o", markersize=4, linewidth=1)
+        return self._save(fig, out)
+
+    def _plot_drift(self, freqs: list[float], digests: list[dict], out: Path) -> str:
+        title = f"R drift vs frequency ({len(digests)} points)"
+        fig, ax = self._new_axes("R drift (V/s)", title)
+        drift = [d["drift_R_slope"] for d in digests]
+        ax.axhline(0, color="0.6", linewidth=0.8, linestyle="--")
+        ax.plot(freqs, drift, marker="o", markersize=4, linewidth=1, color="C1")
+        return self._save(fig, out)
+
+
+def _exp_model(t: np.ndarray, a: float, b: float, c: float) -> np.ndarray:
+    return a * np.exp(b * t) + c
+
+
+class LIADriftEvolutionCompiler:
+    """Analyze how a sweep folder's per-file R-drift rate evolves over the
+    course of capture.
+
+    Each CSV in ``csv_paths`` is one frequency point's digest (or raw snap,
+    via ``_load_digest``); they were captured sequentially, lowest frequency
+    first, ``interval_s`` apart. Treating each file's ``drift_R_slope`` as one
+    sample of a coarser time series, this fits an exponential trend to the
+    drift-over-time curve (first derivative of R, i.e. "the drift") and
+    computes its rate of change (second derivative of R, i.e. "the change of
+    the change of R").
+    """
+
+    def __init__(self, csv_paths: list[str], interval_s: float,
+                 out_name: str | None = None):
+        if len(csv_paths) < 3:
+            raise ValueError("need at least 3 CSVs to fit a drift evolution")
+        self.csv_paths = [Path(p).resolve() for p in csv_paths]
+        self.interval_s = interval_s
+        self.out_name = out_name
+
+    def compile(self) -> str:
+        digests = [_load_digest(p) for p in self.csv_paths]
+
+        missing = [p.name for p, d in zip(self.csv_paths, digests)
+                   if "freq" not in d["params"]]
+        if missing:
+            raise ValueError(f"'freq' missing in: {missing}")
+
+        order = np.argsort([d["params"]["freq"] for d in digests])
+        digests = [digests[i] for i in order]
+
+        n = len(digests)
+        t = np.arange(n) * self.interval_s
+        drift = np.array([d["drift_R_slope"] for d in digests])
+        rate = np.gradient(drift, t)
+        accel = np.gradient(rate, t)
+
+        for i in range(n):
+            logger.info(
+                "t=%.0fs: drift_R=%.6g V/s, d(drift)/dt=%.6g V/s^2, "
+                "d^2(drift)/dt^2=%.6g V/s^3",
+                t[i], drift[i], rate[i], accel[i],
+            )
+
+        p0 = (drift[0] - drift[-1], 0.0, drift[-1])
+        try:
+            (a, b, c), _ = curve_fit(_exp_model, t, drift, p0=p0, maxfev=10000)
+        except RuntimeError:
+            logger.warning("exponential fit did not converge; falling back to p0")
+            a, b, c = p0
+
+        stem = self.out_name or "drift_evolution"
+        anchor = self.csv_paths[0]
+        out = _output_path(anchor, "").parent / f"{stem}.png"
+        out.parent.mkdir(parents=True, exist_ok=True)
+
+        fmt = ticker.FuncFormatter(PlotCompiler._smart_fmt)
+        fig, (ax_drift, ax_accel) = plt.subplots(2, 1, sharex=True, figsize=(8, 8))
+        fig.suptitle(f"R-drift evolution across sweep ({n} points)")
+
+        ax_drift.plot(t, drift, marker="o", markersize=4, linewidth=1,
+                      color="C1", label="drift_R_slope")
+        t_fit = np.linspace(t[0], t[-1], 200)
+        ax_drift.plot(t_fit, _exp_model(t_fit, a, b, c), color="red",
+                      linewidth=1.2, linestyle="--", label="exponential fit")
+        ax_drift.set_ylabel("R drift (V/s)")
+        ax_drift.grid(True, linestyle="--", linewidth=0.5, alpha=0.7)
+        ax_drift.yaxis.set_major_formatter(fmt)
+        ax_drift.legend(loc="upper right", fontsize=8)
+
+        txt = (f"drift(t) = {a:+.3e}·exp({b:+.3e}·t) {c:+.3e}\n"
+               f"A={a:+.3e}, B={b:+.3e}, C={c:+.3e}")
+        ax_drift.text(
+            0.02, 0.05, txt, transform=ax_drift.transAxes, va="bottom", ha="left",
+            fontsize=8, family="monospace", color="darkred",
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.85),
+        )
+
+        ax_accel.axhline(0, color="0.6", linewidth=0.8, linestyle="--")
+        ax_accel.plot(t, accel, marker="o", markersize=4, linewidth=1, color="C2")
+        ax_accel.set_ylabel("d²(drift)/dt² (V/s³)")
+        ax_accel.set_xlabel("Time (s)")
+        ax_accel.grid(True, linestyle="--", linewidth=0.5, alpha=0.7)
+        ax_accel.yaxis.set_major_formatter(fmt)
+
+        fig.tight_layout()
         fig.savefig(out, dpi=150, bbox_inches="tight")
         plt.close(fig)
         return str(out)

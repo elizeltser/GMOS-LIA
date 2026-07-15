@@ -1,0 +1,17 @@
+# Active config for: python sources/main.py --experiment lia_digest_sweep --config configs/lia_digest_sweep.toml
+# Digests an already-captured frequency-sweep folder and compiles the
+# R/theta/drift-vs-frequency summary plots. Touches no instruments.
+#
+# Keep sweep_dir in sync with lia_snap_sweep.toml's [experiment] sweep_folder
+# (the folder this data was originally captured into).
+
+[experiment]
+sweep_dir = "Results/LIAMeasurementSetup/july_11"
+baseline = true
+
+# Constant phase offset (deg) applied to every point in the theta summary
+# plot only (the underlying digest CSVs / raw data are unaffected). E.g. if
+# the first point's raw theta is 0 deg and phase_shift_deg is set to X, that
+# point is displayed as X deg, and a point with raw theta 5 deg is displayed
+# as 5+X deg. Fill in X below.
+phase_shift_deg = 0.0

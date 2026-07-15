@@ -49,11 +49,13 @@ class ATEBase:
 
     def query(self, cmd: str) -> str:
         """Send query command"""
-        return self.resource.query(cmd)
+        resp = self.resource.query(cmd)
+        logger.debug(f"[{self.tag}] {cmd} -> {resp.strip()!r}")
+        return resp
 
     def write(self, cmd: str) -> None:
         """Send write command"""
-        logger.debug(f">> {cmd}")
+        logger.debug(f"[{self.tag}] >> {cmd}")
         self.resource.write(cmd)
 
     def read(self) -> str:

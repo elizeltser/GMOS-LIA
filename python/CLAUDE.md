@@ -77,6 +77,8 @@ Concrete experiments (CLI `--experiment` names in parentheses):
   - `lia_snap_only`: snap X/Y/R at fixed intervals for a duration (assumes LIA already configured)
   - `lia_snap_sweep`: snap capture at each reference frequency, one CSV per frequency
   - `lia_readout`, `lia_noise_scan`: configure the LIA/SCUs and read out (needs attention)
+  - `lia_gas_response`: manually-gated baseline/gas-exposure capture for actual gas dosing runs. The operator presses Enter three times (setup settled, gas inserted, stop) while sampling continues uninterrupted; writes `baseline.csv` and `gas.csv` per session folder
+- `LIADriftEvolution` (`lia_drift_evolution`): analyzes how the R-drift rate evolves across an already-captured sweep folder's digest files (drift-of-drift + exponential fit); touches no instruments
 
 Experimental / work-in-progress (not on the supported CLI path):
 - `NoiseMeasurement`: multi-threaded data capture from LIA (VISA thread-safety caveats)

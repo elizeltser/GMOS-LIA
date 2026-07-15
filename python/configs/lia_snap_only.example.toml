@@ -1,0 +1,16 @@
+# Example config for: python sources/main.py --experiment lia_snap_only --config configs/lia_snap_only.example.toml
+#
+# Assumes the LIA and bias are already set up by hand (or via a previous run) —
+# snap_only never reconfigures them, it only snaps X/Y/R at fixed intervals.
+
+[ate]
+# ESD (ch2) and fan (ch4) are always ensured on with these values; omit this
+# table entirely to just use the defaults (5V/0.7A ESD, 7V/1.5A fan).
+# Heater channels (ch1/ch3) are left untouched unless set here, e.g.:
+# [ate.heater1]
+# voltage = 3.0
+# current = 0.5
+
+[experiment]
+duration = 60.0
+sample_interval = 1.0

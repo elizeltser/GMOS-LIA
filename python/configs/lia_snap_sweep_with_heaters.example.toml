@@ -1,0 +1,19 @@
+# Example config for: python sources/main.py --experiment lia_snap_sweep --config configs/lia_snap_sweep_with_heaters.example.toml
+#
+# Same as lia_snap_sweep.example.toml, but also drives the heater channels
+# (PSU ch1/ch3) from config instead of setting them by hand beforehand.
+
+[ate]
+[ate.heater1]
+voltage = 3.0
+current = 0.5
+
+[ate.heater3]
+voltage = 3.0
+current = 0.5
+
+[experiment]
+duration = 60.0
+sample_interval = 1.0
+frequencies = [340.0, 510.0, 910.0]
+settle = 20.0

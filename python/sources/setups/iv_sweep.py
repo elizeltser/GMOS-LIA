@@ -7,6 +7,7 @@ from typing import List
 
 import numpy as np
 import ATE
+from config import ATEConfig, IVSweepConfig
 
 from .setup_base import SetupBase
 
@@ -14,15 +15,17 @@ logger = logging.getLogger(__name__)
 
 
 class IVSweep(SetupBase):
-    def __init__(self, scu_tag: str = 'SCU1', start: float = 0.001, stop: float = 4.0, step: float = 0.01, scale: str = 'linear', mode: str = 'voltage', compliance: float = 1e-3, output_name: str = None) -> None:  # type: ignore
-        super().__init__(output_name=output_name)
-        self.scu_tag: str = scu_tag
-        self.start: float = start
-        self.stop: float = stop
-        self.step: float = step
-        self.mode: str = mode  # 'voltage' or 'current'
-        self.scale: str = scale  # 'linear' or 'log'
-        self.compliance: float = compliance
+    def __init__(self, output_name: str = None, ate_config: ATEConfig = None,  # type: ignore
+                 config: IVSweepConfig = None) -> None:  # type: ignore
+        super().__init__(output_name=output_name, ate_config=ate_config)
+        cfg = config or IVSweepConfig()
+        self.scu_tag: str = cfg.scu_tag
+        self.start: float = cfg.start
+        self.stop: float = cfg.stop
+        self.step: float = cfg.step
+        self.mode: str = cfg.mode  # 'voltage' or 'current'
+        self.scale: str = cfg.scale  # 'linear' or 'log'
+        self.compliance: float = cfg.compliance
 
     @SetupBase.setup_ate
     def run(self) -> None:

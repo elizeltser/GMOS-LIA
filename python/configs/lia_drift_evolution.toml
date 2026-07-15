@@ -1,0 +1,10 @@
+# Active config for: python sources/main.py --experiment lia_drift_evolution --config configs/lia_drift_evolution.toml
+# Analyzes how the R-drift rate (drift_R_slope) evolves across an already-
+# captured sweep folder's digest files (one per frequency, captured
+# sequentially starting at the lowest frequency). Touches no instruments.
+
+[experiment]
+digest_dir = "Plots/LIAMeasurementSetup/july_11"
+
+# Wall-clock time (s) between the start of consecutive frequency captures.
+interval_s = 130.0

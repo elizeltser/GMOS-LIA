@@ -1,0 +1,22 @@
+# Example config for: python sources/main.py --experiment lia_snap_sweep --config configs/lia_snap_sweep.example.toml
+#
+# Captures one snap_only-style CSV per frequency in `frequencies`, changing
+# only the LIA reference frequency between captures (everything else is
+# assumed already configured).
+
+[ate]
+
+[experiment]
+duration = 60.0
+sample_interval = 1.0
+# `frequencies` can be a literal list (as below), or a [experiment.frequencies]
+# sub-table with start/stop/num/scale to expand via np.linspace/np.logspace:
+#
+# [experiment.frequencies]
+# start = 100.0
+# stop = 1000.0
+# num = 5
+# scale = "linear"       # "linear" or "log"
+frequencies = [340.0, 510.0, 910.0]
+settle = 20.0          # seconds to wait after changing frequency before capturing
+sweep_folder = "5ppm_run"   # subfolder under Results/LIAMeasurementSetup/; omit for a date-stamped name

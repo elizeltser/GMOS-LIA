@@ -2,21 +2,32 @@ import argparse
 import logging
 import os
 import sys
+from dataclasses import replace
 
 # Add python/sources/ to path so ATE and setups are importable as top-level packages
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import setups
+from config import (
+    ATEConfig,
+    IVSweepConfig,
+    LIADigestSweepConfig,
+    LIADriftEvolutionConfig,
+    LIAGasResponseConfig,
+    LIAReadoutConfig,
+    LIASnapConfig,
+    load_config,
+)
 from gmos_repl import run_repl
 from plotting import (
     LIADiffSweepScatterCompiler,
+    LIAFrequencyResponseCompiler,
     LIAPlotCompiler,
     LIASnapDigest,
     LIASweepScatterCompiler,
     NoiseEvalCompiler,
     PlotCompiler,
 )
-from setups import SetupBase
 from visa_enumeration import list_devices
 
 logging.basicConfig(
@@ -26,19 +37,33 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# experiment name -> (setup class, config dataclass or None, constructor kwargs,
+# config field overrides forced by this experiment name regardless of --config)
+_EXPERIMENTS = {
+    "IV-voltage-lin": (setups.IVSweep, IVSweepConfig, {}, {"scale": "linear"}),
+    "IV-voltage-log": (setups.IVSweep, IVSweepConfig, {}, {"scale": "log"}),
+    "lia_readout":    (setups.LIAMeasurementSetup, LIAReadoutConfig, {"mode": "readout"}, {}),
+    "lia_noise_scan": (setups.LIAMeasurementSetup, LIAReadoutConfig, {"mode": "scan_noise"}, {}),
+    "lia_snap_only":  (setups.LIAMeasurementSetup, LIASnapConfig, {"mode": "snap_only"}, {}),
+    "lia_snap_sweep": (setups.LIAMeasurementSetup, LIASnapConfig, {"mode": "snap_sweep"}, {}),
+    "lia_gas_response": (setups.LIAMeasurementSetup, LIAGasResponseConfig, {"mode": "gas_response"}, {}),
+    "lia_digest_sweep": (setups.LIADigestSweep, LIADigestSweepConfig, {}, {}),
+    "lia_drift_evolution": (setups.LIADriftEvolution, LIADriftEvolutionConfig, {}, {}),
+}
+
 
 def main():
     parser = argparse.ArgumentParser(description="GMOS LIA Experiment Runner")
     parser.add_argument("--experiment", "-e", help="Experiment name")
-    parser.add_argument("--config", "-c", help="Config file path")
+    parser.add_argument("--config", "-c", metavar="TOML",
+                        help="Path to a TOML file with [ate] and [experiment] tables "
+                             "overriding this experiment's parameters")
     parser.add_argument("--list_devices", action="store_true",
                         help="List all available VISA resources and exit")
     parser.add_argument("--repl", action="store_true",
                         help="Enter interactive REPL")
     parser.add_argument("--log", action="store_true",
                         help="With --repl: also log to <repo_root>/repl.log")
-    parser.add_argument("--scu", default="SCU1",
-                        help="SCU device tag to be used for IV sweep (default: SCU1)")
     parser.add_argument("--output-name", metavar="NAME",
                         help="Custom result filename stem (no extension); omit for auto date-stamped name")
     parser.add_argument("--compile-2d-plot", metavar="CSV",
@@ -60,17 +85,16 @@ def main():
                         help="Signal (e.g. gas) LIA snap CSVs; subtracted against --lia-diff-baseline")
     parser.add_argument("--sweep-param", choices=["freq", "offset", "sr560_amp"],
                         help="Parameter swept across --lia-sweep-scatter inputs")
+    parser.add_argument("--lia-freq-response", nargs="+", metavar="CSV",
+                        help="LIA digest (or raw snap) CSVs across a frequency sweep; "
+                             "produces separate R, theta, and R-drift vs frequency plots")
+    parser.add_argument("--phase-shift-deg", type=float, default=0.0,
+                        help="With --lia-freq-response: constant phase offset (deg) "
+                             "added to every point in the theta plot")
     parser.add_argument("--x-scale", choices=["linear", "log"], default="linear",
                         help="X-axis scale (default: linear)")
     parser.add_argument("--y-scale", choices=["linear", "log"], default="linear",
                         help="Y-axis scale (default: linear)")
-    parser.add_argument("--duration", type=float, default=60.0,
-                        help="lia_snap_only: total measurement duration in seconds (default: 60)")
-    parser.add_argument("--interval", type=float, default=1.0,
-                        help="lia_snap_only: sample interval in seconds (default: 1)")
-    parser.add_argument("--sweep-folder", metavar="NAME",
-                        help="lia_snap_sweep: subfolder under Results/LIAMeasurementSetup/ "
-                             "for the per-frequency CSVs (default: date-stamped)")
     args = parser.parse_args()
 
     if args.list_devices:
@@ -130,40 +154,41 @@ def main():
         print(f"Plot saved to: {out_path}")
         return
 
+    if args.lia_freq_response:
+        out_paths = LIAFrequencyResponseCompiler(
+            args.lia_freq_response, out_name=args.output_name,
+            phase_shift_deg=args.phase_shift_deg,
+        ).compile()
+        for out_path in out_paths:
+            print(f"Plot saved to: {out_path}")
+        return
+
     if not args.experiment:
         parser.error("--experiment / -e is required unless --list_devices, --repl, or --compile-2d-plot is used")
 
-    logger.info(f"Starting experiment: {args.experiment}")
-
-    experiment: SetupBase | None = None
-    if args.experiment == "IV-voltage-lin":
-        experiment = setups.IVSweep(scale="linear", scu_tag=args.scu, mode="voltage", output_name=args.output_name)
-        experiment.run()
-    elif args.experiment == "IV-voltage-log":
-        experiment = setups.IVSweep(scale="log", scu_tag=args.scu, mode="voltage", output_name=args.output_name)
-        experiment.run()
-    elif args.experiment == "lia_readout":
-        experiment = setups.LIAMeasurementSetup(output_name=args.output_name, mode="readout")
-        experiment.run()
-    elif args.experiment == "lia_noise_scan":
-        experiment = setups.LIAMeasurementSetup(output_name=args.output_name, mode="scan_noise")
-        experiment.run()
-    elif args.experiment == "lia_snap_only":
-        experiment = setups.LIAMeasurementSetup(
-            output_name=args.output_name, mode="snap_only",
-            duration=args.duration, sample_interval=args.interval,
-        )
-        experiment.run()
-    elif args.experiment == "lia_snap_sweep":
-        experiment = setups.LIAMeasurementSetup(
-            output_name=args.output_name, mode="snap_sweep",
-            duration=args.duration, sample_interval=args.interval,
-            sweep_folder=args.sweep_folder,
-        )
-        experiment.run()
-    else:
+    if args.experiment not in _EXPERIMENTS:
         logger.error(f"Unknown experiment: {args.experiment}")
         sys.exit(1)
+
+    logger.info(f"Starting experiment: {args.experiment}")
+
+    setup_cls, config_cls, ctor_kwargs, config_overrides = _EXPERIMENTS[args.experiment]
+
+    ate_config = ATEConfig()
+    experiment_config = config_cls() if config_cls else None
+    if args.config:
+        ate_config, loaded_config = load_config(args.config, config_cls)
+        if loaded_config is not None:
+            experiment_config = loaded_config
+    if experiment_config is not None and config_overrides:
+        experiment_config = replace(experiment_config, **config_overrides)
+
+    kwargs = dict(ctor_kwargs, output_name=args.output_name, ate_config=ate_config)
+    if experiment_config is not None:
+        kwargs["config"] = experiment_config
+
+    experiment = setup_cls(**kwargs)
+    experiment.run()
 
 
 if __name__ == "__main__":

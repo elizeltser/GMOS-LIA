@@ -1,0 +1,67 @@
+# Active config for: python sources/main.py --experiment lia_snap_sweep --config configs/lia_snap_sweep.toml
+# Used by run_experiment.sh's frequency-sweep step.
+
+[ate]
+# Log every SCPI write/query (voltage set, output enable/disable, etc.) so
+# actual device state can be confirmed from the log alone (e.g. remotely).
+debug_device_io = false
+
+# Heater channels (PSU ch1/ch3): enabled once at the start of the run (before
+# the first sweep point) and only disabled at the very end, in
+# _shutdown_all_devices (snap_sweep's `finally`) — never touched in between.
+[ate.heater1]
+voltage = 2.75
+current = 0.101
+
+[ate.heater3]
+voltage = 2.702
+current = 0.098
+
+[experiment]
+duration = 120.0
+sample_interval = 1.0
+settle = 10.0
+sweep_folder = "july_11"
+
+# The first frequency point only: run bias auto-calibration (if enabled),
+# then wait `first_settle` (thermal settling), then auto-phase the LIA, then
+# wait `first_autophase_settle`, then start capturing. Every later point just
+# waits `settle` above before capturing.
+first_settle = 480.0
+first_auto_phase = true
+first_autophase_settle = 20.0
+
+# Apply the LIA + SCU bias settings below before each capture, instead of
+# assuming the instruments are already configured by hand.
+configure_instruments = true
+
+# LIA + SCU bias settings (defaults match Results/LIAMeasurementSetup/July2/510Hz.csv);
+# override here if this run should use different values.
+v_scu1 = 2.01
+v_scu2 = 2.0
+scu_compliance = 1e-4
+offset = 0.955
+amplitude = 25e-3
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "S1"
+input_coupling = "DC"
+input_source = "A"
+input_range = "V1"
+
+[experiment.frequencies]
+start = 0.1
+stop = 3000.0
+num = 120
+scale = "log"
+
+# Closed-loop bias auto-calibration: disabled by default. When enabled, runs
+# once (right after setting the first point's frequency, before
+# `first_settle`), hill-climbing heater1/heater3 voltages and then trimming
+# v_scu1/v_scu2 toward the target currents below. See
+# lia_snap_sweep_calibration.example.toml for an enabled example with all
+# tunable parameters.
+[experiment.calibration]
+enabled = true
+target_current_scu1 = 4.5e-6
+target_current_scu2 = 4.5e-6

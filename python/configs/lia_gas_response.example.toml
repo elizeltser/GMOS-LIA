@@ -1,0 +1,63 @@
+# Example config for: python sources/main.py --experiment lia_gas_response --config configs/lia_gas_response.example.toml
+#
+# Manually-gated single-frequency gas dosing run. Configures the LIA/SCU bias
+# for `lia_frequency`, optionally runs closed-loop bias auto-calibration, then
+# waits for the operator to press Enter three times:
+#   1. setup has settled -> start baseline (no-gas) recording
+#   2. gas has just been inserted -> end baseline, start gas-exposure recording
+#      (the exact wall-clock moment is recorded into gas.csv's snapshot rows)
+#   3. stop recording
+#
+# Sampling never pauses while waiting for the next press. Writes
+# Results/LIAMeasurementSetup/<session_folder>/baseline.csv and gas.csv, in
+# the same snap format as lia_snap_only/lia_snap_sweep.
+
+[ate]
+# ESD (ch2) and fan (ch4) are always ensured on with these values; omit this
+# table entirely to just use the defaults (5V/0.7A ESD, 7V/1.5A fan).
+# Heater channels (ch1/ch3) are left untouched unless set here, e.g.:
+# [ate.heater1]
+# voltage = 3.0
+# current = 0.5
+
+[experiment]
+lia_frequency = 510.0
+sample_interval = 1.0
+settle = 60.0          # thermal settle after calibration, before Enter #1
+auto_phase = true
+autophase_settle = 60.0
+session_folder = "gas_response_run"   # subfolder under Results/LIAMeasurementSetup/; omit for a date-stamped name
+
+v_scu1 = 2.01
+v_scu2 = 2.0
+scu_compliance = 1e-4
+offset = 0.955
+amplitude = 25e-3
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "MS100"
+input_coupling = "DC"
+input_source = "A"
+input_range = "V1"
+
+[experiment.calibration]
+enabled = false
+# Target SCU drain currents; heater1 is paired with SCU2's current, heater3
+# with SCU1's current (cross-paired per the physical setup). Set enabled =
+# true and configure [ate.heater1]/[ate.heater3] above to use this.
+target_current_scu1 = 4.5e-6
+target_current_scu2 = 4.5e-6
+current_tolerance = 1e-6
+final_current_tolerance = 5e-7
+heater_step_voltage = 0.01
+heater_min_step_voltage = 0.001
+heater_settle_time = 1.0
+heater_max_steps = 40
+heater1_min_voltage = 2.5
+heater1_max_voltage = 3.0
+heater3_min_voltage = 2.5
+heater3_max_voltage = 3.0
+max_rounds = 5
+scu_voltage_step = 10e-6
+scu_settle_time = 0.5
+scu_max_steps = 200

@@ -1,0 +1,24 @@
+# Example config for: python sources/main.py --experiment lia_noise_scan --config configs/lia_noise_scan.example.toml
+#
+# Resets and fully configures the LIA + both SCUs, then runs a full readout
+# (see lia_readout.example.toml) at each frequency in `frequencies`, and
+# summarizes R/phase averages and X/Y/R noise (std) per frequency into
+# Results/LIAMeasurementSetup/std_phase.csv.
+
+[ate]
+
+[experiment]
+# `frequencies` can be a literal list (as below), or a [experiment.frequencies]
+# sub-table with start/stop/num/scale to expand via np.linspace/np.logspace:
+#
+# [experiment.frequencies]
+# start = 0.1
+# stop = 100.0
+# num = 10
+# scale = "log"          # "linear" or "log"
+frequencies = [0.5, 1.0, 5.0, 10.0, 20.0, 40.0]
+v_scu1 = 1.11
+v_scu2 = 1.09
+scu_compliance = 10e-6
+offset = 2.5
+amplitude = 10e-3

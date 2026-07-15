@@ -1,5 +1,7 @@
 from .lia_analysis import (
     LIADiffSweepScatterCompiler,
+    LIADriftEvolutionCompiler,
+    LIAFrequencyResponseCompiler,
     LIASnapDigest,
     LIASweepScatterCompiler,
 )
@@ -12,4 +14,6 @@ __all__ = [
     "LIASnapDigest",
     "LIASweepScatterCompiler",
     "LIADiffSweepScatterCompiler",
+    "LIAFrequencyResponseCompiler",
+    "LIADriftEvolutionCompiler",
 ]
