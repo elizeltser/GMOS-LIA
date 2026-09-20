@@ -2,6 +2,7 @@
 
 import logging
 import re
+from typing import cast
 
 import pyvisa
 
@@ -9,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def _idn(resource: pyvisa.resources.Resource, timeout_ms: int = 2000) -> str:
+    resource = cast(pyvisa.resources.MessageBasedResource, resource)
     orig = resource.timeout
     try:
         resource.timeout = timeout_ms
@@ -22,7 +24,7 @@ def _idn(resource: pyvisa.resources.Resource, timeout_ms: int = 2000) -> str:
 
 def _parse_resource(resource_str: str) -> tuple:
     """Return (interface, info_dict) parsed from a VISA resource string."""
-    m = re.match(r'^([A-Za-z]+)', resource_str)
+    m = re.match(r"^([A-Za-z]+)", resource_str)
     iface = m.group(1).upper() if m else "UNKNOWN"
     parts = resource_str.split("::")
     info: dict = {}
@@ -60,8 +62,11 @@ def list_devices(include_serial: bool = False) -> None:
         all_resources = rm.list_resources()
 
         # Filter out serial/tty ports unless explicitly requested
-        resources_no_serial = [r for r in all_resources
-                               if include_serial or _parse_resource(r)[0] not in _SERIAL_IFACES]
+        resources_no_serial = [
+            r
+            for r in all_resources
+            if include_serial or _parse_resource(r)[0] not in _SERIAL_IFACES
+        ]
         skipped_serial = len(all_resources) - len(resources_no_serial)
 
         # Filter out GPIB addresses known to hang with no response
@@ -98,14 +103,20 @@ def list_devices(include_serial: bool = False) -> None:
             for resource_str, info in groups[iface]:
                 print(f"  {resource_str}")
                 if iface == "GPIB":
-                    print(f"    Board   : {info['board']}   Primary address: {info['address']}")
+                    print(
+                        f"    Board   : {info['board']}   "
+                        f"Primary address: {info['address']}"
+                    )
                 elif iface == "TCPIP":
                     line = f"    Host    : {info['host']}"
                     if info.get("lan_device"):
                         line += f"   LAN device: {info['lan_device']}"
                     print(line)
                 elif iface == "USB":
-                    print(f"    Manuf   : {info['manuf_id']}   Model: {info['model_code']}   Serial: {info['serial']}")
+                    print(
+                        f"    Manuf   : {info['manuf_id']}   "
+                        f"Model: {info['model_code']}   Serial: {info['serial']}"
+                    )
                 elif iface in _SERIAL_IFACES:
                     print(f"    Port    : {info['port']}")
                 if iface not in _SERIAL_IFACES:
@@ -120,7 +131,10 @@ def list_devices(include_serial: bool = False) -> None:
             print(f"\n  ({skipped_serial} serial/tty port(s) hidden)")
         if skipped_gpib:
             addrs = ", ".join(str(a) for a in sorted(_GPIB_SKIP_ADDRS))
-            print(f"  ({skipped_gpib} GPIB address(es) skipped — known non-responsive: {addrs})")
+            print(
+                f"  ({skipped_gpib} GPIB address(es) skipped — "
+                f"known non-responsive: {addrs})"
+            )
         print()
     finally:
         rm.close()

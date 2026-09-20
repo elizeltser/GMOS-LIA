@@ -1,0 +1,63 @@
+# Example config for: python sources/main.py --experiment lia_gas_response_interactive --config configs/lia_gas_response_interactive.example.toml
+#
+# A manually-gated continuous capture at a fixed operating point. After the
+# initial Enter press starts recording, every further Enter press marks the
+# current row (mark_label_prefix + an incrementing number, e.g. "mark_1",
+# "mark_2", ...) without stopping the capture, and pressing Esc stops
+# recording and moves straight into plotting/analysis.
+#
+# Flow: after configuring the LIA/SCU bias, setting the heater temperature,
+# and settling, the operator:
+#   1. presses Enter to begin measurement (sampling starts immediately,
+#      continuously)
+#   2. presses Enter any number of times, whenever a portion (e.g. gas
+#      inserted/removed) should be marked
+#   3. presses Esc to stop recording and start analysis
+# Writes one continuous CSV (Results/LIAMeasurementSetup/<session_folder>/
+# gas_response.csv) with index/event columns, and a time-series plot with
+# every marked event shown as its own vertical line.
+#
+# The reference phase is always set literally to 0 deg (never auto-phased).
+# All ATE (ESD/fan/heaters) are live from the very start via [ate] below.
+
+[ate]
+debug_device_io = true
+
+[ate.heater1]
+voltage = 2.91
+current = 0.5
+
+[ate.heater3]
+voltage = 2.9
+current = 0.5
+
+[experiment]
+# Heater ch1/ch3 voltage (V), applied to both channels simultaneously.
+temperature = 2.9
+lia_frequency = 518.0
+
+settle = 60.0            # wait after temperature, before the first Enter prompt
+sample_interval = 0.5
+
+session_folder = "bottle_new_sample_100PPM_integrated_AMP100_1ppm"   # subfolder under Results/LIAMeasurementSetup/; omit for a date-stamped name
+
+# Prefix for the CSV event column / plot legend of each mark: "mark_1",
+# "mark_2", etc.
+mark_label_prefix = "mark"
+
+# Explicit SCU1/SCU2 starting bias. Comment both out to fall back to starting
+# from v_scu1/v_scu2 below instead.
+# v_scu1_start = 0.84
+# v_scu2_start = 0.84
+
+v_scu1 = 2.75
+v_scu2 = 2.75
+scu_compliance = 1e-4
+offset = 1.000
+amplitude = 5e-3
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "S3"
+input_coupling = "AC"
+input_source = "A"
+input_range = "V1"

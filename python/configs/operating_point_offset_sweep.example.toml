@@ -1,0 +1,61 @@
+# Example config for: python sources/main.py --experiment operating_point_offset_sweep --config configs/operating_point_offset_sweep.example.toml
+#
+# Locates the GMOS's optimal LIA DC reference offset at a fixed SCU bias.
+#
+# Unlike operating_point_sweep (which sweeps a list of SCU voltages), SCU1/
+# SCU2 are held at their configured baseline voltages (v_scu1/v_scu2 below)
+# for the whole sweep: for every [experiment.heater_voltages] x
+# [experiment.lia_offsets] combo, SCU1/SCU2 current is measured once at that
+# fixed bias.
+#
+# Produces one plot per channel of measured current vs LIA offset, overlaying
+# every heater voltage
+# (Plots/OperatingPointOffsetSweep/.../<channel>_current_vs_offset.png).
+
+[ate]
+# Heaters must be configured here: OperatingPointOffsetSweep depends on
+# setup_ate having already enabled PSU ch1/ch3 before the sweep starts
+# driving their voltage to each heater_voltages setpoint.
+debug_device_io = true
+
+[ate.heater1]
+voltage = 2.5
+current = 0.5
+
+[ate.heater3]
+voltage = 2.5
+current = 0.5
+
+[experiment]
+heater_settle = 30.0   # wait after changing heater voltage
+offset_settle = 5.0    # wait after changing LIA offset
+point_settle = 0.5     # wait before each current measurement
+
+session_folder = "operating_point_offset_sweep_run"   # subfolder under Results/OperatingPointOffsetSweep/; omit for a date-stamped name
+
+# Fixed SCU bias held throughout the sweep (not swept).
+v_scu1 = 2.5
+v_scu2 = 2.5
+scu_compliance = 1e-4
+offset = 0.9
+amplitude = 25e-3
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "MS100"
+input_coupling = "DC"
+input_source = "A"
+input_range = "V1"
+
+# Heater ch1/ch3 voltage (V) per step, applied to both channels simultaneously.
+[experiment.heater_voltages]
+start = 2.5
+stop = 2.8
+num = 9
+scale = "linear"
+
+# LIA DC reference offset (V) per step.
+[experiment.lia_offsets]
+start = 0.9
+stop = 1.1
+num = 150
+scale = "linear"

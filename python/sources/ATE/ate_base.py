@@ -30,14 +30,18 @@ class ATEBase:
 
     def _get_address(self, tag: str) -> str:
         """Get address from devices.json"""
-        devices_file: str = os.path.join(os.path.dirname(__file__), '..', '..', 'devices.json')
-        with open(devices_file, 'r') as f:
+        devices_file: str = os.path.join(
+            os.path.dirname(__file__), "..", "..", "devices.json"
+        )
+        with open(devices_file, "r") as f:
             devices: Dict[str, str] = json.load(f)
         return devices[tag]
 
     def __enter__(self: T) -> T:
         logger.debug(f"Opening resource: {self.address} (tag={self.tag})")
-        self.resource = cast(pyvisa.resources.MessageBasedResource, self.rm.open_resource(self.address))
+        self.resource = cast(
+            pyvisa.resources.MessageBasedResource, self.rm.open_resource(self.address)
+        )
         self.resource.timeout = 5000  # 5 seconds
         return self
 
@@ -64,16 +68,16 @@ class ATEBase:
 
     def reset(self) -> None:
         """Reset device"""
-        self.write('*RST')
+        self.write("*RST")
 
     def clear_status(self) -> None:
         """Clear status"""
-        self.write('*CLS')
+        self.write("*CLS")
 
     def idn(self) -> str:
         """Get identification"""
-        return self.query('*IDN?')
+        return self.query("*IDN?")
 
     def opc(self) -> str:
         """Operation complete"""
-        return self.query('*OPC?')
+        return self.query("*OPC?")

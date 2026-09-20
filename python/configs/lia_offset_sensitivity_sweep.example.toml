@@ -1,0 +1,66 @@
+# Example config for: python sources/main.py --experiment lia_offset_sensitivity_sweep --config configs/lia_offset_sensitivity_sweep.example.toml
+#
+# Measures GMOS current sensitivity to a small heater-voltage (gate
+# temperature) perturbation, at each point of a heater-voltage (PSU ch1/ch3)
+# x SCU-bias (SCU1/SCU2) x LIA-offset sweep, for the active (SCU1, PSU ch1)
+# and blind/reference (SCU2, PSU ch3) devices simultaneously.
+#
+# LIA amplitude/frequency are held fixed for the whole run; only the DC
+# reference offset is swept. At each sweep point, both channels are measured
+# independently: an averaged baseline current, then that channel's own PSU
+# heater voltage is bumped by psu_step, held for step_settle, and
+# re-measured (perturbed current), before being restored.
+#
+# Results are written to Results/LIAOffsetSensitivitySweep/<session_folder>/
+# as two separate CSVs: active.csv and blind.csv.
+
+[ate]
+# Heaters must be configured here: LIAOffsetSensitivitySweep depends on
+# setup_ate having already enabled PSU ch1/ch3 before the sweep starts
+# driving their voltage to each psu_voltages setpoint.
+debug_device_io = true
+
+[ate.heater1]
+voltage = 2.5
+current = 0.5
+
+[ate.heater3]
+voltage = 2.5
+current = 0.5
+
+[experiment]
+lia_frequency = 517.0
+amplitude = 0.005       # 5 mV
+psu_step = 0.001        # 1 mV heater-voltage perturbation
+n_measurements = 25     # repeated current reads averaged per measurement
+initial_settle = 120.0   # wait once, right after instrument setup, before the sweep starts
+heater_settle = 120.0    # wait after changing heater (PSU ch1/ch3) voltage
+bias_settle = 5.0       # wait after changing SCU1/SCU2 bias
+offset_settle = 1.0     # wait after changing LIA offset
+step_settle = 5.0       # wait after the small PSU perturbation before re-measuring
+
+session_folder = "lia_offset_sensitivity_sweep_run_third_try"   # subfolder under Results/LIAOffsetSensitivitySweep/; omit for a date-stamped name
+
+v_scu1 = 2.01
+v_scu2 = 2.0
+scu_compliance = 1e-4
+offset = 0.955
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "MS100"
+input_coupling = "DC"
+input_source = "A"
+input_range = "V1"
+
+# Heater ch1/ch3 voltage (V) per step, applied to both channels simultaneously.
+psu_voltages = [2.7, 2.75, 2.8, 2.83, 2.85, 2.87, 2.9, 2.93, 2.95]
+
+# SCU1/SCU2 bias voltage (V) per step, applied to both channels simultaneously.
+scu_bias_voltages = [2.65, 2.68, 2.7, 2.73 , 2.75, 2.77]
+
+# LIA DC reference offset (V) per step.
+[experiment.lia_offsets]
+start = 0.975
+stop = 1.000
+num = 41
+scale = "linear"

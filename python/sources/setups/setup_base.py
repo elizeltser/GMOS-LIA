@@ -70,16 +70,24 @@ class SetupBase:
     Base class for experiment setups.
     """
 
-    def __init__(self, devices: Dict[str, Any] = None, params: Dict[str, Any] = None,  # type: ignore
-                 output_name: str = None, ate_config: ATEConfig = None) -> None:  # type: ignore
+    def __init__(
+        self,
+        devices: Dict[str, Any] = None,  # type: ignore
+        params: Dict[str, Any] = None,  # type: ignore
+        output_name: str = None,  # type: ignore
+        ate_config: ATEConfig = None,  # type: ignore
+    ) -> None:
         self.devices: Dict[str, Any] = devices or {}
         self.params: Dict[str, Any] = params or {}
         self.output_name: str | None = output_name
         self.ate_config: ATEConfig = ate_config or ATEConfig()
         if self.ate_config.debug_device_io:
             logging.getLogger("ATE.ate_base").setLevel(logging.DEBUG)
-            logger.info("Debug device I/O logging enabled: every SCPI write/query will be logged")
-        self.results_dir: str = os.path.join('Results', self.__class__.__name__)
+            logger.info(
+                "Debug device I/O logging enabled: "
+                "every SCPI write/query will be logged"
+            )
+        self.results_dir: str = os.path.join("Results", self.__class__.__name__)
         os.makedirs(self.results_dir, exist_ok=True)
         self.rm: pyvisa.ResourceManager = pyvisa.ResourceManager()
         self.snapshot: SetupSnapshot = SetupSnapshot()
@@ -92,6 +100,7 @@ class SetupBase:
         set up manually. Re-asserting voltage/current/output-on for an
         already-enabled channel is a no-op, so this is safe to run every time.
         """
+
         @wraps(test_method)
         def wrapper(self, *args, **kwargs):
             cfg: ATEConfig = self.ate_config
@@ -106,11 +115,14 @@ class SetupBase:
                 psu.enable_output(4)
                 for channel, heater in ((1, cfg.heater1), (3, cfg.heater3)):
                     if heater is not None:
-                        logger.info(f"Setting heater ch{channel}: {heater.voltage}V / {heater.current}A")
+                        logger.info(
+                            f"Setting heater ch{channel}: "
+                            f"{heater.voltage}V / {heater.current}A"
+                        )
                         psu.set_voltage(channel, heater.voltage)
                         psu.set_current(channel, heater.current)
                         psu.enable_output(channel)
-                while psu.opc() != '\n':
+                while psu.opc() != "\n":
                     sleep(0.1)  # Wait for PSU to be ready
                 logger.info("PSU ready. Running experiment.")
                 result = test_method(self, *args, **kwargs)
@@ -118,6 +130,7 @@ class SetupBase:
             finally:
                 psu.resource.close()
             return result
+
         return wrapper
 
     @setup_ate
@@ -145,7 +158,9 @@ class SetupBase:
         self.snapshot.add(label, settings)
         return settings
 
-    def snapshot_scu(self, scu: "ATE.SCU", channel: int = 1, label: str = None) -> Dict[str, Any]:  # type: ignore
+    def snapshot_scu(
+        self, scu: "ATE.SCU", channel: int = 1, label: str = None  # type: ignore
+    ) -> Dict[str, Any]:
         """Read a B2962A (SCU) channel's voltage setting, current compliance,
         and measured (actual) current draw."""
         label = label or scu.tag
@@ -157,7 +172,9 @@ class SetupBase:
         self.snapshot.add(f"{label}[ch{channel}]", settings)
         return settings
 
-    def snapshot_psu(self, psu: "ATE.PSU", channel: int, label: str = "PSU") -> Dict[str, Any]:
+    def snapshot_psu(
+        self, psu: "ATE.PSU", channel: int, label: str = "PSU"
+    ) -> Dict[str, Any]:
         """Read an HP6624A (PSU) channel's programmed voltage/current compliance,
         and measured (actual) output voltage/current."""
         settings: Dict[str, Any] = {
@@ -189,22 +206,30 @@ class SetupBase:
                 return device
             except pyvisa.errors.VisaIOError as exc:
                 last_exc = exc
-                logger.warning(f"VISA open failed for {device.tag} at {device.address} "
-                                f"(attempt {attempt}/{retries}): {exc}")
+                logger.warning(
+                    f"VISA open failed for {device.tag} at {device.address} "
+                    f"(attempt {attempt}/{retries}): {exc}"
+                )
                 if attempt < retries:
                     sleep(retry_delay)
         raise last_exc
 
-    def save_results(self, data: Dict[str, List], filename: str, include_snapshot: bool = True) -> str:
+    def save_results(
+        self, data: Dict[str, List], filename: str, include_snapshot: bool = True
+    ) -> str:
         """Save results to CSV.
 
         If ``include_snapshot`` is set and a setup snapshot has been captured, the
         instrument settings are prepended as CSV rows (a device label row followed
         by ``setting,value`` rows) so the measurement conditions travel with the data.
         """
-        stem = self.output_name if self.output_name else f'{filename}_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
-        filepath: str = os.path.join(self.results_dir, f'{stem}.csv')
-        with open(filepath, 'w', newline='') as f:
+        stem = (
+            self.output_name
+            if self.output_name
+            else f"{filename}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        )
+        filepath: str = os.path.join(self.results_dir, f"{stem}.csv")
+        with open(filepath, "w", newline="") as f:
             writer = csv.writer(f)
             if include_snapshot and self.snapshot.devices:
                 writer.writerows(self.snapshot.as_rows(width=len(data)))

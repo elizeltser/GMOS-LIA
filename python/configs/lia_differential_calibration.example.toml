@@ -1,0 +1,65 @@
+# Example config for: python sources/main.py --experiment lia_differential_calibration --config configs/lia_differential_calibration.example.toml
+#
+# Differential-method phase-zero / drift calibration. Starting point matches
+# lia_gas_response_interactive: heater ch1/ch3 set to `temperature`, LIA
+# reference configured from the fields below, then `initial_settle`.
+#
+# Flow:
+#   1. Phase auto-zero (APHS), wait `phase_zero_wait`, check
+#      abs(theta) <= theta_tolerance_deg; retries up to
+#      phase_zero_max_retries times before aborting.
+#   2. Once phase-locked, X/Y/theta are sampled every `sample_interval`,
+#      continuously, into one CSV with a plaintext `notes` column narrating
+#      every action taken.
+#   3. Every `window_duration` seconds the slope of X vs time is measured.
+#      If abs(slope) > slope_threshold_v_per_s, PSU ch1 then ch3 (increase
+#      then decrease) are adjusted in `psu_step` increments up to
+#      `psu_step_max` away from `temperature`, re-auto-zeroing and
+#      re-measuring after every step, until the slope converges or the
+#      search space is exhausted.
+#   4. Once settled, a `final_validation_duration` (default 10 min)
+#      observation-only window runs at the resulting voltage: sampling and
+#      slope-fitting continue, but no further PSU adjustment is made — this
+#      just confirms the chosen point holds up over a longer horizon than
+#      the 30s search windows.
+#
+# Writes Results/DifferentialCalibration/<session_folder>/calibration.csv
+# plus a time-series plot (X/Y/theta) with every note shown as a vertical
+# line.
+
+[ate]
+debug_device_io = true
+
+[experiment]
+# Heater ch1/ch3 voltage (V), applied to both channels as the starting point.
+temperature = 2.9
+lia_frequency = 518.0
+
+initial_settle = 120.0      # thermal settle after setting temperature, before phase auto-zero
+
+phase_zero_wait = 20.0
+theta_tolerance_deg = 0.6
+phase_zero_max_retries = 7
+
+window_duration = 30.0
+sample_interval = 0.5
+slope_threshold_v_per_s = 0.5e-6
+
+psu_step = 0.005           # 5 mV per adjustment step
+psu_step_max = 0.025       # up to 25 mV away from `temperature`, per channel/direction
+
+final_validation_duration = 600.0   # 10 min observation-only window after settling, no further adjustment
+
+session_folder = "differential_calibration_run"   # subfolder under Results/DifferentialCalibration/; omit for a date-stamped name
+
+v_scu1 = 2.90
+v_scu2 = 2.90
+scu_compliance = 1e-4
+offset = 0.990
+amplitude = 5e-3
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "S3"
+input_coupling = "AC"
+input_source = "A"
+input_range = "V1"

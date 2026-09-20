@@ -1,0 +1,35 @@
+# Example config for: python sources/main.py --experiment heater_resistance --config configs/heater_resistance.example.toml
+#
+# Estimates the heater resistance of PSU ch1/ch3 with a linear I-V fit. Only
+# the PSU is used (ESD ch2 and fan ch4 are enabled first); the heater
+# resistors are separate from the rest of the setup.
+#
+# Each voltage point is the mean of n_samples V/I readings taken
+# sample_interval apart; the whole sweep is repeated n_repeats times and the
+# spread between repeats gives the error bars. Outputs:
+#   Results/HeaterResistanceSetup/<session>/heater_resistance.csv, fit_summary.csv
+#   Plots/HeaterResistanceSetup/<session>/heater_resistance_ch<N>.png
+#   (I-V points + error bars, linear fit, R^2, MSE, fit +- RMSE band)
+#
+# To run it from run_experiment.sh: uncomment the "heater_resistance" block
+# (and comment out any other active experiment), and change --config to point
+# at your own copy of this file if you edit the parameters.
+
+[ate]
+debug_device_io = false
+
+[experiment]
+channels = [1, 3]
+current_limit = 0.6        # A, PSU current limit on the heater channels
+settle = 1.0               # s, wait after each voltage step
+n_samples = 5              # readings averaged per point
+sample_interval = 0.0005   # s between readings (a lower bound; GPIB may be slower)
+n_repeats = 3              # full sweeps
+repeat_wait = 5.0          # s between sweeps
+session_folder = "heater_resistance_run"   # omit for a date-stamped name
+
+[experiment.heater_voltages]
+start = 0.5
+stop = 5.0
+num = 19
+scale = "linear"

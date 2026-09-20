@@ -23,10 +23,9 @@ sample_interval = 1.0
 settle = 10.0
 sweep_folder = "july_11"
 
-# The first frequency point only: run bias auto-calibration (if enabled),
-# then wait `first_settle` (thermal settling), then auto-phase the LIA, then
-# wait `first_autophase_settle`, then start capturing. Every later point just
-# waits `settle` above before capturing.
+# The first frequency point only: wait `first_settle` (thermal settling),
+# then auto-phase the LIA, then wait `first_autophase_settle`, then start
+# capturing. Every later point just waits `settle` above before capturing.
 first_settle = 480.0
 first_auto_phase = true
 first_autophase_settle = 20.0
@@ -41,11 +40,11 @@ v_scu1 = 2.01
 v_scu2 = 2.0
 scu_compliance = 1e-4
 offset = 0.955
-amplitude = 25e-3
+amplitude = 10e-3
 sensitivity = "MV500"
 filter_slope = "DB24"
 time_constant = "S1"
-input_coupling = "DC"
+input_coupling = "AC"
 input_source = "A"
 input_range = "V1"
 
@@ -54,14 +53,3 @@ start = 0.1
 stop = 3000.0
 num = 120
 scale = "log"
-
-# Closed-loop bias auto-calibration: disabled by default. When enabled, runs
-# once (right after setting the first point's frequency, before
-# `first_settle`), hill-climbing heater1/heater3 voltages and then trimming
-# v_scu1/v_scu2 toward the target currents below. See
-# lia_snap_sweep_calibration.example.toml for an enabled example with all
-# tunable parameters.
-[experiment.calibration]
-enabled = true
-target_current_scu1 = 4.5e-6
-target_current_scu2 = 4.5e-6

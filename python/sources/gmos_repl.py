@@ -41,7 +41,7 @@ class GMOSRepl(cmd.Cmd):
     def _get_psu(self):
         if self.psu is not None:
             return self.psu
-        psu = ATE.PSU('PSU', rm=self.rm)
+        psu = ATE.PSU("PSU", rm=self.rm)
         psu.__enter__()
         self.psu = psu
         logger.info("Opened PSU")
@@ -69,7 +69,9 @@ class GMOSRepl(cmd.Cmd):
             scu = self._get_scu(tag)
             if sub == "voltage":
                 if len(parts) != 2:
-                    logger.warning(f"{tag} voltage: expected exactly one numeric argument")
+                    logger.warning(
+                        f"{tag} voltage: expected exactly one numeric argument"
+                    )
                     return
                 v = float(parts[1])
                 scu.set_source_function(ATE.SourceFunction.VOLTAGE, 10e-6, channel=1)
@@ -82,7 +84,9 @@ class GMOSRepl(cmd.Cmd):
                 scu.disable_output(channel=1)
                 logger.info(f"{tag} output disabled")
             else:
-                logger.warning(f"{tag}: unknown subcommand {sub!r} (voltage <V> | on | off)")
+                logger.warning(
+                    f"{tag}: unknown subcommand {sub!r} (voltage <V> | on | off)"
+                )
         except Exception:
             logger.error(f"{tag} {sub} failed", exc_info=True)
 
@@ -95,6 +99,57 @@ class GMOSRepl(cmd.Cmd):
     def do_scu2(self, arg: str) -> None:
         """scu2 voltage <V> | scu2 on | scu2 off"""
         self._scu_cmd("SCU2", arg)
+
+    def _psu_channel_cmd(self, channel: int, arg: str) -> None:
+        parts = self._split(arg)
+        if not parts:
+            logger.warning(
+                f"psu{channel}: missing subcommand "
+                "(voltage <V> | current <A> | on | off)"
+            )
+            return
+        sub = parts[0].lower()
+        try:
+            psu = self._get_psu()
+            if sub == "voltage":
+                if len(parts) != 2:
+                    logger.warning(
+                        f"psu{channel} voltage: expected exactly one numeric argument"
+                    )
+                    return
+                v = float(parts[1])
+                psu.set_voltage(channel, v)
+                logger.info(f"PSU ch{channel} voltage set to {v} V")
+            elif sub == "current":
+                if len(parts) != 2:
+                    logger.warning(
+                        f"psu{channel} current: expected exactly one numeric argument"
+                    )
+                    return
+                i = float(parts[1])
+                psu.set_current(channel, i)
+                logger.info(f"PSU ch{channel} current set to {i} A")
+            elif sub == "on":
+                psu.enable_output(channel)
+                logger.info(f"PSU ch{channel} output enabled")
+            elif sub == "off":
+                psu.disable_output(channel)
+                logger.info(f"PSU ch{channel} output disabled")
+            else:
+                logger.warning(
+                    f"psu{channel}: unknown subcommand {sub!r} "
+                    f"(voltage <V> | current <A> | on | off)"
+                )
+        except Exception:
+            logger.error(f"psu{channel} {sub} failed", exc_info=True)
+
+    def do_psu1(self, arg: str) -> None:
+        """psu1 voltage <V> | psu1 current <A> | psu1 on | psu1 off"""
+        self._psu_channel_cmd(1, arg)
+
+    def do_psu3(self, arg: str) -> None:
+        """psu3 voltage <V> | psu3 current <A> | psu3 on | psu3 off"""
+        self._psu_channel_cmd(3, arg)
 
     def do_protection(self, arg: str) -> None:
         """protection on|off — toggle PSU ch2 (ESD, 5V/0.7A) and ch4 (fan, 7V/1.5A)."""
@@ -121,7 +176,7 @@ class GMOSRepl(cmd.Cmd):
             logger.error(f"protection {state} failed", exc_info=True)
 
     def do_status(self, arg: str) -> None:
-        """status — read SCU1/SCU2 voltage and current, and PSU ch2/ch4 voltage and current."""
+        """status — read SCU1/SCU2 voltage/current and PSU ch1-4 voltage/current."""
         lines = ["--- status ---"]
         for tag in ("SCU1", "SCU2"):
             try:
@@ -134,14 +189,15 @@ class GMOSRepl(cmd.Cmd):
                 lines.append(f"{tag}: <error>")
         try:
             psu = self._get_psu()
-            for ch, label in ((2, "ESD"), (4, "fan")):
+            for ch, label in ((1, None), (2, "ESD"), (3, None), (4, "fan")):
+                name = f"PSU ch{ch}" + (f" ({label})" if label else "")
                 try:
                     v = psu.get_output_voltage(ch)
                     i = psu.get_output_current(ch)
-                    lines.append(f"PSU ch{ch} ({label}): V={v:.6g} V   I={i:.6g} A")
+                    lines.append(f"{name}: V={v:.6g} V   I={i:.6g} A")
                 except Exception:
-                    logger.error(f"PSU ch{ch} status read failed", exc_info=True)
-                    lines.append(f"PSU ch{ch} ({label}): <error>")
+                    logger.error(f"{name} status read failed", exc_info=True)
+                    lines.append(f"{name}: <error>")
         except Exception:
             logger.error("PSU status read failed", exc_info=True)
             lines.append("PSU: <error>")

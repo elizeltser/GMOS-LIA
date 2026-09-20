@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gmos-operating-point": {
+      "command": "/home/elizeltser/Documents/GMOS-LIA/.venv/bin/python",
+      "args": ["/home/elizeltser/Documents/GMOS-LIA/python/sources/mcp_server/server.py"],
+      "env": {
+        "PYTHONPATH": "/home/elizeltser/Documents/GMOS-LIA/python/sources",
+        "PYVISA_LIBRARY": "@py"
+      }
+    }
+  }
+}

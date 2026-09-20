@@ -1,0 +1,66 @@
+# Example config for: python sources/main.py --experiment operating_point_sweep --config configs/operating_point_sweep.example.toml
+#
+# Locates the GMOS's optimal DC operating point by characterizing SCU1/SCU2
+# IV curves across the LIA's DC reference offset and the heater temperature
+# (PSU ch1/ch3).
+#
+# For every [experiment.heater_voltages] x [experiment.lia_offsets] combo,
+# SCU1 and SCU2 are each swept independently through
+# [experiment.scu_voltages] (log scale): while one channel is swept, the
+# other is held at its own baseline (v_scu1/v_scu2 below), then reset to
+# that baseline before the other channel's sweep starts.
+#
+# Produces one "offsets overlaid" IV plot per heater voltage per channel
+# (Plots/OperatingPointSweep/.../<heater>V_<channel>_iv_vs_offset.png), plus
+# one "heater voltages overlaid" IV plot per channel at the single
+# plot_offset_value below (offset_<value>V_<channel>_iv_vs_heater.png).
+
+[ate]
+# Heaters must be configured here: OperatingPointSweep depends on setup_ate
+# having already enabled PSU ch1/ch3 before the sweep starts driving their
+# voltage to each heater_voltages setpoint.
+debug_device_io = true
+
+[ate.heater1]
+voltage = 2.5
+current = 0.5
+
+[ate.heater3]
+voltage = 2.5
+current = 0.5
+
+[experiment]
+# Heater ch1/ch3 voltage (V) per step, applied to both channels simultaneously.
+heater_voltages = [2, 2.5, 2.7, 3.0, 3.2]
+
+# LIA DC reference offset (V) per step.
+lia_offsets = [0.7, 0.8, 0.9, 0.95 , 0.97, 1.1 ,1.0]
+
+heater_settle = 30.0   # wait after changing heater voltage
+offset_settle = 5.0    # wait after changing LIA offset
+point_settle = 0.2     # wait before each SCU voltage-step measurement
+
+session_folder = "operating_point_sweep_run"   # subfolder under Results/OperatingPointSweep/; omit for a date-stamped name
+
+# Single lia_offsets value used for the "IV plot for every heater voltage"
+# comparison plot (nearest swept offset is used if it doesn't match exactly).
+plot_offset_value = 0.9
+
+# Baseline bias voltage each SCU is held at while the other channel is swept.
+v_scu1 = 2.01
+v_scu2 = 2.0
+scu_compliance = 1e-4
+offset = 0.9
+amplitude = 25e-3
+sensitivity = "MV500"
+filter_slope = "DB24"
+time_constant = "MS100"
+input_coupling = "DC"
+input_source = "A"
+input_range = "V1"
+
+[experiment.scu_voltages]
+start = 2.0
+stop = 5.0
+num = 30
+scale = "log"
