@@ -83,13 +83,13 @@ The GMOS is always connected with the **3T method**: gate and drain are driven i
 | 2 | (DUT VDD/GND, 5 V ESD protection) | - | - |
 | 4 | (fan) | - | - |
 
-*Validated on hardware through the `gmos-operating-point` MCP server:* LIA offset 1.0 V, amplitude 5 mV @ 518 Hz, SCU set to 2.5–3.2 V, heaters at 2.9 V (the MCP hard lower bound is 2.85 V, so the 2.5 V originally proposed was not used).
+*Validated on hardware through the `gmos-operating-point` MCP server:* LIA offset 1.0 V, amplitude 5 mV @ 518 Hz, SCU set to 2.5–3.2 V, heaters at 2.9 V (the MCP hard lower bound is 2.8 V, so the 2.5 V originally proposed was not used).
 
 - All heaters off (~0 V): SCU1 current 0 A, SCU2 current 1e-7 A at 2.5 V. Both are far below the 7 µA expected of a conducting device.
 - PSU ch1 on only: SCU1 conducts (Vd ≈ 0 V, so the current is resistor-limited, ≈ Vscu/330 kΩ ≈ 7.6 µA at 2.5 V); SCU2 stays at 1e-7 A.
 - PSU ch3 also on: SCU2 conducts fully (Vd ≈ -5 mV at 2.8 V), as SCU1 did.
 
-Note the MCP tool `set_drain_voltage` rejects (and rolls back) any setpoint whose Vd is below 120 mV, which a fully-heated device at 2.9 V cannot satisfy. The mapping evidence above comes from the current readings quoted in those rejection messages.
+Note a fully-heated device at 2.9 V cannot satisfy the Vd >= 110 mV target window. The MCP tool `set_drain_voltage` therefore keeps the setpoint and reports a `warnings` entry when Vd is low or the current is below 7 µA, so the operating point can be explored; only a drain current above 10 µA is rolled back. `read_drain_state` reports the same warnings. The mapping evidence above comes from the current readings quoted in the earlier rejection messages.
 
 ## Automatic Test Equipment
 
@@ -162,7 +162,7 @@ Run from the repo root with `python python/sources/main.py <args>`.
 
 | Argument | Short | Description |
 | --- | :---: | --- |
-| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices` or `--repl` is used. Valid names: `IV-voltage-lin`, `IV-voltage-log`, `lia_readout`, `lia_noise_scan`, `lia_snap_only`, `lia_snap_sweep`, `lia_gas_response_interactive`, `lia_digest_sweep`, `lia_drift_evolution`, `operating_point_sweep`, `operating_point_offset_sweep`, `lia_offset_sensitivity_sweep`, `lia_differential_calibration`, `heater_resistance`. The authoritative list is `_EXPERIMENTS` in `python/sources/main.py`. |
+| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices` or `--repl` is used. Valid names: `IV-voltage-lin`, `IV-voltage-log`, `lia_readout`, `lia_noise_scan`, `lia_snap_only`, `lia_snap_sweep`, `lia_gas_response_interactive`, `lia_digest_sweep`, `lia_drift_evolution`, `operating_point_sweep`, `operating_point_offset_sweep`, `lia_offset_sensitivity_sweep`, `lia_differential_calibration`, `heater_resistance`, `heater_slope_table`, `dwell_analysis`. The authoritative list is `_EXPERIMENTS` in `python/sources/main.py`. |
 | `--config <path>` | `-c` | Path to a TOML file with `[ate]` and `[experiment]` tables overriding the selected experiment's parameters. See [Experiment Configuration Files](#experiment-configuration-files) below. |
 | `--list_devices` | — | Probe all visible VISA resources and print a summary grouped by interface type (GPIB, TCPIP, USB, Serial). For each resource the VISA address string, interface-specific details (GPIB primary address / IP host / USB serial number), and the `*IDN?` response are shown. Devices that do not respond to IDN (e.g. HP 6624A) display `(no response)`. |
 | `--repl` | — | Enter an interactive REPL instead of running an experiment (see `gmos_repl.py`). |
@@ -351,9 +351,12 @@ Implemented by `LIAMeasurementSetup` (`python/sources/setups/lia_setup.py`). Con
 
 Implemented by `LIAMeasurementSetup` (`LIAGasResponseInteractiveConfig`): a manually-gated capture for actual gas-dosing runs at a fixed (`temperature`, `lia_frequency`) operating point. After the initial Enter press starts recording, every further Enter press marks the current row as `f"{mark_label_prefix}_N"` without stopping capture, and Esc stops recording — so the operator marks an arbitrary number of gas insertions/removals during the run. Output is one continuous CSV (`gas_response.csv`) with `index`/`event` columns, plus a time-series plot with each mark drawn as a vertical line. `temperature` (a shared heater ch1/ch3 voltage) is applied before `settle`.
 
-#### Post-Processing Setups (`lia_digest_sweep` / `lia_drift_evolution`)
+#### Post-Processing Setups (`lia_digest_sweep` / `lia_drift_evolution` / `heater_slope_table` / `dwell_analysis`)
 
-Both touch no instruments — they operate purely on already-captured CSVs:
+All touch no instruments — they operate purely on already-captured CSVs:
+
+- **`heater_slope_table`** (`HeaterSlopeTableConfig`, `python/sources/setups/heater_slope_table.py`) — recomputes heater-sensitivity points and slopes from the MCP monitor CSVs (`monitor_csvs`) instead of live tool readings. Each measurement note (a note containing `R=` and the ch1 readback as `ch1=X` or `pt(X)`) becomes one point: the settled window is the last `window_s` seconds of the dwell since the previous logged setpoint change (`offset ->`, `heater chN ->`, `SCUN voltage ->`), starting no earlier than the last phase auto-zero. The point value is the linear fit of X = R·cos(theta) evaluated at the end of the dwell, with the fit-residual standard error inflated by the lag-1 autocorrelation (`n_eff`). Points are flagged `short_settle`, `over_range`, `phase_suspect` (phase last zeroed at low R), `ch1_mismatch` (note vs logged PSU readback) — excluded from slopes — and `drifting`, `vd_low` (reported only). Slopes are adjacent-ch1 differences within a Vgs visit; the ch1 readback resolution (`heater_resolution_v`, default 1 mV) enters as a uniform quantization error and normally dominates the statistical error. Writes `Results/HeaterSlopeTable/<session>/{points.csv,slopes.csv,slope_table.md}` with N, σ, N_eff and the settle time actually used per point. Monitor logs written before the heater event carried a `(readback X V)` suffix rely on the ch1 value in the operator's note.
+- **`dwell_analysis`** (`DwellAnalysisConfig`, `python/sources/setups/dwell_analysis.py`) — quantifies operating-point recalibration needs from isolated-dwell monitor CSVs (`dwell_csvs`): each file must contain one `ISOLATED START` and one `ISOLATED END` note event bracketing a stretch with no instrument calls but the continuous monitor. Fits the linear drift of X = R·cos(theta) over that window (whole-session slope + 30-minute block slopes, `block_s`), and reports the cold-start-to-cold-start shift of X at dwell start across sessions, optionally converted to an equivalent heater-voltage shift via `local_slope_v_per_v` (take this from a `heater_slope_table` slope at the same Vgs/heater point). Writes `Results/DwellAnalysis/<session>/dwell_report.md`.
 
 - **`lia_digest_sweep`** (`LIADigestSweepConfig`, `python/sources/setups/lia_digest_sweep.py`) — digests every raw snap CSV in `sweep_dir` (avg X/Y/R, X/Y RMSE, optional baseline R-drift fit if `baseline=true`) and compiles the digests into R/theta/R-drift-vs-frequency summary plots (`phase_shift_deg` offsets the theta plot only).
 - **`lia_drift_evolution`** (`LIADriftEvolutionConfig`, `python/sources/setups/lia_drift_evolution.py`) — analyzes how each frequency point's R-drift rate evolves across a sequentially-captured sweep folder (`digest_dir`), given the wall-clock spacing between captures (`interval_s`).

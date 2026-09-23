@@ -14,7 +14,7 @@ import pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'python', 'sources'))
 
 from mcp_server import bounds
-from mcp_server.errors import DrainVoltageError, MonitorStateError, OutOfRangeError
+from mcp_server.errors import MonitorStateError, OutOfRangeError
 from mcp_server.operating_point_session import OperatingPointSession
 
 
@@ -99,19 +99,41 @@ def test_set_drain_voltage_success_within_bounds():
     assert session._last_good_voltage["SCU1"] == 3.0
 
 
-def test_set_drain_voltage_rolls_back_on_low_vd():
-    # Vd = 3.0 - 330e3*9e-6 = 3.0 - 2.97 = 0.03V <= 150mV -> rejected
+def test_set_drain_voltage_success_has_no_warnings():
+    session, _ = _session_with_fake_scu([8e-6])
+    assert session.set_drain_voltage("SCU1", 3.0)["warnings"] == []
+
+
+def test_set_drain_voltage_keeps_setpoint_and_warns_on_low_vd():
+    # Vd = 3.0 - 330e3*9e-6 = 3.0 - 2.97 = 0.03V <= 120mV -> warning, no rollback
     session, scu = _session_with_fake_scu([9e-6], previous_voltage=1.23)
-    with pytest.raises(DrainVoltageError):
-        session.set_drain_voltage("SCU1", 3.0)
-    # Rolled back to the previous known-good voltage.
-    assert scu.set_voltage_calls[-1] == 1.23
-    assert session._last_good_voltage["SCU1"] == 1.23
+    result = session.set_drain_voltage("SCU1", 3.0)
+    assert len(result["warnings"]) == 1
+    assert "Vd=" in result["warnings"][0]
+    assert scu.set_voltage_calls == [3.0]
+    assert session._last_good_voltage["SCU1"] == 3.0
 
 
-def test_set_drain_voltage_rolls_back_on_current_out_of_range():
+def test_set_drain_voltage_keeps_setpoint_and_warns_on_low_current():
+    # 2uA is below the 7uA window, Vd = 3.0 - 0.66 = 2.34V is fine.
+    session, scu = _session_with_fake_scu([2e-6], previous_voltage=1.23)
+    result = session.set_drain_voltage("SCU1", 3.0)
+    assert len(result["warnings"]) == 1
+    assert "Iscu=" in result["warnings"][0]
+    assert session._last_good_voltage["SCU1"] == 3.0
+
+
+def test_read_drain_state_reports_warnings():
+    session, _ = _session_with_fake_scu([9e-6, 9e-6])
+    session.set_drain_voltage("SCU1", 3.0)
+    state = session.read_drain_state("SCU1")
+    assert state["vd_ok"] is False
+    assert len(state["warnings"]) == 1
+
+
+def test_set_drain_voltage_rolls_back_on_current_above_max():
     # voltage_v=6.0, current=15uA -> Vd = 6.0 - 330e3*15e-6 = 6.0 - 4.95 = 1.05V,
-    # comfortably above 150mV, but 15uA is outside the 7-10uA target range.
+    # comfortably above 120mV, but 15uA exceeds the 10uA maximum.
     session, scu = _session_with_fake_scu([15e-6], previous_voltage=0.5)
     with pytest.raises(OutOfRangeError):
         session.set_drain_voltage("SCU1", 6.0)

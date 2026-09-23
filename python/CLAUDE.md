@@ -112,6 +112,8 @@ Experiments (CLI `--experiment` names in parentheses; authoritative map is `_EXP
   - `lia_gas_response_interactive`: operator-marked gas-dosing run at a fixed (temperature, frequency) operating point. Enter marks an event, Esc stops; writes one `gas_response.csv` (`index`/`event` columns) plus a time-series plot
 - `LIADigestSweep` (`lia_digest_sweep`): digests already-captured snap CSVs into R/theta/drift-vs-frequency plots; touches no instruments
 - `LIADriftEvolution` (`lia_drift_evolution`): R-drift rate evolution across a captured sweep's digest files; touches no instruments
+- `HeaterSlopeTable` (`heater_slope_table`): recomputes heater-sensitivity points and slopes (N, σ, settle time, uncertainties) from MCP monitor CSVs; touches no instruments
+- `DwellAnalysis` (`dwell_analysis`): quantifies R drift rate and cold-start-to-cold-start operating-point shift from isolated-dwell MCP monitor CSVs; touches no instruments
 - `OperatingPointSweep` (`operating_point_sweep`): heater voltage x LIA offset, full SCU1/SCU2 IV curves per point
 - `OperatingPointOffsetSweep` (`operating_point_offset_sweep`): lighter variant, one current point per heater voltage x offset
 - `LIAOffsetSensitivitySweep` (`lia_offset_sensitivity_sweep`): heater-voltage x SCU-bias x LIA-offset sweep measuring active/blind current sensitivity to a small heater-voltage bump; writes `active.csv`/`blind.csv`
@@ -126,7 +128,7 @@ Experiments (CLI `--experiment` names in parentheses; authoritative map is `_EXP
 
 Typical flow: `open_session` → `configure_signal` → `set_offset` → `set_drain_voltage` (SCU1/SCU2) → `set_heater_voltage` (PSU ch1/ch3) → `zero_phase` → `read_r`, or `start_monitoring` / `monitor_status` / `note_event` / `stop_monitoring` (CSV + drift-fit plot) → `close_session`. `configure_signal` defaults to a 5 mV amplitude (hard limit 7 mV). Other tools: `read_drain_state`, `snapshot_state`, `plot_monitor_session`.
 
-**Hard safety bounds** (`mcp_server/bounds.py`, plain constants, not configurable; out-of-range values are rejected): LIA offset 0.87–1.1 V, LIA amplitude ≤ 7 mV, heater 2.85–3.1 V, drain current 7–10 µA, drain voltage Vd ≥ 120 mV (Vd = Vscu − 330 kΩ · Iscu). `set_drain_voltage` rolls the setpoint back if the measured result violates the current/Vd window. Always `close_session` when done (de-energizes the instruments).
+**Hard safety bounds** (`mcp_server/bounds.py`, plain constants, not configurable; out-of-range values are rejected): LIA offset 0.87–1.1 V, LIA amplitude ≤ 7 mV, heater 2.8–3.1 V, drain current 7–10 µA, drain voltage Vd ≥ 110 mV (Vd = Vscu − 330 kΩ · Iscu). `set_drain_voltage` rolls the setpoint back only if the measured drain current exceeds 10 µA; a low Vd or low current keeps the setpoint and is returned in a `warnings` list (also given by `read_drain_state`). Always `close_session` when done (de-energizes the instruments).
 
 Tests: `tests/test_mcp_server_tools.py`, `test_operating_point_session.py`, `test_bounds.py`, `test_continuous_monitor.py`.
 

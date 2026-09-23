@@ -261,6 +261,53 @@ class LIADigestSweepConfig:
 
 
 @dataclass
+class HeaterSlopeTableConfig:
+    """Recompute heater-sensitivity points and slopes from stored monitor CSVs
+    (``monitor_*.csv`` from the MCP operating-point session). Touches no
+    instruments.
+
+    Each measurement note in a monitor CSV becomes one point: the settled
+    window is the last ``window_s`` seconds of the dwell since the previous
+    logged setpoint change. Points are flagged ``short_settle`` (dwell below
+    ``min_settle_s``), ``over_range`` (mean R above ``overrange_fraction`` of
+    ``full_scale_v``), ``phase_suspect`` (last phase auto-zero happened at
+    R below ``phase_min_r_v``), ``drifting`` (|drift| above
+    ``settled_drift_uv_per_s``) and ``vd_low`` (a noted Vd below
+    ``vd_flag_v``). ``heater_resolution_v`` is the PSU readback resolution,
+    treated as a uniform quantization error on each ch1 value.
+    """
+
+    monitor_csvs: list[str] = field(default_factory=list)
+    window_s: float = 300.0
+    min_settle_s: float = 240.0
+    full_scale_v: float = 1.0
+    overrange_fraction: float = 0.95
+    phase_min_r_v: float = 0.2
+    settled_drift_uv_per_s: float = 20.0
+    vd_flag_v: float = 0.150
+    heater_resolution_v: float = 0.001
+
+
+@dataclass
+class DwellAnalysisConfig:
+    """Quantify per-session R drift and cold-start-to-cold-start shift from
+    isolated-dwell monitor CSVs (see ``setups/dwell_analysis.py``). Touches
+    no instruments.
+
+    Each CSV in ``dwell_csvs`` must contain one 'ISOLATED START' and one
+    'ISOLATED END' note event; the linear drift of X = R cos(theta) is fit
+    over that window only. ``local_slope_v_per_v`` (from a
+    ``heater_slope_table`` run at the same Vgs/heater point) converts the
+    cold-start X shift into an equivalent heater-voltage shift; leave 0 to
+    skip that conversion.
+    """
+
+    dwell_csvs: list[str] = field(default_factory=list)
+    block_s: float = 1800.0
+    local_slope_v_per_v: float = 0.0
+
+
+@dataclass
 class LIADriftEvolutionConfig:
     """Analyze how a sweep folder's per-file R-drift rate evolves over the
     course of capture. Touches no instruments.

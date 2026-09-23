@@ -1,0 +1,11 @@
+# Quantify per-session drift and cold-start shift from isolated-dwell logs.
+# Run: .venv/bin/python python/sources/main.py --experiment dwell_analysis \
+#        --config python/configs/dwell_analysis.example.toml
+[experiment]
+dwell_csvs = [
+  "Results/OperatingPointSession/20260921_000042/monitor_dwell_s1_long.csv",
+  "Results/OperatingPointSession/20260921_000042/monitor_dwell_s2.csv",
+  "Results/OperatingPointSession/20260921_000042/monitor_dwell_s3.csv",
+  "Results/OperatingPointSession/20260921_000042/monitor_dwell_s4.csv",
+]
+local_slope_v_per_v = 92.3

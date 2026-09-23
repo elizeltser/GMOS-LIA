@@ -12,8 +12,11 @@ from .operating_point_offset_sweep import OperatingPointOffsetSweep
 from .lia_offset_sensitivity_sweep import LIAOffsetSensitivitySweep
 from .differential_calibration import DifferentialCalibration
 from .heater_resistance import HeaterResistanceSetup
+from .heater_slope_table import HeaterSlopeTable
+from .dwell_analysis import DwellAnalysis
 
 __all__ = [
+    'HeaterSlopeTable', 'DwellAnalysis',
     'SetupBase', 'IVSweep', 'LIAMeasurementSetup', 'LIADigestSweep',
     'LIADriftEvolution', 'OperatingPointSweep', 'OperatingPointOffsetSweep',
     'LIAOffsetSensitivitySweep', 'DifferentialCalibration', 'HeaterResistanceSetup',

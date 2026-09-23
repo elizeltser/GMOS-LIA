@@ -109,9 +109,10 @@ def set_offset(offset_v: float) -> dict:
 @mcp.tool()
 def set_drain_voltage(channel: str, voltage_v: float) -> dict:
     """Set SCU1 or SCU2's voltage-source level (drives the transistor drain
-    through a 330kOhm series resistor). The resulting measured drain current
-    must land in 7-10uA and the derived drain voltage Vd must exceed 120mV;
-    otherwise the voltage is rolled back and this call fails."""
+    through a 330kOhm series resistor). Target window: drain current 7-10uA
+    and derived drain voltage Vd above 110mV. A low Vd or low current keeps
+    the setpoint and is reported in `warnings`; a drain current above 10uA
+    is rolled back to the last good voltage and this call fails."""
     return _tool_result(
         lambda: _get_session().set_drain_voltage(channel, voltage_v)
     )
@@ -119,14 +120,15 @@ def set_drain_voltage(channel: str, voltage_v: float) -> dict:
 
 @mcp.tool()
 def read_drain_state(channel: str) -> dict:
-    """Read-only spot check of Vscu/Iscu/Vd for SCU1 or SCU2; never rejects."""
+    """Read-only spot check of Vscu/Iscu/Vd for SCU1 or SCU2; never rejects.
+    Out-of-window values are listed in `warnings`."""
     return _tool_result(lambda: _get_session().read_drain_state(channel))
 
 
 @mcp.tool()
 def set_heater_voltage(channel: int, voltage_v: float) -> dict:
     """Set PSU heater voltage on channel 1 or 3. Hard-rejected outside
-    2.85-3.1V (bounds.py). Channel 1 heats the SCU1 transistor, channel 3 the
+    2.8-3.1V (bounds.py). Channel 1 heats the SCU1 transistor, channel 3 the
     SCU2 one (config.HEATER_CHANNEL_FOR_SCU)."""
     return _tool_result(
         lambda: _get_session().set_heater_voltage(channel, voltage_v)

@@ -11,7 +11,9 @@ import setups
 from config import (
     ATEConfig,
     DifferentialCalibrationConfig,
+    DwellAnalysisConfig,
     HeaterResistanceConfig,
+    HeaterSlopeTableConfig,
     IVSweepConfig,
     LIADigestSweepConfig,
     LIADriftEvolutionConfig,
@@ -69,6 +71,8 @@ _EXPERIMENTS = {
         {},
     ),
     "lia_digest_sweep": (setups.LIADigestSweep, LIADigestSweepConfig, {}, {}),
+    "heater_slope_table": (setups.HeaterSlopeTable, HeaterSlopeTableConfig, {}, {}),
+    "dwell_analysis": (setups.DwellAnalysis, DwellAnalysisConfig, {}, {}),
     "lia_drift_evolution": (setups.LIADriftEvolution, LIADriftEvolutionConfig, {}, {}),
     "operating_point_sweep": (
         setups.OperatingPointSweep,

@@ -23,7 +23,6 @@ from setups.setup_base import SetupBase
 from . import bounds
 from .continuous_monitor import ContinuousMonitor
 from .errors import (
-    DrainVoltageError,
     InstrumentIOError,
     MonitorStateError,
     OutOfRangeError,
@@ -32,6 +31,18 @@ from .errors import (
 logger = logging.getLogger(__name__)
 
 _CHANNEL_TO_SCU_TAG = {"SCU1": "SCU1", "SCU2": "SCU2"}
+
+
+def _drain_warnings(iscu: float, vd: float) -> list[str]:
+    """Human-readable notes for a drain state outside the target window."""
+    warnings = []
+    if vd <= bounds.VD_MIN_V:
+        warnings.append(f"Vd={vd:.4g}V <= minimum {bounds.VD_MIN_V:g}V")
+    if iscu < bounds.SCU_CURRENT_MIN_A:
+        warnings.append(f"Iscu={iscu:.4g}A < minimum {bounds.SCU_CURRENT_MIN_A:g}A")
+    elif iscu > bounds.SCU_CURRENT_MAX_A:
+        warnings.append(f"Iscu={iscu:.4g}A > maximum {bounds.SCU_CURRENT_MAX_A:g}A")
+    return warnings
 
 
 class OperatingPointSession(SetupBase):
@@ -172,9 +183,11 @@ class OperatingPointSession(SetupBase):
         return scu
 
     def set_drain_voltage(self, channel: str, voltage_v: float) -> dict:
-        """Set the SCU voltage-source level for ``channel`` and validate the
-        resulting drain current/voltage. On violation, rolls back to the
-        last known-good voltage and raises."""
+        """Set the SCU voltage-source level for ``channel`` and check the
+        resulting drain current/voltage. A drain current above the window
+        rolls back to the last known-good voltage and raises. A low Vd or a
+        low current keeps the setpoint and is reported in ``warnings`` so the
+        operating point can be explored."""
         self.open_instruments()
         with self._lock:
             scu = self._scu_for(channel)
@@ -198,10 +211,7 @@ class OperatingPointSession(SetupBase):
                 scu.set_voltage(previous_voltage, channel=1)
                 self._last_good_voltage[channel] = previous_voltage
 
-            if vd <= bounds.VD_MIN_V:
-                _rollback()
-                raise DrainVoltageError(channel, vd, bounds.VD_MIN_V)
-            if not (bounds.SCU_CURRENT_MIN_A <= iscu <= bounds.SCU_CURRENT_MAX_A):
+            if iscu > bounds.SCU_CURRENT_MAX_A:
                 _rollback()
                 raise OutOfRangeError(
                     f"{channel}_current",
@@ -210,16 +220,21 @@ class OperatingPointSession(SetupBase):
                     bounds.SCU_CURRENT_MAX_A,
                 )
 
+            warnings = _drain_warnings(iscu, vd)
             self._last_good_voltage[channel] = voltage_v
 
-        self._note_event(
-            f"{channel} voltage -> {voltage_v:g}V (Iscu={iscu:g}A, Vd={vd:g}V)"
-        )
+        for warning in warnings:
+            logger.warning("%s: %s", channel, warning)
+        note = f"{channel} voltage -> {voltage_v:g}V (Iscu={iscu:g}A, Vd={vd:g}V)"
+        if warnings:
+            note += " WARNING: " + "; ".join(warnings)
+        self._note_event(note)
         return {
             "channel": channel,
             "voltage_v": voltage_v,
             "current_a": iscu,
             "vd_v": vd,
+            "warnings": warnings,
         }
 
     def read_drain_state(self, channel: str) -> dict:
@@ -240,6 +255,7 @@ class OperatingPointSession(SetupBase):
             "vd_v": vd,
             "current_ok": current_ok,
             "vd_ok": vd > bounds.VD_MIN_V,
+            "warnings": _drain_warnings(iscu, vd),
         }
 
     def set_heater_voltage(self, channel: int, voltage_v: float) -> dict:
@@ -258,7 +274,8 @@ class OperatingPointSession(SetupBase):
                 readback = psu.get_output_voltage(channel)
             except Exception as exc:
                 raise InstrumentIOError("PSU", "set_heater_voltage", exc) from exc
-        self._note_event(f"heater ch{channel} -> {voltage_v:g}V")
+        self._note_event(
+            f"heater ch{channel} -> {voltage_v:g}V (readback {readback:.3f}V)")
         return {"channel": channel, "voltage_v": readback}
 
     def zero_phase(

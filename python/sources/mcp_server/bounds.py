@@ -12,7 +12,7 @@ exposed as tool parameters instead, with sane defaults.
 from .errors import OutOfRangeError
 
 # LIA reference DC offset == shared Vgs of both transistors.
-OFFSET_MIN_V = 0.87
+OFFSET_MIN_V = 0.6
 OFFSET_MAX_V = 1.1
 
 # LIA excitation amplitude limit (device safety / linear-ish regime).
@@ -23,7 +23,7 @@ SCU_CURRENT_MIN_A = 7e-6
 SCU_CURRENT_MAX_A = 10e-6
 
 # Heater voltage range (PSU ch1 / ch3).
-HEATER_MIN_V = 2.85
+HEATER_MIN_V = 2.8
 HEATER_MAX_V = 3.1
 
 # Minimum acceptable drain voltage: Vd = Vscu - SERIES_RESISTANCE_OHM * Iscu.

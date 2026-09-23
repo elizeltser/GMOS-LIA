@@ -1,0 +1,12 @@
+# Recompute heater-sensitivity points/slopes from monitor CSVs (no instruments).
+# Run: .venv/bin/python python/sources/main.py --experiment heater_slope_table \
+#        --config python/configs/heater_slope_table.example.toml
+[experiment]
+monitor_csvs = [
+  "Results/OperatingPointSession/20260920_135934/monitor_vgs_heater_sensitivity.csv",
+  "Results/OperatingPointSession/20260921_000042/monitor_vgs_scan.csv",
+  "Results/OperatingPointSession/20260921_000042/monitor_vgs_fine_scan.csv",
+  "Results/OperatingPointSession/20260921_000042/monitor_vgs_updown.csv",
+]
+window_s = 300.0
+min_settle_s = 240.0
