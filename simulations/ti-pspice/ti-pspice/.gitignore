@@ -1,0 +1,65 @@
+# ==============================================
+# PSpice for TI / OrCAD Capture + PSpice
+# ==============================================
+
+# --- KEEP (do NOT ignore) ---
+# *.opj   project file
+# *.dsn   schematic design
+# *.sim   simulation profiles (inside *-PSpiceFiles/)
+# *.prb   probe/waveform window settings (optional, small)
+# *.lib, *.olb, *.mod   your own models / symbol libraries
+
+# --- Simulation output (regenerated on every run) ---
+*.dat
+*.out
+*.out.*
+*.[0-9]OP
+*.msg
+*_pspmetadata.db
+# Unsure: likely run-time state, uncomment once verified as regenerated
+# *.mif
+# *.json
+*.smk
+*.log
+
+# --- Netlists & aliases (regenerated from the schematic) ---
+*.net
+*.als
+*.cir
+!models/**/*.cir
+
+# --- External libraries and models ---
+vendor/
+
+# --- Backups, locks, journals, temp files ---
+*.DBK
+*.dbk
+*.bak
+*.BAK
+*.lck
+*.DSNlck
+*.dsnlck
+*.OPJlck
+*.opjlck
+*.jrl
+*.tmp
+*.$$$
+*~
+~$*
+
+# --- Capture / PSpice per-user settings & caches ---
+*.ini
+*.cache
+**/autobackup/
+**/AutoBackup/
+**/PSpiceTemp/
+
+# --- Exports (re-create as needed) ---
+*.pdf
+*.csv
+*.png
+
+# --- OS cruft ---
+Thumbs.db
+desktop.ini
+.DS_Store
