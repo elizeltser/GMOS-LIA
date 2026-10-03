@@ -649,7 +649,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "#PWR1-24,L1-2,D1,C1-15,R1-13,IC1,J1,FL1,U1-5",
+    "used_designators": "#PWR1-26,L1-2,D1,C1-19,R1-16,IC1,J1,FL1,U1-7",
     "variants": []
   },
   "sheets": [
@@ -664,6 +664,10 @@
     [
       "057bc398-9cad-4fbf-82b0-6414e0e9ecb2",
       "Analog"
+    ],
+    [
+      "7546a70f-ea65-4898-abe1-9938b48cd568",
+      "oscillator"
     ],
     [
       "24d58a37-277c-4dbe-a5fe-38b4ef83cb3e",
