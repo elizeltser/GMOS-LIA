@@ -82,3 +82,29 @@ $$
 The drains carry this signal as **common mode** (both transistors share the gate excitation), which the readout must reject ([§2.7](#27-common-mode-rejection)).
  
 The gate excitation must remain a small signal relative to n·k_B·T/q ≈ 41 mV (300 K) to 93 mV (673 K); 5 mVpp satisfies this.
+
+# Noise analysis
+
+ SNR is fixed at the drain node, before any amplifier, so the supply rails can't change it. A transistor in subthreshold has full shot noise on its drain current, and that is far larger than R_D's thermal noise:
+$$
+e_{n,R_D} = \sqrt{4 k_B T R_D} \approx 74\ \mathrm{nV/\sqrt{Hz}}, \qquad \sqrt{2}\,e_{n,R_D} \approx 105\ \mathrm{nV/\sqrt{Hz}}\ \text{(differential)}
+
+$$
+\frac{S_{i,\mathrm{MOS}}}{S_{i,R_D}} = \frac{2 q I_D}{4 k_B T / R_D} = \frac{I_D R_D}{2 k_B T / q} \approx \frac{7.5\,\mu\mathrm{A}\cdot 330\,\mathrm{k\Omega}}{51.7\,\mathrm{mV}} \approx 48
+$$
+
+So each drain carries about 520 nV/√Hz (assuming r₀ ≫ R_D), not 74 nV/√Hz, and the transistors dominate the noise. Since signal and noise both scale with g_m, the white-noise SNR depends only on the excitation, the drain current and the bandwidth:
+
+$$
+\mathrm{SNR} = \frac{g_m\,\delta V_{GS}}{\sqrt{2 q I_D B}} = \frac{\delta V_{GS}}{n\,k_B T/q}\sqrt{\frac{I_D}{2 q B}}
+$$
+
+R_D drops out, and so do the rails and every gain stage after the drain. With a 5 % Δg_m mismatch and the 500 ms filter (B = 0.5 Hz), this gives roughly 80 dB from white noise alone. The transistor's 1/f noise and drift add to that.
+
+The things that actually improve SNR are:
+
+- Gate excitation: larger δV_GS, up to where the response turns nonlinear.
+- Drain current: SNR rises with √I_D while the device stays in subthreshold.
+- Averaging time: a longer effective τ, which you already plan to do in software.
+- Device-level effects: reference frequency relative to the 1/f corner, active/blind matching, and thermal stability.
+

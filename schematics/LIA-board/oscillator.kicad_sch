@@ -432,6 +432,193 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Diode:1N4448W"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "1N4448W"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode_SMD:D_SOD-123"
+				(at 0 -4.445 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.vishay.com/docs/85722/1n4448w.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "100V 0.15A High-speed standard diode, SOD-123"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Sim.Device" "D"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Sim.Pins" "1=K 2=A"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "diode"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "D*SOD?123*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "1N4448W_0_1"
+				(polyline
+					(pts
+						(xy -1.27 1.27) (xy -1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "1N4448W_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "SparkFun:R"
 			(pin_numbers
 				(hide yes)
@@ -632,509 +819,840 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:GND"
-			(power global)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "GND"
-				(at 0 -3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "GND_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GND_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(junction
-		(at 135.89 67.31)
+		(at 104.14 53.34)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "152927af-75e4-4a38-8f63-8189de317b38")
+		(uuid "1a9e7f15-6516-4541-9133-98b36ba55f59")
 	)
 	(junction
-		(at 62.23 45.72)
+		(at 104.14 46.99)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "3fa6ee6b-668b-451e-a5ae-ec37c3fffb2a")
+		(uuid "1d0f8ca5-133d-48df-98b2-c0d3d69c88dc")
 	)
 	(junction
-		(at 90.17 64.77)
+		(at 139.7 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "650ff3b4-a209-4f0b-8a99-79d89a9ba190")
+		(uuid "28de7b4a-389f-470b-b9c8-d60fda8d4491")
 	)
 	(junction
-		(at 135.89 87.63)
+		(at 78.74 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "6a29c8dc-82e0-487e-8449-b16e4e6cd93e")
+		(uuid "2f6621a6-3cbe-44fc-8e4c-e57f044fcfe8")
 	)
 	(junction
-		(at 90.17 48.26)
+		(at 78.74 46.99)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "aacc2efd-feb0-430a-a925-82c297d33c9d")
+		(uuid "32d08a20-d4b1-476b-bbbb-1d3120db3c63")
 	)
 	(junction
-		(at 111.76 87.63)
+		(at 104.14 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "cf71b47d-21fb-43aa-af42-3dfcecbd3159")
+		(uuid "56fb4bd7-6283-43ed-8863-cf5453299dd2")
+	)
+	(junction
+		(at 62.23 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6f89dd6d-688a-4d08-8503-f38202f7743f")
+	)
+	(junction
+		(at 104.14 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "73fea795-72e6-4fc9-83cc-f839591f0914")
+	)
+	(junction
+		(at 162.56 60.96)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7b3632b5-d0fe-47d1-9828-1230334994b7")
+	)
+	(junction
+		(at 62.23 46.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "855449ee-0461-43f1-9ff3-ec9c6d5de862")
+	)
+	(junction
+		(at 78.74 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8cf67a49-4e75-41e5-9be2-ce3012685777")
+	)
+	(junction
+		(at 139.7 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8fcf270d-c6da-4987-8b4f-5b069b180600")
+	)
+	(junction
+		(at 104.14 30.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "975a8961-0e5b-45c1-a9d0-9494f6d69048")
+	)
+	(junction
+		(at 104.14 88.9)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a5b4c5a7-2223-4720-adf0-6449d5a3ffd6")
+	)
+	(junction
+		(at 38.1 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b31d92bf-d81d-43d9-af4d-557fc8e967ea")
+	)
+	(junction
+		(at 182.88 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c4914928-b4c8-45ec-9643-289c706d513f")
+	)
+	(junction
+		(at 104.14 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d4d6b8ba-7053-4fde-8db0-712d7f3a645b")
+	)
+	(junction
+		(at 162.56 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e0e1b84a-7315-408b-a47d-2d1320cd59fe")
+	)
+	(junction
+		(at 38.1 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f411c3f5-e6a1-409b-ab50-843249d9b796")
+	)
+	(junction
+		(at 38.1 60.96)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f7f18218-cff0-4d81-8775-c30d8765f729")
 	)
 	(wire
 		(pts
-			(xy 135.89 87.63) (xy 135.89 93.98)
+			(xy 104.14 123.19) (xy 104.14 125.73)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "032119c7-69ea-4ed8-b000-19e8b56a1bf3")
+		(uuid "02b3c24e-a90a-451b-8d21-069bfbbe9e15")
 	)
 	(wire
 		(pts
-			(xy 111.76 87.63) (xy 118.11 87.63)
+			(xy 73.66 46.99) (xy 78.74 46.99)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "05817e8c-a7da-4a70-b406-b04454f83756")
+		(uuid "0cfaa3b2-2693-4338-84e1-cd84a0ad20f6")
 	)
 	(wire
 		(pts
-			(xy 135.89 67.31) (xy 135.89 87.63)
+			(xy 165.1 101.6) (xy 172.72 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0cbb322b-d81c-4f2e-a3de-98dfe0889c86")
+		(uuid "158c8d56-2eec-4918-836e-2fb2c40c2f2b")
 	)
 	(wire
 		(pts
-			(xy 62.23 35.56) (xy 62.23 45.72)
+			(xy 53.34 109.22) (xy 104.14 109.22)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "15efaf74-30b5-48b9-b7a7-43442d347cbe")
+		(uuid "1d9d1d18-98f4-471d-836d-75d29e5c6e44")
 	)
 	(wire
 		(pts
-			(xy 59.69 50.8) (xy 66.04 50.8)
+			(xy 182.88 60.96) (xy 182.88 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "17346038-0fdf-4802-9de1-e1a83a0952eb")
+		(uuid "22e8d99e-cfc4-4bd8-bb7a-760c6411a026")
 	)
 	(wire
 		(pts
-			(xy 90.17 73.66) (xy 90.17 76.2)
+			(xy 208.28 88.9) (xy 204.47 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "216e1cb8-d1b6-4a07-8449-be1206c3fcf9")
+		(uuid "2471bce7-af49-4e3e-b0d8-6105a4535e7e")
 	)
 	(wire
 		(pts
-			(xy 135.89 67.31) (xy 142.24 67.31)
+			(xy 104.14 16.51) (xy 104.14 19.05)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "24da7cab-25bc-441c-b55b-107c2eb1298e")
+		(uuid "24cbe6c3-d28a-42d7-821b-241765e4d0fc")
 	)
 	(wire
 		(pts
-			(xy 46.99 45.72) (xy 46.99 93.98)
+			(xy 175.26 60.96) (xy 182.88 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5cee0195-8588-4620-816d-2fcf1e0c78ce")
+		(uuid "294e3ef4-d39b-46d3-80f5-bb232cdb49c2")
 	)
 	(wire
 		(pts
-			(xy 62.23 45.72) (xy 66.04 45.72)
+			(xy 38.1 91.44) (xy 38.1 113.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "62329f4b-be26-4773-a4a5-c3cf932bf8bc")
+		(uuid "2c4c9669-2878-48e5-9f09-34f816e02923")
 	)
 	(wire
 		(pts
-			(xy 97.79 87.63) (xy 59.69 87.63)
+			(xy 139.7 76.2) (xy 147.32 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6e67e02c-a7ab-468c-bf3e-a7cd4ec12b33")
+		(uuid "39b4c5ed-337f-4ff3-b7c9-ee0c2d94f7a5")
 	)
 	(wire
 		(pts
-			(xy 114.3 69.85) (xy 111.76 69.85)
+			(xy 139.7 101.6) (xy 78.74 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7f169d5d-810d-4917-bded-ed59af60e9c0")
+		(uuid "3b58ca12-2b7e-4d1d-a23e-9835cc9699e8")
 	)
 	(wire
 		(pts
-			(xy 81.28 48.26) (xy 142.24 48.26)
+			(xy 143.51 86.36) (xy 139.7 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "84252bf9-f8b1-47e6-bbf2-dbd408b05cbe")
+		(uuid "406a2a43-9089-4aa1-b09c-025db42c2c10")
 	)
 	(wire
 		(pts
-			(xy 90.17 64.77) (xy 90.17 66.04)
+			(xy 104.14 133.35) (xy 104.14 137.16)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "865efcda-37fa-4fe7-83d6-608f166a9178")
+		(uuid "40757917-2fb8-413a-955d-cc2572f7c77f")
 	)
 	(wire
 		(pts
-			(xy 105.41 87.63) (xy 111.76 87.63)
+			(xy 38.1 91.44) (xy 41.91 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "883ea438-5ee6-4cf3-9858-537a90fefdc2")
+		(uuid "42fddd06-976a-4304-b695-9129c9e4ede0")
 	)
 	(wire
 		(pts
-			(xy 77.47 35.56) (xy 90.17 35.56)
+			(xy 104.14 88.9) (xy 99.06 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "92ba6472-41d9-4b4f-934e-2f67cdfcc15c")
+		(uuid "437f1eb5-8144-471e-9e70-1a6cf3222b30")
 	)
 	(wire
 		(pts
-			(xy 50.8 45.72) (xy 46.99 45.72)
+			(xy 78.74 77.47) (xy 78.74 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "94a6a011-1b96-43c4-b9c0-a36c9b8f16b4")
+		(uuid "4d9b5d71-ba53-4e69-bc1e-8170621b6b32")
 	)
 	(wire
 		(pts
-			(xy 90.17 35.56) (xy 90.17 48.26)
+			(xy 200.66 76.2) (xy 208.28 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a2db4ae7-9de4-4ff2-949d-a5e634d9bd2d")
+		(uuid "5852cdc7-7eee-4aa8-a6e5-5b7053bdb453")
 	)
 	(wire
 		(pts
-			(xy 69.85 35.56) (xy 62.23 35.56)
+			(xy 182.88 86.36) (xy 189.23 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b5048491-1d81-4eb9-8260-ab57c95c43d5")
+		(uuid "59b3ac89-1ae0-4f0a-84ad-86d3add2ae5c")
 	)
 	(wire
 		(pts
-			(xy 59.69 50.8) (xy 59.69 87.63)
+			(xy 78.74 101.6) (xy 78.74 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b5ed8fb3-1a1b-420e-b30d-58a7f8cfc390")
+		(uuid "5a54ec57-3498-48df-88fd-aa48c935ae51")
 	)
 	(wire
 		(pts
-			(xy 90.17 60.96) (xy 90.17 64.77)
+			(xy 104.14 119.38) (xy 104.14 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bbd99716-cff8-4177-a7ba-abd11f65ce12")
+		(uuid "647a31b3-5aa2-4b3e-9c04-71fe4dc98961")
 	)
 	(wire
 		(pts
-			(xy 111.76 69.85) (xy 111.76 87.63)
+			(xy 104.14 109.22) (xy 104.14 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c7d8ee6c-e942-445c-ac02-2e636400c980")
+		(uuid "6901b3a5-aea1-46f3-b770-e564b2a4342e")
 	)
 	(wire
 		(pts
-			(xy 90.17 64.77) (xy 114.3 64.77)
+			(xy 78.74 46.99) (xy 78.74 77.47)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cc72419c-ccc2-49e9-a3f2-1f89591aaa76")
+		(uuid "6bbba36b-c6f6-48fc-8a84-4e05efc09c84")
 	)
 	(wire
 		(pts
-			(xy 90.17 48.26) (xy 90.17 53.34)
+			(xy 53.34 53.34) (xy 104.14 53.34)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d290974e-8bb2-48d8-8590-878a53019ed1")
+		(uuid "7114b5be-3bf7-45f6-90f1-ecd6e5c6094f")
 	)
 	(wire
 		(pts
-			(xy 125.73 87.63) (xy 135.89 87.63)
+			(xy 162.56 88.9) (xy 158.75 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d3e9b0ea-d1d2-4ec5-8fa1-c14678136a52")
+		(uuid "741a4d02-8957-44e6-9d98-96fab07d132b")
 	)
 	(wire
 		(pts
-			(xy 129.54 67.31) (xy 135.89 67.31)
+			(xy 38.1 77.47) (xy 38.1 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "da343d8f-35ae-4cbb-8cd0-9613258b40a7")
+		(uuid "76efc342-b343-428c-9661-0e28f9c38c5d")
 	)
 	(wire
 		(pts
-			(xy 58.42 45.72) (xy 62.23 45.72)
+			(xy 104.14 109.22) (xy 104.14 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ef708f72-a659-4a64-bd86-a0fe94a794d4")
+		(uuid "7a25ff4e-4f87-4a78-92ef-61ace7ac9f83")
 	)
 	(wire
 		(pts
-			(xy 46.99 93.98) (xy 135.89 93.98)
+			(xy 62.23 77.47) (xy 53.34 77.47)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f4200bfe-3bb3-4098-9067-6730529c31bb")
+		(uuid "7e9dec15-85d5-423e-9111-b3caafbc979c")
 	)
-	(symbol
-		(lib_id "power:GND")
-		(at 90.17 76.2 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "28c0e630-45d8-40cb-8973-843b9508d76f")
-		(property "Reference" "#PWR011"
-			(at 90.17 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 104.14 46.99) (xy 104.14 53.34)
 		)
-		(property "Value" "GND"
-			(at 90.17 81.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" ""
-			(at 90.17 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(uuid "87098491-7bd9-4454-88c0-98a4394b066f")
+	)
+	(wire
+		(pts
+			(xy 78.74 30.48) (xy 90.17 30.48)
 		)
-		(property "Datasheet" ""
-			(at 90.17 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 90.17 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(uuid "89a8d5e9-df51-4b96-a97b-b4fe5fb4f538")
+	)
+	(wire
+		(pts
+			(xy 97.79 123.19) (xy 104.14 123.19)
 		)
-		(pin "1"
-			(uuid "378a357f-1034-4105-9f89-6a73a130a1c8")
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(instances
-			(project "GMOS-LIA"
-				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
-					(reference "#PWR011")
-					(unit 1)
-				)
-			)
+		(uuid "8bc5d6b5-fdf5-470a-9630-18db08203bbb")
+	)
+	(wire
+		(pts
+			(xy 57.15 88.9) (xy 62.23 88.9)
 		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c348e4b-aa9a-49d8-b581-0cd9cc4562ff")
+	)
+	(wire
+		(pts
+			(xy 182.88 76.2) (xy 193.04 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d3332c1-834f-4320-b281-7e8b46c3a6f6")
+	)
+	(wire
+		(pts
+			(xy 41.91 86.36) (xy 38.1 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "913e50cc-f894-47b9-bf77-8bd505035aa9")
+	)
+	(wire
+		(pts
+			(xy 78.74 91.44) (xy 83.82 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98cc3c71-3964-4ca9-9950-1ee74a1a86bd")
+	)
+	(wire
+		(pts
+			(xy 38.1 77.47) (xy 45.72 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99096ba9-0a04-4a34-99f3-ed787b1ce4cf")
+	)
+	(wire
+		(pts
+			(xy 189.23 91.44) (xy 182.88 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a4c2e45-f6ff-4d61-b2b7-a6a4e7880751")
+	)
+	(wire
+		(pts
+			(xy 104.14 30.48) (xy 104.14 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b03085c-1927-4ef8-ab31-784a27ac8690")
+	)
+	(wire
+		(pts
+			(xy 62.23 88.9) (xy 62.23 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4a76331-1fcf-4e71-a243-a8f6f631e6f1")
+	)
+	(wire
+		(pts
+			(xy 38.1 60.96) (xy 38.1 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7917e42-58e4-48bb-a8f8-ef7ce096f771")
+	)
+	(wire
+		(pts
+			(xy 139.7 91.44) (xy 139.7 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af0ead49-43e7-4953-834c-2356d88c9206")
+	)
+	(wire
+		(pts
+			(xy 87.63 77.47) (xy 78.74 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b329c4fd-ace7-435d-b76e-aa3275be4dee")
+	)
+	(wire
+		(pts
+			(xy 78.74 101.6) (xy 78.74 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b934196f-7eb9-4ec1-84f3-aa042c5e15fd")
+	)
+	(wire
+		(pts
+			(xy 139.7 46.99) (xy 139.7 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba87dd42-2d82-4cfd-9fd8-285808b535f1")
+	)
+	(wire
+		(pts
+			(xy 38.1 86.36) (xy 38.1 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc444eac-acbc-458d-ad12-909e03aa2fd2")
+	)
+	(wire
+		(pts
+			(xy 124.46 46.99) (xy 139.7 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc54ee75-ea08-4bf4-b32a-f14510634cf0")
+	)
+	(wire
+		(pts
+			(xy 78.74 123.19) (xy 90.17 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1f12108-c0b5-4db6-9b77-4b7bceb6e9cd")
+	)
+	(wire
+		(pts
+			(xy 38.1 53.34) (xy 45.72 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c299fc59-24d0-4258-9674-a716530c03d6")
+	)
+	(wire
+		(pts
+			(xy 104.14 53.34) (xy 104.14 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c316488a-b752-4bf5-8ff6-bbb4e347583e")
+	)
+	(wire
+		(pts
+			(xy 104.14 46.99) (xy 116.84 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4a7bbc4-90d4-40ad-9c21-495b0cb9c98d")
+	)
+	(wire
+		(pts
+			(xy 62.23 46.99) (xy 66.04 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c52ae8b1-4df3-41c2-85b3-b4623b13303a")
+	)
+	(wire
+		(pts
+			(xy 104.14 40.64) (xy 104.14 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c83adf25-4748-4b45-8c97-77abdfe0f164")
+	)
+	(wire
+		(pts
+			(xy 95.25 60.96) (xy 162.56 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c8b0003a-b8ce-401e-8dd0-3dfde634675d")
+	)
+	(wire
+		(pts
+			(xy 162.56 60.96) (xy 162.56 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9652554-29d3-43b2-b7bb-d081f2ea0e9a")
+	)
+	(wire
+		(pts
+			(xy 182.88 76.2) (xy 182.88 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cca859ac-c0f5-4f92-bef5-b3995667f4a7")
+	)
+	(wire
+		(pts
+			(xy 104.14 77.47) (xy 104.14 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce977086-8977-4f7e-9eda-d5a29eb8c710")
+	)
+	(wire
+		(pts
+			(xy 95.25 77.47) (xy 104.14 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ceab2144-0015-475a-9bf5-f9f87e5f97c6")
+	)
+	(wire
+		(pts
+			(xy 97.79 30.48) (xy 104.14 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf2cda86-a4bb-4e89-a040-aa59bfe79a4d")
+	)
+	(wire
+		(pts
+			(xy 182.88 101.6) (xy 180.34 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d97f0b8d-3a1a-4a2e-a1ba-03d99131c24d")
+	)
+	(wire
+		(pts
+			(xy 143.51 91.44) (xy 139.7 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9dd8b3e-aca8-4510-a769-6fa564ae4c51")
+	)
+	(wire
+		(pts
+			(xy 78.74 30.48) (xy 78.74 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd0b8030-d8f5-41e8-9d01-7a64e27cf93d")
+	)
+	(wire
+		(pts
+			(xy 62.23 41.91) (xy 62.23 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2b56ebe-3223-4070-bbc1-ce9da2d37135")
+	)
+	(wire
+		(pts
+			(xy 154.94 76.2) (xy 162.56 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e59574e6-b68d-4fc4-8c6c-9db0e8329972")
+	)
+	(wire
+		(pts
+			(xy 78.74 86.36) (xy 83.82 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e67660ea-df61-411c-97a1-6805bfab3d1f")
+	)
+	(wire
+		(pts
+			(xy 182.88 91.44) (xy 182.88 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7f46041-1442-4898-9ab5-d1c66dc6917c")
+	)
+	(wire
+		(pts
+			(xy 38.1 60.96) (xy 87.63 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e93a2119-74e3-4b06-a7f1-aaaab60a4785")
+	)
+	(wire
+		(pts
+			(xy 104.14 26.67) (xy 104.14 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e9c62a6f-f54d-4b37-85a8-ff4596c4b9b7")
+	)
+	(wire
+		(pts
+			(xy 208.28 76.2) (xy 208.28 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f03b2a2f-a23b-40e4-8e17-0f9e7dfdf927")
+	)
+	(wire
+		(pts
+			(xy 139.7 86.36) (xy 139.7 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1ff141a-cf1b-447c-b5d9-7e81d1bf600e")
+	)
+	(wire
+		(pts
+			(xy 162.56 60.96) (xy 167.64 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa78b5b0-00a1-4ac3-9691-db166fa1a527")
+	)
+	(wire
+		(pts
+			(xy 38.1 109.22) (xy 45.72 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc2775fb-08ce-4763-82a7-0d5bebc38108")
+	)
+	(wire
+		(pts
+			(xy 162.56 76.2) (xy 162.56 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff30a284-3f30-4080-ba30-88ce7f78c5de")
 	)
 	(symbol
 		(lib_id "SparkFun:R")
-		(at 54.61 45.72 0)
+		(at 91.44 60.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1143,9 +1661,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "5568987f-1d37-4267-88fb-12a51684a719")
-		(property "Reference" "R6"
-			(at 54.61 39.37 0)
+		(uuid "03766b68-3b1e-40b1-90fc-5bc85196436e")
+		(property "Reference" "R14"
+			(at 91.44 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1155,7 +1673,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 54.61 41.91 0)
+			(at 91.44 57.15 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1165,7 +1683,7 @@
 			)
 		)
 		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
-			(at 54.61 50.292 0)
+			(at 91.44 65.532 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1176,7 +1694,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
-			(at 53.34 54.61 0)
+			(at 90.17 69.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1187,7 +1705,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 54.61 57.15 0)
+			(at 91.44 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1198,7 +1716,189 @@
 			)
 		)
 		(property "PROD_ID" "RES-07856"
-			(at 54.61 52.578 0)
+			(at 91.44 67.818 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3073f54c-7b83-441a-aa6b-5e893cd2ad5d")
+		)
+		(pin "2"
+			(uuid "6efc4496-5529-4a9d-89ee-8ec6cb3f2472")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 69.85 46.99 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0ba1e6e8-25ea-4980-b474-7ea6f3d6049b")
+		(property "Reference" "R17"
+			(at 69.85 40.64 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 69.85 43.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 69.85 51.562 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 68.58 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 69.85 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 69.85 53.848 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "20a3176d-58f4-4798-b754-07327dab8824")
+		)
+		(pin "2"
+			(uuid "0c8906ba-1921-4ebe-b108-b284ac2f0cca")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 49.53 77.47 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5568987f-1d37-4267-88fb-12a51684a719")
+		(property "Reference" "R6"
+			(at 49.53 71.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 49.53 73.66 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 49.53 82.042 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 48.26 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 49.53 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 49.53 84.328 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1224,8 +1924,110 @@
 		)
 	)
 	(symbol
+		(lib_id "Diode:1N4448W")
+		(at 93.98 30.48 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5b3b7df8-9a61-4a91-94b3-00a8730452df")
+		(property "Reference" "D2"
+			(at 93.98 24.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1N4448W"
+			(at 93.98 26.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SOD-123"
+			(at 93.98 34.925 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/85722/1n4448w.pdf"
+			(at 93.98 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "100V 0.15A High-speed standard diode, SOD-123"
+			(at 93.98 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" "D"
+			(at 93.98 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 93.98 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "b3673950-d6a7-40e1-a414-0c067056c79b")
+		)
+		(pin "1"
+			(uuid "522fe241-4667-40de-a938-ad1228716e99")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "D2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
-		(at 121.92 87.63 90)
+		(at 91.44 77.47 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1236,7 +2038,7 @@
 		(fields_autoplaced yes)
 		(uuid "5d5506b2-6dec-4fe0-821a-bff7257b9b9a")
 		(property "Reference" "C16"
-			(at 121.92 80.01 90)
+			(at 91.44 69.85 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1246,7 +2048,7 @@
 			)
 		)
 		(property "Value" "C"
-			(at 121.92 82.55 90)
+			(at 91.44 72.39 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1256,7 +2058,7 @@
 			)
 		)
 		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
-			(at 125.73 86.6648 0)
+			(at 95.25 76.5048 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1267,7 +2069,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 121.92 87.63 0)
+			(at 91.44 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1278,7 +2080,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 121.92 87.63 0)
+			(at 91.44 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1305,7 +2107,7 @@
 	)
 	(symbol
 		(lib_id "Amplifier_Operational:OPA2196xD")
-		(at 110.49 26.67 0)
+		(at 40.64 151.13 0)
 		(unit 3)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1316,7 +2118,7 @@
 		(fields_autoplaced yes)
 		(uuid "777c6500-8863-47d6-b0ce-17266cf4a72f")
 		(property "Reference" "U6"
-			(at 111.76 25.3999 0)
+			(at 41.91 149.8599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1327,7 +2129,7 @@
 			)
 		)
 		(property "Value" "OPA2196xD"
-			(at 111.76 27.9399 0)
+			(at 41.91 152.3999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1338,7 +2140,7 @@
 			)
 		)
 		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 113.03 26.67 0)
+			(at 43.18 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1349,7 +2151,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
-			(at 116.84 22.86 0)
+			(at 46.99 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1360,7 +2162,7 @@
 			)
 		)
 		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
-			(at 110.49 26.67 0)
+			(at 40.64 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1405,7 +2207,7 @@
 	)
 	(symbol
 		(lib_id "SparkFun:R")
-		(at 90.17 57.15 90)
+		(at 49.53 109.22 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1416,29 +2218,27 @@
 		(fields_autoplaced yes)
 		(uuid "7bdd4efc-d3fd-4e10-91da-a2d0c2528a57")
 		(property "Reference" "R7"
-			(at 92.71 55.8799 90)
+			(at 49.53 102.87 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Value" "1k"
-			(at 92.71 58.4199 90)
+			(at 49.53 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
-			(at 94.742 57.15 0)
+			(at 49.53 104.648 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1449,7 +2249,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
-			(at 99.06 58.42 0)
+			(at 50.8 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1460,7 +2260,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 101.6 57.15 0)
+			(at 49.53 97.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1471,7 +2271,7 @@
 			)
 		)
 		(property "PROD_ID" "RES-07856"
-			(at 97.028 57.15 0)
+			(at 49.53 102.362 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1498,7 +2298,7 @@
 	)
 	(symbol
 		(lib_id "SparkFun:R")
-		(at 101.6 87.63 0)
+		(at 49.53 53.34 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1509,7 +2309,7 @@
 		(fields_autoplaced yes)
 		(uuid "7e430ab1-7261-415c-b47b-7ac45069ffe0")
 		(property "Reference" "R9"
-			(at 101.6 81.28 0)
+			(at 49.53 46.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1519,7 +2319,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 101.6 83.82 0)
+			(at 49.53 49.53 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1529,7 +2329,7 @@
 			)
 		)
 		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
-			(at 101.6 92.202 0)
+			(at 49.53 57.912 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1540,7 +2340,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
-			(at 100.33 96.52 0)
+			(at 48.26 62.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1551,7 +2351,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 101.6 99.06 0)
+			(at 49.53 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1562,7 +2362,7 @@
 			)
 		)
 		(property "PROD_ID" "RES-07856"
-			(at 101.6 94.488 0)
+			(at 49.53 60.198 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1588,9 +2388,9 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:OPA2196xD")
-		(at 121.92 67.31 0)
-		(unit 2)
+		(lib_id "SparkFun:R")
+		(at 120.65 46.99 0)
+		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1598,29 +2398,122 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "90be49e8-7b93-4e0c-8929-349d2d1a1125")
-		(property "Reference" "U6"
-			(at 121.92 57.15 0)
+		(uuid "800c9d0b-120e-4c81-a573-012a209c6665")
+		(property "Reference" "R20"
+			(at 120.65 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+			)
+		)
+		(property "Value" "1k"
+			(at 120.65 43.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 120.65 51.562 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 119.38 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 120.65 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 120.65 53.848 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3280bd36-b6f6-4f8b-9785-073b51ac6da5")
+		)
+		(pin "2"
+			(uuid "65bd7bd3-b1f0-4325-8bf0-408c40c9210c")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Operational:OPA2196xD")
+		(at 82.55 151.13 0)
+		(unit 3)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8ecf462c-066b-4e5d-9218-418708885951")
+		(property "Reference" "U7"
+			(at 83.82 149.8599 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(property "Value" "OPA2196xD"
-			(at 121.92 59.69 0)
+			(at 83.82 152.3999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 124.46 67.31 0)
+			(at 85.09 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1631,7 +2524,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
-			(at 128.27 63.5 0)
+			(at 88.9 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1642,7 +2535,7 @@
 			)
 		)
 		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
-			(at 121.92 67.31 0)
+			(at 82.55 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1668,13 +2561,111 @@
 			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f5")
 		)
 		(pin "8"
-			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab12")
+			(uuid "99556887-8c41-4fdf-b6d9-0d36cd55ed81")
 		)
 		(pin "6"
 			(uuid "bd34949e-86c7-4b25-a43a-a2e0677885ed")
 		)
 		(pin "4"
-			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11147")
+			(uuid "4ba04af6-349a-46b6-9293-81ec221cd3a4")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "U7")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Operational:OPA2196xD")
+		(at 91.44 88.9 0)
+		(mirror x)
+		(unit 2)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "90be49e8-7b93-4e0c-8929-349d2d1a1125")
+		(property "Reference" "U6"
+			(at 91.44 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OPA2196xD"
+			(at 91.44 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 93.98 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
+			(at 97.79 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
+			(at 91.44 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089ec")
+		)
+		(pin "2"
+			(uuid "9affd58b-01f5-4c4e-9462-516b8de2152f")
+		)
+		(pin "5"
+			(uuid "fd98c3f7-c02b-4e52-840e-0c5a5ca1787a")
+		)
+		(pin "7"
+			(uuid "d0699a09-a7c7-401b-a3ff-8861a57bbef3")
+		)
+		(pin "1"
+			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f6")
+		)
+		(pin "8"
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab13")
+		)
+		(pin "6"
+			(uuid "bd34949e-86c7-4b25-a43a-a2e0677885ee")
+		)
+		(pin "4"
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11148")
 		)
 		(instances
 			(project "GMOS-LIA"
@@ -1686,8 +2677,197 @@
 		)
 	)
 	(symbol
+		(lib_id "Amplifier_Operational:OPA2196xD")
+		(at 196.85 88.9 0)
+		(mirror x)
+		(unit 2)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9c0c66bf-16e5-4357-abd4-d641dfc3f34e")
+		(property "Reference" "U7"
+			(at 196.85 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OPA2196xD"
+			(at 196.85 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 199.39 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
+			(at 203.2 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
+			(at 196.85 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089ec")
+		)
+		(pin "2"
+			(uuid "9affd58b-01f5-4c4e-9462-516b8de2152f")
+		)
+		(pin "5"
+			(uuid "2965b2f3-f8c6-4eb4-8f0b-6fb12dfe45e0")
+		)
+		(pin "7"
+			(uuid "32f002e8-93c3-41c2-bd10-4aa17cd3315a")
+		)
+		(pin "1"
+			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f6")
+		)
+		(pin "8"
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab13")
+		)
+		(pin "6"
+			(uuid "3956ddb9-9829-43d5-9945-4157eb485735")
+		)
+		(pin "4"
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11148")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "U7")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 104.14 115.57 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a45cf08f-b368-4087-ad2e-30ec7675a955")
+		(property "Reference" "R18"
+			(at 97.79 115.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 100.33 115.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 108.712 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 113.03 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 115.57 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 110.998 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c9b9c5a1-463b-481d-845f-ef716451611a")
+		)
+		(pin "2"
+			(uuid "4f702bbc-9520-44a5-a7e8-ac5a6d7cbbb9")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
-		(at 90.17 69.85 0)
+		(at 151.13 76.2 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1698,29 +2878,27 @@
 		(fields_autoplaced yes)
 		(uuid "afd76926-7575-42d4-8bc5-d2e8090e1290")
 		(property "Reference" "C17"
-			(at 93.98 68.5799 0)
+			(at 151.13 68.58 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "C"
-			(at 93.98 71.1199 0)
+			(at 151.13 71.12 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 91.1352 73.66 0)
+			(at 154.94 75.2348 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1731,7 +2909,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 90.17 69.85 0)
+			(at 151.13 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1742,7 +2920,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 90.17 69.85 0)
+			(at 151.13 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1769,7 +2947,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 73.66 35.56 90)
+		(at 30.48 151.13 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1780,7 +2958,7 @@
 		(fields_autoplaced yes)
 		(uuid "b0377de7-4d6a-4981-995e-501a87531406")
 		(property "Reference" "C18"
-			(at 73.66 27.94 90)
+			(at 30.48 143.51 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1790,7 +2968,7 @@
 			)
 		)
 		(property "Value" "C"
-			(at 73.66 30.48 90)
+			(at 30.48 146.05 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1800,7 +2978,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 77.47 34.5948 0)
+			(at 34.29 150.1648 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1811,7 +2989,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 73.66 35.56 0)
+			(at 30.48 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1822,7 +3000,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 73.66 35.56 0)
+			(at 30.48 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1848,8 +3026,554 @@
 		)
 	)
 	(symbol
+		(lib_id "SparkFun:R")
+		(at 104.14 129.54 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b1614346-3fb4-4ae2-94da-4257df691c84")
+		(property "Reference" "R19"
+			(at 97.79 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 100.33 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 108.712 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 113.03 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 115.57 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 110.998 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "06dd0e07-ce4d-4f74-bc42-b13f3078f3f2")
+		)
+		(pin "2"
+			(uuid "0a294db7-f716-4d9d-8eb3-8c1a1316b3e1")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 104.14 22.86 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b2015678-8600-4d3f-b3d4-7f44b4cc1db6")
+		(property "Reference" "R16"
+			(at 97.79 22.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 100.33 22.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 108.712 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 113.03 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 115.57 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 110.998 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fe0381e0-bc9d-4069-9526-74c1544c5aac")
+		)
+		(pin "2"
+			(uuid "6c6196d8-1b76-4925-9f42-d2c9f652d8ce")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 176.53 101.6 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b7e4fa28-80db-46be-a06d-c63daebc5d7a")
+		(property "Reference" "R23"
+			(at 176.53 95.25 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 176.53 97.79 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 176.53 106.172 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 175.26 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 176.53 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 176.53 108.458 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9e828880-b27e-4308-8eaf-0961453779bd")
+		)
+		(pin "2"
+			(uuid "e343b839-5d40-41b8-aa21-926d6d000e12")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 171.45 60.96 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c15452c1-1586-4425-a4ae-6d8278e65b3e")
+		(property "Reference" "R21"
+			(at 171.45 54.61 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 171.45 57.15 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 171.45 65.532 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 170.18 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 171.45 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 171.45 67.818 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6d638569-a9a0-4c23-ac09-6f35132ebc73")
+		)
+		(pin "2"
+			(uuid "ee1f26ac-4b1b-4ebf-a9f8-ca91146ecd1a")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 196.85 76.2 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c235e2c9-62e8-43c6-b84c-dd5dad6e1b4e")
+		(property "Reference" "R22"
+			(at 196.85 69.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 196.85 72.39 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 196.85 80.772 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 195.58 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 196.85 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 196.85 83.058 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "43eb517d-d029-45b0-ad62-cd0424099d43")
+		)
+		(pin "2"
+			(uuid "eb4f2697-d9dc-4ff0-8330-33a3b560e8ce")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 104.14 36.83 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d36e1b4a-4a27-47de-996d-900062e2432f")
+		(property "Reference" "R15"
+			(at 97.79 36.83 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 100.33 36.83 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 108.712 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 113.03 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 115.57 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 110.998 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1a2402a2-f52b-4eaa-b57b-fc070f1009ee")
+		)
+		(pin "2"
+			(uuid "b16fc45c-4b13-42e1-a6a7-c2291d991d1f")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "R15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Amplifier_Operational:OPA2196xD")
-		(at 73.66 48.26 0)
+		(at 49.53 88.9 0)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -1860,7 +3584,7 @@
 		(dnp no)
 		(uuid "e5edfa84-4448-4b2b-ad13-1cd4283c2b12")
 		(property "Reference" "U6"
-			(at 73.66 58.42 0)
+			(at 49.53 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1870,7 +3594,7 @@
 			)
 		)
 		(property "Value" "OPA2196xD"
-			(at 73.66 55.88 0)
+			(at 49.53 96.52 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1880,7 +3604,7 @@
 			)
 		)
 		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 76.2 48.26 0)
+			(at 52.07 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1891,7 +3615,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
-			(at 80.01 52.07 0)
+			(at 55.88 92.71 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1902,7 +3626,7 @@
 			)
 		)
 		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
-			(at 73.66 48.26 0)
+			(at 49.53 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1913,33 +3637,232 @@
 			)
 		)
 		(pin "3"
-			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089eb")
+			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089ed")
 		)
 		(pin "2"
-			(uuid "9affd58b-01f5-4c4e-9462-516b8de2152e")
+			(uuid "9affd58b-01f5-4c4e-9462-516b8de21530")
 		)
 		(pin "5"
-			(uuid "fd98c3f7-c02b-4e52-840e-0c5a5ca17879")
+			(uuid "fd98c3f7-c02b-4e52-840e-0c5a5ca1787b")
 		)
 		(pin "7"
-			(uuid "d0699a09-a7c7-401b-a3ff-8861a57bbef2")
+			(uuid "d0699a09-a7c7-401b-a3ff-8861a57bbef4")
 		)
 		(pin "1"
-			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f5")
+			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f7")
 		)
 		(pin "8"
-			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab12")
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab14")
 		)
 		(pin "6"
-			(uuid "bd34949e-86c7-4b25-a43a-a2e0677885ed")
+			(uuid "bd34949e-86c7-4b25-a43a-a2e0677885ef")
 		)
 		(pin "4"
-			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11147")
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11149")
 		)
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
 					(reference "U6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Operational:OPA2196xD")
+		(at 151.13 88.9 0)
+		(mirror x)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f7d95ec5-35a1-4569-87b6-18b7ebe7df9a")
+		(property "Reference" "U7"
+			(at 151.13 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OPA2196xD"
+			(at 151.13 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 153.67 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
+			(at 157.48 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
+			(at 151.13 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "9869fafa-dfa6-4599-a69e-8658072e93af")
+		)
+		(pin "2"
+			(uuid "953f6591-f38e-48bb-8cd0-21757383bce0")
+		)
+		(pin "5"
+			(uuid "fd98c3f7-c02b-4e52-840e-0c5a5ca1787b")
+		)
+		(pin "7"
+			(uuid "d0699a09-a7c7-401b-a3ff-8861a57bbef4")
+		)
+		(pin "1"
+			(uuid "28d2eaba-0a21-45d3-b030-5d0ef90a2f25")
+		)
+		(pin "8"
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab14")
+		)
+		(pin "6"
+			(uuid "bd34949e-86c7-4b25-a43a-a2e0677885ef")
+		)
+		(pin "4"
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11149")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "U7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:1N4448W")
+		(at 93.98 123.19 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "fb6aa7b0-a232-4616-a1ef-45d635a4cef4")
+		(property "Reference" "D3"
+			(at 93.98 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1N4448W"
+			(at 93.98 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SOD-123"
+			(at 93.98 127.635 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/85722/1n4448w.pdf"
+			(at 93.98 123.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "100V 0.15A High-speed standard diode, SOD-123"
+			(at 93.98 123.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" "D"
+			(at 93.98 123.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 93.98 123.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "1a2b8dc9-363e-4511-b70c-3f1805746748")
+		)
+		(pin "1"
+			(uuid "c43e20cd-5add-4727-b18f-bbe4a54121c3")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/7546a70f-ea65-4898-abe1-9938b48cd568"
+					(reference "D3")
 					(unit 1)
 				)
 			)
