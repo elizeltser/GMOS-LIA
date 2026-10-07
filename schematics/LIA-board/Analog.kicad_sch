@@ -6,6 +6,52 @@
 	(paper "A4")
 	(lib_symbols)
 	(sheet
+		(at 227.33 38.1)
+		(size 34.29 44.45)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "55ee5068-026f-40c4-b2a7-6004f4cd46ce")
+		(property "Sheetname" "LIA_FE"
+			(at 227.33 37.3884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "lia_fe.kicad_sch"
+			(at 227.33 83.1346 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 25.4 25.4)
 		(size 62.23 41.91)
 		(exclude_from_sim no)

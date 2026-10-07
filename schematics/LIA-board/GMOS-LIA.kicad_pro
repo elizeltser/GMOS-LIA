@@ -649,7 +649,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "#PWR1-26,L1-2,D1-3,C1-19,R1-23,IC1,J1,FL1,U1-7",
+    "used_designators": "U1-2,U14,J1",
     "variants": []
   },
   "sheets": [
@@ -672,6 +672,14 @@
     [
       "24d58a37-277c-4dbe-a5fe-38b4ef83cb3e",
       "GMOS_Sock"
+    ],
+    [
+      "55ee5068-026f-40c4-b2a7-6004f4cd46ce",
+      "LIA_FE"
+    ],
+    [
+      "c2b448c7-1606-40e4-b2d6-d927d0381aee",
+      "ADC"
     ]
   ],
   "text_variables": {},
