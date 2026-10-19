@@ -170,7 +170,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "DAC.kicad_sch"
+		(property "Sheetfile" "dac.kicad_sch"
 			(at 99.06 144.0946 0)
 			(show_name no)
 			(do_not_autoplace no)

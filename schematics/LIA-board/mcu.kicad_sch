@@ -1889,14 +1889,14 @@
 		)
 	)
 	(junction
-		(at 142.24 129.54)
+		(at 144.78 140.97)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7526836b-86c3-48f4-b8ad-359435027010")
 	)
 	(wire
 		(pts
-			(xy 140.97 129.54) (xy 142.24 129.54)
+			(xy 143.51 140.97) (xy 144.78 140.97)
 		)
 		(stroke
 			(width 0)
@@ -1906,7 +1906,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 129.54) (xy 142.24 130.81)
+			(xy 144.78 140.97) (xy 144.78 142.24)
 		)
 		(stroke
 			(width 0)
@@ -1916,7 +1916,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 129.54) (xy 143.51 129.54)
+			(xy 144.78 140.97) (xy 146.05 140.97)
 		)
 		(stroke
 			(width 0)
@@ -1926,7 +1926,7 @@
 	)
 	(wire
 		(pts
-			(xy 140.97 127) (xy 140.97 129.54)
+			(xy 143.51 138.43) (xy 143.51 140.97)
 		)
 		(stroke
 			(width 0)
@@ -1936,7 +1936,7 @@
 	)
 	(wire
 		(pts
-			(xy 143.51 129.54) (xy 143.51 127)
+			(xy 146.05 140.97) (xy 146.05 138.43)
 		)
 		(stroke
 			(width 0)
@@ -1946,7 +1946,7 @@
 	)
 	(symbol
 		(lib_id "MCU_ST_STM32U5:STM32U575RGTx")
-		(at 140.97 81.28 0)
+		(at 143.51 92.71 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1957,7 +1957,7 @@
 		(fields_autoplaced yes)
 		(uuid "2c1e4a5c-12fa-4473-a88e-f5ecbb2396b2")
 		(property "Reference" "U2"
-			(at 145.6533 127 0)
+			(at 148.1933 138.43 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1968,7 +1968,7 @@
 			)
 		)
 		(property "Value" "STM32U575RGTx"
-			(at 145.6533 129.54 0)
+			(at 148.1933 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1979,7 +1979,7 @@
 			)
 		)
 		(property "Footprint" "Package_QFP:LQFP-64_10x10mm_P0.5mm"
-			(at 125.73 124.46 0)
+			(at 128.27 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1991,7 +1991,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.st.com/resource/en/datasheet/stm32u575rg.pdf"
-			(at 140.97 81.28 0)
+			(at 143.51 92.71 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2002,7 +2002,7 @@
 			)
 		)
 		(property "Description" "STMicroelectronics Arm Cortex-M33 MCU, 1024KB flash, 786KB RAM, 160 MHz, 1.71-3.6V, 51 GPIO, LQFP64"
-			(at 140.97 81.28 0)
+			(at 143.51 92.71 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2215,7 +2215,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 142.24 130.81 0)
+		(at 144.78 142.24 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2226,7 +2226,7 @@
 		(fields_autoplaced yes)
 		(uuid "32211fbe-1e9e-4eab-b2b7-cfd5948173ff")
 		(property "Reference" "#PWR070"
-			(at 142.24 137.16 0)
+			(at 144.78 148.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2237,7 +2237,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 142.24 135.89 0)
+			(at 144.78 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2247,7 +2247,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 142.24 130.81 0)
+			(at 144.78 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2258,7 +2258,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 142.24 130.81 0)
+			(at 144.78 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2269,7 +2269,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 142.24 130.81 0)
+			(at 144.78 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
