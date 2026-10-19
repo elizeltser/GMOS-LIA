@@ -24,7 +24,7 @@ from config import (
     LIASnapConfig,
 )
 from mcp_server.errors import PhaseZeroError
-from plotting import plot_channels_timeseries_marks
+from plotting import LIANoiseScanCompiler, plot_channels_timeseries_marks
 
 from .setup_base import SetupBase
 
@@ -242,6 +242,7 @@ class LIAMeasurementSetup(SetupBase):
         lia.set_input_coupling(cfg.input_coupling)
         lia.set_input_source(cfg.input_source)
         lia.set_input_range(cfg.input_range)
+        lia.set_sync_filter(cfg.sync_filter)
 
         # SCU1: voltage mode
         scu1.set_source_function(
@@ -278,8 +279,15 @@ class LIAMeasurementSetup(SetupBase):
             scu2.reset()
 
             self._configure_lia_scu(lia, scu1, scu2, cfg)
+            logger.info(
+                f"Letting the system (bias/offset) settle after startup "
+                f"({cfg.startup_settle:g}s)"
+            )
+            time.sleep(cfg.startup_settle)
+
             lia.set_frequency(lia_frequency)
             lia.set_time_constant(time_const)
+            lia.clear_status()
 
             logger.info("Dummy read and let LIA settle")
             _, _, _ = lia.snap(0, 1, 3)  # 0=X, 1=Y, 3=Theta
@@ -289,6 +297,14 @@ class LIAMeasurementSetup(SetupBase):
 
             logger.info(f"Letting signals to settle ({settling_time:g}s)")
             time.sleep(settling_time)
+
+            overload = lia.get_overload_status()
+            if overload:
+                raise RuntimeError(
+                    f"LIA input overload at f={lia_frequency:g} Hz "
+                    f"(CUROVLDSTAT={overload}); check input coupling/range "
+                    f"before resuming the sweep"
+                )
 
             logger.info(
                 f"Measuring {n_cycles} samples @ {sample_interval:g}s "
@@ -532,13 +548,21 @@ class LIAMeasurementSetup(SetupBase):
         logger.info("Starting LIAMeasurementSetup (noise scan)")
         frequencies = self.readout_config.frequencies
         logger.info(f"Scanning in range {frequencies}")
+        stem = (
+            self.readout_config.session_folder
+            or f"scan_noise_{datetime.now():%Y%m%d_%H%M%S}"
+        )
+        out_dir = os.path.join(self.results_dir, stem)
+        os.makedirs(out_dir, exist_ok=True)
         result_paths = [
-            os.path.join(self.results_dir, f"scan_noise_f{f}.csv") for f in frequencies
+            os.path.join(out_dir, f"scan_noise_f{f}.csv") for f in frequencies
         ]
+        enbw_values = []
         for f, fp in zip(frequencies, result_paths):
             tau, tc, enbw, settling_time, measurement_time, sample_interval = (
                 _lia_timing(f)
             )
+            enbw_values.append(enbw)
             logger.info(
                 f"Measurement f={f} Hz: tau={tau:g}s ({tc.name}), ENBW={enbw:g} Hz, "
                 f"settling={settling_time:g}s, meas={measurement_time:g}s, "
@@ -579,8 +603,14 @@ class LIAMeasurementSetup(SetupBase):
                 Y_std.append(np.std(y_vals))
                 R_std.append(np.std(r_vals))
 
+        # ENBW grows as the time constant shrinks at higher reference
+        # frequencies, which alone widens R_std; dividing by sqrt(ENBW)
+        # normalizes to an amplitude spectral density (V/sqrt(Hz)) that's
+        # comparable across points with different time constants.
+        R_asd = [r_std / np.sqrt(enbw) for r_std, enbw in zip(R_std, enbw_values)]
+
         logger.info("Store results")
-        summary_filename = os.path.join(self.results_dir, "std_phase.csv")
+        summary_filename = os.path.join(out_dir, "std_phase.csv")
         with open(summary_filename, mode="w", newline="") as fn:
             writer = csv.writer(fn)
             writer.writerow(
@@ -588,15 +618,21 @@ class LIAMeasurementSetup(SetupBase):
                     "f_ref [Hz]",
                     "R_avg [V]",
                     "R_std [V]",
+                    "ENBW [Hz]",
+                    "R_asd [V/sqrt(Hz)]",
                     "Phase_avg [deg]",
                     "X_std [V]",
                     "Y_std [V]",
                 ]
             )
-            for f, r_avg, r_std, p_avg, x_std, y_std in zip(
-                frequencies, R_avg, R_std, phase_avg, X_std, Y_std
+            for f, r_avg, r_std, enbw, r_asd, p_avg, x_std, y_std in zip(
+                frequencies, R_avg, R_std, enbw_values, R_asd, phase_avg, X_std, Y_std
             ):
-                writer.writerow([f, r_avg, r_std, p_avg, x_std, y_std])
+                writer.writerow([f, r_avg, r_std, enbw, r_asd, p_avg, x_std, y_std])
+
+        for plot_path in LIANoiseScanCompiler(summary_filename).compile():
+            logger.info(f"Plot saved to: {plot_path}")
+        logger.info("Noise scan complete.")
 
     def _capture_gas_response_interactive(
         self,
@@ -731,6 +767,9 @@ class LIAMeasurementSetup(SetupBase):
                     self.snapshot_psu(psu, channel=3)
                     self.snapshot_scu(scu1)
                     self.snapshot_scu(scu2)
+                    self.snapshot.add(
+                        "SR560", {"gain_V_per_V": cfg.sr560_gain}
+                    )
                     logger.info(f"Setup snapshot:\n{self.snapshot}")
 
                     input("Press Enter to begin measurement...")

@@ -70,7 +70,8 @@ The GMOS is always connected with the **3T method**: gate and drain are driven i
 - Each **drain** is connected to a resistor of approximately **330 kΩ**, whose other end is connected to an **SCU channel** (SCU1 or SCU2). The SCU sets the DC drain bias and measures the drain current.
 - The two **drains** also feed the two inputs of a **differential amplifier (Stanford Research SR560)**. Its output drives the **SR860 LIA input**.
 - All stages are **AC coupled**.
-- **SR560 settings:** gain of 20, band-pass filter with 6 dB/oct roll-off on both sides, between 300 Hz and 1 kHz.
+- **SR560 settings (as of the 2026-10-07 noise-spectrum/R-spectrum measurements):** **DC coupled, no band-pass filter** (bypassed), gain **500 V/V** (reduced from 1000 V/V after it overloaded the LIA's ±1V input range around 170 Hz during an R-spectrum sweep; originally documented as gain 20 with a 300 Hz-1 kHz band-pass — that no longer reflects the live bench setup). The SR560 is a manual bench instrument, not under GPIB/software control (not in `devices.json`); its live gain/coupling/filter settings can drift from this note — verify on the instrument before trusting this for quantitative work.
+- Because the SR560 is now DC coupled, the LIA's own input coupling (`ICPL`) must be set to **AC** (not the `LIAInstrumentConfig` default of DC) whenever its output feeds the LIA directly, or the amplified DC offset overloads the LIA input. See `python/configs/lia_noise_scan.example.toml`.
 
 ### PSU Channel / Transistor Mapping
 
@@ -162,7 +163,7 @@ Run from the repo root with `python python/sources/main.py <args>`.
 
 | Argument | Short | Description |
 | --- | :---: | --- |
-| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices` or `--repl` is used. Valid names: `IV-voltage-lin`, `IV-voltage-log`, `lia_readout`, `lia_noise_scan`, `lia_snap_only`, `lia_snap_sweep`, `lia_gas_response_interactive`, `lia_digest_sweep`, `lia_drift_evolution`, `operating_point_sweep`, `operating_point_offset_sweep`, `lia_offset_sensitivity_sweep`, `lia_differential_calibration`, `heater_resistance`, `heater_slope_table`, `dwell_analysis`. The authoritative list is `_EXPERIMENTS` in `python/sources/main.py`. |
+| `--experiment <name>` | `-e` | Run a named experiment. Required unless `--list_devices` or `--repl` is used. Valid names: `IV-voltage-lin`, `IV-voltage-log`, `lia_readout`, `lia_noise_scan`, `lia_snap_only`, `lia_snap_sweep`, `lia_gas_response_interactive`, `lia_digest_sweep`, `lia_drift_evolution`, `operating_point_sweep`, `operating_point_offset_sweep`, `lia_offset_sensitivity_sweep`, `lia_differential_calibration`, `heater_resistance`, `heater_slope_table`, `dwell_analysis`, `noise_spectrum`. The authoritative list is `_EXPERIMENTS` in `python/sources/main.py`. |
 | `--config <path>` | `-c` | Path to a TOML file with `[ate]` and `[experiment]` tables overriding the selected experiment's parameters. See [Experiment Configuration Files](#experiment-configuration-files) below. |
 | `--list_devices` | — | Probe all visible VISA resources and print a summary grouped by interface type (GPIB, TCPIP, USB, Serial). For each resource the VISA address string, interface-specific details (GPIB primary address / IP host / USB serial number), and the `*IDN?` response are shown. Devices that do not respond to IDN (e.g. HP 6624A) display `(no response)`. |
 | `--repl` | — | Enter an interactive REPL instead of running an experiment (see `gmos_repl.py`). |
@@ -498,10 +499,10 @@ In this chapter some additional information regarding the python implementation 
 Audited against the code; update this list whenever a driver changes.
 
 - **`ATEBase`**: `query`, `write`, `read`, `reset`, `clear_status`, `idn`, `opc`; context manager (`__exit__` resets the device). Constructor `(tag, rm)`.
-- **`SR860` (LIA)**: `set/get_frequency`, `set/get_phase`, `set/get_amplitude`, `set/get_offset`, `set/get_sensitivity`, `set/get_time_constant`, `set/get_filter_slope`, `get_output(param)`, `snap(*params)`, `auto_phase`, `auto_scale`, `auto_range`, `set_input_source`, `set_input_coupling`, `set/get_input_range`. Enums: `Sensitivity`, `TimeConstant`, `FilterSlope`, `InputSource`, `InputCoupling`, `InputRange`.
+- **`SR860` (LIA)**: `set/get_frequency`, `set/get_phase`, `set/get_amplitude`, `set/get_offset`, `set/get_sensitivity`, `set/get_time_constant`, `set/get_filter_slope`, `get_output(param)`, `snap(*params)`, `auto_phase`, `auto_scale`, `auto_range`, `set_input_source`, `set_input_coupling`, `set/get_input_range`, `set/get_sync_filter` (synchronous filter; only affects detection below 200 Hz). Enums: `Sensitivity`, `TimeConstant`, `FilterSlope`, `InputSource`, `InputCoupling`, `InputRange`.
 - **`B2962A` (SCU1/SCU2)**, all take `channel: int = 1`: `set/get_voltage`, `set/get_current`, `set/get_voltage_compliance`, `set/get_current_compliance`, `set_source_function`, `set_source_mode`, `enable_output`, `disable_output`, `enable_protection`, `disable_protection`, `set_measurement_function`, `measure_spot`, `measure_current`, `set_aperture_time`, `set_nplc`, `initiate_measurement`, `abort_measurement`, `fetch_data`, `read_data`. Enums: `SourceMode`, `SourceFunction`, `MeasurementFunction`.
 - **`HP6624A` (PSU)**, channel first: `set_voltage`, `set_current`, `enable_output`, `disable_output`, `set_overvoltage_protection`, `enable_ocp`, `disable_ocp`, `reset_ocp_ovp`, `get_output_voltage`, `get_output_current`, `get_programmed_voltage`, `get_programmed_current`, `get_status`, `get_error`.
-- **`DSO9104A` (Scope)**: stub, no functional API.
+- **`DSO9104A` (Scope)**: `set/get_channel_scale`, `set_channel_range`, `set_channel_offset`/`get_channel_offset`, `set/get_channel_coupling`, `set_channel_impedance`, `set_channel_display`, `set/get_timebase_range`, `set_timebase_position`, `set_acquisition_mode`, `set_acquisition_count`, `set/get_sample_rate`, `set_acquisition_points`, `set_trigger_auto_sweep` (free-run only, no edge triggering), `digitize`, `stop`, `get_waveform` (returns calibrated `(time_s, voltage_v)` numpy arrays via the preamble), `autoscale`.
 
 ## ATE Useful Enums
 

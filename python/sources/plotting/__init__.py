@@ -1,6 +1,7 @@
 from .lia_analysis import (
     LIADriftEvolutionCompiler,
     LIAFrequencyResponseCompiler,
+    LIANoiseScanCompiler,
     HeaterResistanceCompiler,
     LIASnapDigest,
     OperatingPointIVCompiler,
@@ -14,6 +15,7 @@ __all__ = [
     "LIASnapDigest",
     "LIAFrequencyResponseCompiler",
     "LIADriftEvolutionCompiler",
+    "LIANoiseScanCompiler",
     "OperatingPointIVCompiler",
     "OperatingPointOffsetCompiler",
     "plot_channels_timeseries_marks",

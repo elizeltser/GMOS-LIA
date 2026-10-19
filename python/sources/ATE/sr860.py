@@ -178,3 +178,18 @@ class SR860(ATEBase):
     def get_input_range(self):
         """Get voltage input range"""
         return int(self.query('IRNG?'))
+
+    def get_overload_status(self) -> int:
+        """Current overload status bitmask (0 = no overload). Latched since
+        the last ``*CLS``/power-up; call ``clear_status()`` first to check
+        for overload at the current moment only."""
+        return int(self.query('CUROVLDSTAT?'))
+
+    def set_sync_filter(self, enabled: bool) -> None:
+        """Enable/disable the synchronous filter (only has effect when the
+        detection frequency is below 200 Hz)."""
+        self.write(f'SYNC {1 if enabled else 0}')
+
+    def get_sync_filter(self) -> bool:
+        """Get synchronous filter status"""
+        return bool(int(self.query('SYNC?')))

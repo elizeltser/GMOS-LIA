@@ -3,7 +3,14 @@
 # Resets and fully configures the LIA + both SCUs, then runs a full readout
 # (see lia_readout.example.toml) at each frequency in `frequencies`, and
 # summarizes R/phase averages and X/Y/R noise (std) per frequency into
-# Results/LIAMeasurementSetup/std_phase.csv.
+# Results/LIAMeasurementSetup/<session_folder>/std_phase.csv, plus a log-log
+# R-vs-frequency plot (R_std error bars) at
+# Plots/LIAMeasurementSetup/<session_folder>/std_phase_r_spectrum.png.
+#
+# Use this when the differential-amplifier output feeds the LIA input
+# directly (rather than the scope): sweeping the LIA's own reference
+# frequency and reading R at each point gives an R spectrum over the swept
+# band, the LIA-based equivalent of the scope's noise_spectrum experiment.
 
 [ate]
 
@@ -12,9 +19,9 @@
 # sub-table with start/stop/num/scale to expand via np.linspace/np.logspace:
 #
 # [experiment.frequencies]
-# start = 0.1
-# stop = 100.0
-# num = 10
+# start = 10.0
+# stop = 5000.0
+# num = 25
 # scale = "log"          # "linear" or "log"
 frequencies = [0.5, 1.0, 5.0, 10.0, 20.0, 40.0]
 v_scu1 = 1.11
@@ -22,3 +29,12 @@ v_scu2 = 1.09
 scu_compliance = 10e-6
 offset = 2.5
 amplitude = 10e-3
+# AC: blocks the differential amplifier's DC offset from the LIA's front end.
+# If the amp is DC-coupled (no high-pass filter upstream), DC coupling here
+# will overload the LIA input — confirmed on hardware; see FSD.md.
+input_coupling = "AC"
+filter_slope = "DB24"
+sync_filter = true     # only affects detection below 200 Hz
+startup_settle = 10.0   # s, let the bias settle after (re-)enabling it, before
+                        # the frequency-specific lock-in filter settle
+session_folder = "lia_noise_scan_run"   # omit for a date-stamped name

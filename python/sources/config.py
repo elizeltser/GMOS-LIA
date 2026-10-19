@@ -122,6 +122,9 @@ class LIAInstrumentConfig:
     input_coupling: ATE.InputCoupling = ATE.InputCoupling.DC
     input_source: ATE.InputSource = ATE.InputSource.A
     input_range: ATE.InputRange = ATE.InputRange.V1
+    # Off by default to preserve existing experiments' behavior; only has an
+    # effect below 200 Hz detection frequency when enabled (see FSD.md).
+    sync_filter: bool = False
 
 
 @dataclass
@@ -158,6 +161,12 @@ class LIAReadoutConfig(LIAInstrumentConfig):
 
     ``lia_frequency`` is used by readout mode (single reference frequency);
     ``frequencies`` is used by scan_noise mode (frequency sweep).
+
+    ``startup_settle`` is a fixed delay applied right after (re)applying the
+    LIA/SCU bias (offset, amplitude, SCU voltages/outputs) and before the
+    frequency-specific lock-in filter settle — the device/bias itself needs
+    time to settle after being (re)energized, separately from the LIA's own
+    filter time constant.
     """
 
     lia_frequency: float = 1.0
@@ -166,6 +175,8 @@ class LIAReadoutConfig(LIAInstrumentConfig):
             round(n, 3) for n in np.logspace(np.log10(0.1), np.log10(10e3), num=10)
         ]
     )
+    session_folder: str | None = None
+    startup_settle: float = 10.0
 
 
 @dataclass
@@ -194,6 +205,12 @@ class LIAGasResponseInteractiveConfig(LIAInstrumentConfig):
     v_scu1_start: float | None = None
     v_scu2_start: float | None = None
     mark_label_prefix: str = "mark"
+
+    # Documentation only: the SR560 differential amplifier's gain (V/V), as
+    # set manually on the instrument. Not under GPIB/software control (the
+    # SR560 isn't in devices.json) -- recorded here purely so it ends up in
+    # the snapshot preamble of gas_response.csv.
+    sr560_gain: float | None = None
 
 
 @dataclass
@@ -476,6 +493,71 @@ class IVSweepConfig:
     scale: str = "linear"
     mode: str = "voltage"
     compliance: float = 1e-3
+
+
+@dataclass
+class NoiseSpectrumConfig:
+    """Parameters for NoiseSpectrumSetup: bias the device (SCU1/SCU2 drain,
+    LIA gate offset), capture its differential-amplifier output on the scope,
+    and compute its noise power spectral density over ``[f_min, f_max]``.
+
+    ``v_scu1``/``v_scu2``/``scu_compliance`` set the drain bias (SCU1/SCU2,
+    through the 330 kOhm series resistors), and ``gate_voltage`` sets the LIA
+    DC offset (``SOFF``) driving the gate — without these the device would be
+    unbiased/non-conducting during the capture. ``lia_amplitude`` (``SLVL``)
+    is forced to 0 by default: this is a passive noise capture, so any
+    nonzero AC drive would inject a tone into the measured spectrum at that
+    frequency. ``startup_settle`` is a fixed delay after enabling the bias
+    and before the scope digitize starts, so energizing transients don't
+    contaminate the capture. Heater config (PSU ch1/ch3) is NOT part of this
+    dataclass — set it via ``ATEConfig.heater1``/``heater3`` (the ``[ate]``
+    TOML table), same as every other experiment.
+
+    A single time-domain record of ``duration_s`` seconds is digitized at
+    ``sample_rate_hz`` (so ``sample_rate_hz`` should be comfortably above
+    ``2 * f_max``), then split into Welch segments via ``nperseg`` (auto if
+    ``None``: ``sample_rate_hz / f_min * 2``, i.e. ~2x the resolution needed
+    to resolve ``f_min``) with 50% overlap and a ``window`` taper.
+    """
+
+    v_scu1: float = 2.7
+    v_scu2: float = 2.7
+    scu_compliance: float = 1e-4
+    gate_voltage: float = 0.975
+    lia_amplitude: float = 0.0
+    startup_settle: float = 10.0
+
+    channel: int = 4
+    coupling: str = "DC"
+    volts_full_scale: float = 0.08
+    channel_offset: float = 0.0
+    impedance: str = "ONEMeg"
+    acquisition_mode: str = "HRESolution"
+
+    f_min: float = 10.0
+    f_max: float = 1000.0
+    duration_s: float = 60.0
+    sample_rate_hz: float = 10_000.0
+    nperseg: int | None = None
+    window: str = "hann"
+
+    # External (SR560) amplifier gain (V/V) in effect during the capture.
+    # Not applied to the measured data (the raw ASD is always the amplifier
+    # *output*, as actually measured) — documented as a preamble in
+    # noise_spectrum.csv and used to add an input-referred secondary axis to
+    # the plot. Must match the live bench setting; the SR560 is manual/not
+    # under GPIB control, see FSD.md.
+    amplifier_gain: float = 1.0
+
+    # Overlay a red-dashed "device noise" trendline on the plot: a rolling
+    # median filter over ``trendline_window_hz`` (converted to an odd bin
+    # count via the Welch frequency spacing), which rejects narrow spikes
+    # (mains harmonics only occupy 1-2 bins) while tracking the broad 1/f +
+    # white-noise trend. Purely cosmetic — never affects the saved data.
+    show_trendline: bool = True
+    trendline_window_hz: float = 10.0
+
+    session_folder: str | None = None
 
 
 # Field names that hold a nested dataclass in TOML, mapped to that dataclass.

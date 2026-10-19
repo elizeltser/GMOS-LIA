@@ -21,6 +21,7 @@ from config import (
     LIAOffsetSensitivitySweepConfig,
     LIAReadoutConfig,
     LIASnapConfig,
+    NoiseSpectrumConfig,
     OperatingPointOffsetSweepConfig,
     OperatingPointSweepConfig,
     load_config,
@@ -101,6 +102,12 @@ _EXPERIMENTS = {
     "heater_resistance": (
         setups.HeaterResistanceSetup,
         HeaterResistanceConfig,
+        {},
+        {},
+    ),
+    "noise_spectrum": (
+        setups.NoiseSpectrumSetup,
+        NoiseSpectrumConfig,
         {},
         {},
     ),

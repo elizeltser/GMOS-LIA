@@ -91,7 +91,7 @@ Each file wraps a specific GPIB/VISA instrument. All drivers extend `ATEBase`, w
 - `sr860.py` — Lock-in Amplifier (LIA): frequency, phase, amplitude, DC offset, sensitivity, time constant, filter slope, input settings, snap measurements, auto phase/scale/range. Capture-buffer commands are **not** implemented.
 - `b2962a.py` — Source Measure Unit (SCU1/SCU2): voltage/current sourcing, compliance, output/protection, spot measurement, NPLC/aperture.
 - `hp6624a.py` — Power Supply (PSU): 4 channels with OCP/OVP; ch2 = ESD protection, ch4 = fan, ch1/ch3 = heaters.
-- `dso9104a.py` — Oscilloscope (stub)
+- `dso9104a.py` — Oscilloscope: channel/timebase/acquisition setup, free-run digitize, calibrated waveform readback
 
 **`setups/` — Experiment implementations**
 Each experiment extends `SetupBase`, which provides:
@@ -119,6 +119,7 @@ Experiments (CLI `--experiment` names in parentheses; authoritative map is `_EXP
 - `LIAOffsetSensitivitySweep` (`lia_offset_sensitivity_sweep`): heater-voltage x SCU-bias x LIA-offset sweep measuring active/blind current sensitivity to a small heater-voltage bump; writes `active.csv`/`blind.csv`
 - `DifferentialCalibration` (`lia_differential_calibration`): finds a heater-voltage (PSU ch1/ch3) operating point where LIA X is phase-locked and drift-free; bounded coordinate-descent PSU search driven by the X-vs-time slope; `notes` column narrates every action
 - `HeaterResistance` (`heater_resistance`): see below
+- `NoiseSpectrumSetup` (`noise_spectrum`): biases the device (SCU1/SCU2 drain, LIA gate offset, heater via `[ate]`), digitizes the differential-amplifier output on the scope (`ATE/dso9104a.py`) and computes its noise PSD/ASD via Welch's method over a configurable `[f_min, f_max]`; writes `timeseries.csv`, `noise_spectrum.csv` (settings preamble — SCU/LIA/Scope/`amplifier_gain` — then the PSD/ASD data) and a log-log ASD `.png`
 
 **Data flow:** `sources/main.py` (CLI) → `setups/` → `ATE/` → GPIB/Ethernet instruments
 

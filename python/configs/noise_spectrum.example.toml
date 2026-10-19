@@ -1,0 +1,97 @@
+# Example config for: python sources/main.py --experiment noise_spectrum --config configs/noise_spectrum.example.toml
+#
+# Biases the device (SCU1/SCU2 drain, LIA gate offset, heater via [ate]),
+# lets it settle (startup_settle), then digitizes the differential-amplifier
+# output on the scope (channel below) for duration_s seconds at
+# sample_rate_hz and computes the noise PSD/ASD via Welch's method over
+# [f_min, f_max]. ESD ch2 and fan ch4 are always enabled via [ate]/setup_ate.
+#
+# lia_amplitude is forced to 0 by default: this is a passive noise capture,
+# so any nonzero AC drive on the gate would inject a tone into the measured
+# spectrum at that frequency. amplifier_gain (the external SR560 gain) does
+# not change the measurement — it's only documented in the noise_spectrum.csv
+# preamble (alongside the SCU/LIA/Scope settings actually used) and used to
+# add an input-referred secondary axis to the plot; it must match the live
+# bench setting, since the SR560 is manual/not under GPIB control.
+#
+# CAUTION: if the differential amplifier is the SR560 described in FSD.md
+# ("Signal Chain"), check its configured pass-band before trusting content
+# below ~300 Hz — the documented default there is a 300 Hz-1 kHz band-pass
+# (6 dB/oct), which would roll off most of a 10 Hz-1 kHz noise measurement.
+#
+# volts_full_scale is the scope's full vertical range (V) on the chosen
+# channel, i.e. ~8x the V/div; set it to comfortably bound the amplifier's
+# output swing (noise + any residual offset) without clipping.
+#
+# show_trendline overlays a red-dashed "device noise" trendline (a rolling
+# median filter over trendline_window_hz, converted to an odd bin count via
+# the Welch frequency spacing) that rejects narrow spikes -- mains harmonics
+# only occupy 1-2 bins -- while tracking the broad 1/f + white-noise trend.
+# Purely cosmetic; set show_trendline = false to turn it off.
+#
+# At the end of the experiment (success or failure), the whole setup is
+# de-energized: LIA, SCU1/SCU2, and all 4 PSU channels (ESD ch2, fan ch4,
+# heater ch1/ch3).
+#
+# Outputs:
+#   Results/NoiseSpectrumSetup/<session>/timeseries.csv  (time_s, voltage_v)
+#   Results/NoiseSpectrumSetup/<session>/noise_spectrum.csv
+#       (settings preamble, then frequency_hz, psd_v2_per_hz, asd_v_per_sqrt_hz)
+#   Plots/NoiseSpectrumSetup/<session>/noise_spectrum_psd.png
+#       (log-log amplitude spectral density over [f_min, f_max], plus the
+#       device-noise trendline if show_trendline is set)
+#
+# To run it from run_experiment.sh: uncomment the "noise_spectrum" block
+# (and comment out any other active experiment), and change --config to
+# point at your own copy of this file if you edit the parameters.
+
+[ate]
+debug_device_io = false
+
+[ate.heater1]
+voltage = 2.9
+current = 0.6
+
+[ate.heater3]
+voltage = 2.9
+current = 0.6
+
+[experiment]
+v_scu1 = 2.7                # V, SCU1 drain bias
+v_scu2 = 2.7                # V, SCU2 drain bias
+scu_compliance = 1e-4       # A, SCU current compliance
+gate_voltage = 0.975        # V, LIA DC offset (SOFF) -> GMOS gate voltage
+lia_amplitude = 0.0         # V, LIA sine amplitude (SLVL); 0 for a passive
+                             # noise capture (see note above)
+startup_settle = 10.0       # s, let the bias settle before the scope digitize
+amplifier_gain = 200.0      # V/V, external SR560 gain; documented only (see note above)
+                             # (gain=20 run was clean but pk-pk only used 0.04% of the
+                             # scope range -- 27 quantization levels across 1.2M points;
+                             # stepping to 200 for much better resolution while staying
+                             # well clear of 1000, which clipped)
+
+show_trendline = false      # overlay a red-dashed de-spiked "device noise" trendline
+trendline_window_hz = 10.0  # Hz, rolling median filter window (see note above)
+
+channel = 4             # differential-amplifier readout channel
+coupling = "DC"             # "DC" or "AC" — AC coupling's own low-frequency
+                             # rolloff may itself attenuate near f_min; verify
+                             # against the scope's datasheet before trusting
+                             # the band edge in that mode
+volts_full_scale = 0.3      # V, full vertical range on the channel (the 0.05V attempt
+                             # clipped: it only margined the AC swing, not the DC offset,
+                             # which also scales with gain -- gain=20 offset was -4.74mV,
+                             # so gain=200 projects to ~-47mV alone; 0.3V gives >3x margin)
+channel_offset = 0.0        # V
+impedance = "ONEMeg"        # "ONEMeg" or "FIFTy"
+acquisition_mode = "HRESolution"
+
+f_min = 1.0                 # Hz
+f_max = 2000.0               # Hz
+duration_s = 120.0           # s, single time-domain record length
+sample_rate_hz = 5000.0     # Hz, must be >= 2 * f_max (same ~1.25x margin as before)
+# nperseg = 2000             # Welch segment length; omit for auto (~2x the
+                             # resolution needed to resolve f_min)
+window = "hann"
+
+session_folder = "noise_spectrum_run_1-2k"   # omit for a date-stamped name

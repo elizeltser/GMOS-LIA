@@ -14,10 +14,12 @@ from .differential_calibration import DifferentialCalibration
 from .heater_resistance import HeaterResistanceSetup
 from .heater_slope_table import HeaterSlopeTable
 from .dwell_analysis import DwellAnalysis
+from .noise_spectrum import NoiseSpectrumSetup
 
 __all__ = [
     'HeaterSlopeTable', 'DwellAnalysis',
     'SetupBase', 'IVSweep', 'LIAMeasurementSetup', 'LIADigestSweep',
     'LIADriftEvolution', 'OperatingPointSweep', 'OperatingPointOffsetSweep',
     'LIAOffsetSensitivitySweep', 'DifferentialCalibration', 'HeaterResistanceSetup',
+    'NoiseSpectrumSetup',
 ]

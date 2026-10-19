@@ -996,3 +996,68 @@ class HeaterResistanceCompiler:
             plt.close(fig)
             out_paths.append(str(out))
         return out_paths
+
+
+class LIANoiseScanCompiler:
+    """Plots the R spectrum (``R_avg`` vs ``f_ref``, with ``R_std`` error bars)
+    from a ``std_phase.csv`` written by ``LIAMeasurementSetup.noise_scan``.
+
+    If the CSV has an ``R_asd [V/sqrt(Hz)]`` column (``R_std`` divided by
+    ``sqrt(ENBW)``, normalizing away the per-point detection-bandwidth
+    difference caused by the time constant shrinking at higher reference
+    frequencies), a second plot of that ASD vs frequency is also produced.
+    """
+
+    def __init__(self, csv_path: str):
+        self.csv_path = Path(csv_path).resolve()
+        with open(self.csv_path, newline="") as f:
+            rows = list(csv.DictReader(f))
+        if not rows:
+            raise ValueError(f"no rows in {csv_path}")
+        self.freq = np.array([float(r["f_ref [Hz]"]) for r in rows])
+        self.r_avg = np.array([float(r["R_avg [V]"]) for r in rows])
+        self.r_std = np.array([float(r["R_std [V]"]) for r in rows])
+        self.r_asd = (
+            np.array([float(r["R_asd [V/sqrt(Hz)]"]) for r in rows])
+            if "R_asd [V/sqrt(Hz)]" in rows[0]
+            else None
+        )
+
+    def compile(self) -> list[str]:
+        order = np.argsort(self.freq)
+        freq, r_avg, r_std = self.freq[order], self.r_avg[order], self.r_std[order]
+        out_paths = []
+
+        fig, ax = plt.subplots(figsize=(8, 5.5))
+        ax.errorbar(freq, r_avg, yerr=r_std, fmt="o-", capsize=3, lw=1.2, ms=4)
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.set_xlabel("Reference frequency (Hz)")
+        ax.set_ylabel("R (V)")
+        ax.set_title("LIA R spectrum")
+        ax.grid(True, which="both", alpha=0.3)
+
+        out = _output_path(self.csv_path, "_r_spectrum.png")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(out, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        logger.info(f"Plot saved to: {out}")
+        out_paths.append(str(out))
+
+        if self.r_asd is not None:
+            r_asd = self.r_asd[order]
+            fig, ax = plt.subplots(figsize=(8, 5.5))
+            ax.loglog(freq, r_asd, "o-", lw=1.2, ms=4)
+            ax.set_xlabel("Reference frequency (Hz)")
+            ax.set_ylabel("R amplitude spectral density (V/√Hz)")
+            ax.set_title("LIA R noise spectrum (ENBW-normalized)")
+            ax.grid(True, which="both", alpha=0.3)
+
+            out = _output_path(self.csv_path, "_r_asd_spectrum.png")
+            out.parent.mkdir(parents=True, exist_ok=True)
+            fig.savefig(out, dpi=150, bbox_inches="tight")
+            plt.close(fig)
+            logger.info(f"Plot saved to: {out}")
+            out_paths.append(str(out))
+
+        return out_paths

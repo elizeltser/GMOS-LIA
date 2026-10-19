@@ -19,15 +19,20 @@ OFFSET_MAX_V = 1.1
 AMPLITUDE_MAX_V = 0.007
 
 # Target drain current range (measured via SCU, voltage-source mode).
+# Raised from the old device's 10uA ceiling (2026-10-07): new device needs
+# higher current to clear the Vds>3kT floor at Vgs>=~0.975V without
+# exceeding the SCU's own 1mA hardware compliance (still 20x margin).
 SCU_CURRENT_MIN_A = 7e-6
-SCU_CURRENT_MAX_A = 10e-6
+SCU_CURRENT_MAX_A = 50e-6
 
 # Heater voltage range (PSU ch1 / ch3).
 HEATER_MIN_V = 2.8
 HEATER_MAX_V = 3.1
 
 # Minimum acceptable drain voltage: Vd = Vscu - SERIES_RESISTANCE_OHM * Iscu.
-VD_MIN_V = 0.120
+# Lowered to the Vds>3kT (~298K) criterion for the new device (2026-10-07),
+# replacing the old device's 120mV target.
+VD_MIN_V = 0.078
 SERIES_RESISTANCE_OHM = 330e3
 
 # How long to wait after a drain-voltage setpoint before measuring Iscu/Vd.
