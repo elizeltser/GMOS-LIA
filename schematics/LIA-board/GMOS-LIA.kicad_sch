@@ -67,7 +67,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "24d58a37-277c-4dbe-a5fe-38b4ef83cb3e")
-		(property "Sheetname" "GMOS_Sock"
+		(property "Sheetname" "GMOS_MUX"
 			(at 38.1 75.4884 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78,7 +78,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "GMOS_Sock.kicad_sch"
+		(property "Sheetfile" "GMOS_MUX.kicad_sch"
 			(at 38.1 111.0746 0)
 			(show_name no)
 			(do_not_autoplace no)
