@@ -650,7 +650,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "",
+    "used_designators": "#PWR71-76,C37-40,U16-17,R35-43",
     "variants": []
   },
   "sheets": [
@@ -681,6 +681,10 @@
     [
       "c2b448c7-1606-40e4-b2d6-d927d0381aee",
       "ADC"
+    ],
+    [
+      "5b64db95-c708-4b7d-ae36-d8e5e7cbc2cf",
+      "DAC"
     ],
     [
       "1c6f142e-1df0-4fd8-8558-8d862b0034c2",
