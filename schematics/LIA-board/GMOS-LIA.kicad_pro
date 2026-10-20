@@ -650,7 +650,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "",
+    "used_designators": "U1,U3-5,U18-21,L1-2,#PWR1-10,#PWR13-24,#PWR91-100,C1-15,C43-44,R2-5,R8,R10-13,R51-52",
     "variants": []
   },
   "sheets": [
@@ -689,6 +689,14 @@
     [
       "1c6f142e-1df0-4fd8-8558-8d862b0034c2",
       "MCU"
+    ],
+    [
+      "fb42f41e-98c1-4e70-a940-5244b9320fd6",
+      "USB_PD"
+    ],
+    [
+      "e904435f-2552-45e0-92bb-c8155978367e",
+      "Regulators"
     ]
   ],
   "text_variables": {},
