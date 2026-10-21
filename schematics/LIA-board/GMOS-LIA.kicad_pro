@@ -517,8 +517,8 @@
     "meta": {
       "version": 5
     },
-    "net_colors": null,
-    "netclass_assignments": null,
+    "net_colors": {},
+    "netclass_assignments": {},
     "netclass_patterns": []
   },
   "pcbnew": {
@@ -650,7 +650,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "U1,U3-5,U18-21,L1-2,#PWR1-10,#PWR13-24,#PWR91-100,C1-15,C43-44,R2-5,R8,R10-13,R51-52",
+    "used_designators": "#PWR1-10,#PWR13-24,#PWR47-48,#PWR91-125,C1-15,C43-46,D1,D4-5,J2,L1-3,P1,Q1,R2-5,R8,R10-13,R47-53,U1,U3-5,U18-23",
     "variants": []
   },
   "sheets": [
@@ -697,6 +697,10 @@
     [
       "e904435f-2552-45e0-92bb-c8155978367e",
       "Regulators"
+    ],
+    [
+      "bc9db269-b6e3-4963-a650-1fdcbd7049f2",
+      "Connectors"
     ]
   ],
   "text_variables": {},

@@ -6,8 +6,8 @@
 	(paper "A4")
 	(lib_symbols)
 	(sheet
-		(at 152.4 38.1)
-		(size 73.66 63.5)
+		(at 193.802 71.882)
+		(size 24.892 44.704)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -22,7 +22,7 @@
 		)
 		(uuid "057bc398-9cad-4fbf-82b0-6414e0e9ecb2")
 		(property "Sheetname" "Analog"
-			(at 152.4 37.3884 0)
+			(at 193.802 71.1704 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -33,7 +33,7 @@
 			)
 		)
 		(property "Sheetfile" "Analog.kicad_sch"
-			(at 152.4 102.1846 0)
+			(at 193.802 117.1706 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -52,7 +52,7 @@
 		)
 	)
 	(sheet
-		(at 40.64 124.46)
+		(at 55.118 127.762)
 		(size 34.29 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -68,7 +68,7 @@
 		)
 		(uuid "1c6f142e-1df0-4fd8-8558-8d862b0034c2")
 		(property "Sheetname" "MCU"
-			(at 40.64 123.7484 0)
+			(at 55.118 127.0504 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -79,7 +79,7 @@
 			)
 		)
 		(property "Sheetfile" "mcu.kicad_sch"
-			(at 40.64 150.4446 0)
+			(at 55.118 153.7466 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -98,8 +98,8 @@
 		)
 	)
 	(sheet
-		(at 38.1 76.2)
-		(size 38.1 34.29)
+		(at 126.492 76.2)
+		(size 37.846 34.29)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -114,7 +114,7 @@
 		)
 		(uuid "24d58a37-277c-4dbe-a5fe-38b4ef83cb3e")
 		(property "Sheetname" "GMOS_MUX"
-			(at 38.1 75.4884 0)
+			(at 126.492 75.4884 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -125,7 +125,7 @@
 			)
 		)
 		(property "Sheetfile" "GMOS_MUX.kicad_sch"
-			(at 38.1 111.0746 0)
+			(at 126.492 111.0746 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -144,7 +144,7 @@
 		)
 	)
 	(sheet
-		(at 99.06 115.57)
+		(at 102.362 127)
 		(size 55.88 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -160,7 +160,7 @@
 		)
 		(uuid "5b64db95-c708-4b7d-ae36-d8e5e7cbc2cf")
 		(property "Sheetname" "DAC"
-			(at 99.06 114.8584 0)
+			(at 102.362 126.2884 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -171,7 +171,7 @@
 			)
 		)
 		(property "Sheetfile" "dac.kicad_sch"
-			(at 99.06 144.0946 0)
+			(at 102.362 155.5246 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -190,8 +190,8 @@
 		)
 	)
 	(sheet
-		(at 38.1 25.4)
-		(size 38.1 38.1)
+		(at 75.946 25.4)
+		(size 152.908 22.098)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -206,7 +206,7 @@
 		)
 		(uuid "94922131-7715-4c45-944b-0843ad001e6a")
 		(property "Sheetname" "DC"
-			(at 38.1 24.6884 0)
+			(at 75.946 24.6884 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -217,7 +217,7 @@
 			)
 		)
 		(property "Sheetfile" "DC.kicad_sch"
-			(at 38.1 64.0846 0)
+			(at 75.946 48.0826 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -236,7 +236,53 @@
 		)
 	)
 	(sheet
-		(at 185.42 115.57)
+		(at 24.892 42.672)
+		(size 26.416 109.474)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "bc9db269-b6e3-4963-a650-1fdcbd7049f2")
+		(property "Sheetname" "Connectors"
+			(at 24.892 41.9604 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "connectors.kicad_sch"
+			(at 24.892 152.7306 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
+					(page "12")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 168.402 127.762)
 		(size 59.69 26.67)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -252,7 +298,7 @@
 		)
 		(uuid "c2b448c7-1606-40e4-b2d6-d927d0381aee")
 		(property "Sheetname" "ADC"
-			(at 185.42 114.8584 0)
+			(at 168.402 127.0504 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -263,7 +309,7 @@
 			)
 		)
 		(property "Sheetfile" "adc.kicad_sch"
-			(at 185.42 142.8246 0)
+			(at 168.402 155.0166 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
