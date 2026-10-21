@@ -3150,6 +3150,14 @@
 		(color 0 0 0 0)
 		(uuid "fb456b5e-f759-48b8-a97c-0525c68830fb")
 	)
+	(no_connect
+		(at 38.1 107.95)
+		(uuid "00728a85-d7fb-4857-a6a2-05777c715d8e")
+	)
+	(no_connect
+		(at 38.1 118.11)
+		(uuid "3eb10b5f-6b25-484c-af5d-2380e38eeb2c")
+	)
 	(wire
 		(pts
 			(xy 115.57 49.53) (xy 115.57 36.83)
@@ -5491,6 +5499,103 @@
 		)
 	)
 	(symbol
+		(lib_id "Amplifier_Operational:OPA2196xD")
+		(at 255.27 118.11 0)
+		(unit 2)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "1422c7b6-982c-4d47-bcb1-139ef6010511")
+		(property "Reference" "U12"
+			(at 255.27 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OPA2196xD"
+			(at 255.27 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 257.81 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
+			(at 261.62 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
+			(at 255.27 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089ed")
+		)
+		(pin "2"
+			(uuid "9affd58b-01f5-4c4e-9462-516b8de21530")
+		)
+		(pin "5"
+			(uuid "a6ecc390-8271-4ea2-a749-03914f4ecbcd")
+		)
+		(pin "7"
+			(uuid "04678977-eb67-4577-8f2d-e429f4280eb6")
+		)
+		(pin "1"
+			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f7")
+		)
+		(pin "8"
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab13")
+		)
+		(pin "6"
+			(uuid "df54e68c-18fb-40a3-960a-a5850069fd58")
+		)
+		(pin "4"
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11148")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
+					(reference "U12")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 83.82 128.27 0)
 		(unit 1)
@@ -5813,103 +5918,6 @@
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
 					(reference "R31")
 					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Amplifier_Operational:OPA2196xD")
-		(at 124.46 118.11 0)
-		(unit 2)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "296c71f0-f50a-4aca-9d4a-7561b3bb2132")
-		(property "Reference" "U12"
-			(at 124.46 107.95 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "OPA2196xD"
-			(at 124.46 110.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 127 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
-			(at 130.81 114.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
-			(at 124.46 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "3"
-			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089ed")
-		)
-		(pin "2"
-			(uuid "9affd58b-01f5-4c4e-9462-516b8de21530")
-		)
-		(pin "5"
-			(uuid "249477b0-94d1-4077-ba77-cdc196b5f9e9")
-		)
-		(pin "7"
-			(uuid "e8bb918c-18cb-4e8f-990e-ae640cf351b1")
-		)
-		(pin "1"
-			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f7")
-		)
-		(pin "8"
-			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab13")
-		)
-		(pin "6"
-			(uuid "0a2928e6-d67d-494c-a870-2d36a57563d0")
-		)
-		(pin "4"
-			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11148")
-		)
-		(instances
-			(project "GMOS-LIA"
-				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U12")
-					(unit 2)
 				)
 			)
 		)
@@ -8284,103 +8292,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:OPA2196xD")
-		(at 255.27 118.11 0)
-		(unit 2)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "98c6b86e-eaba-4227-80d3-f4dd8057371b")
-		(property "Reference" "U13"
-			(at 255.27 107.95 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "OPA2196xD"
-			(at 255.27 110.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 257.81 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
-			(at 261.62 114.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
-			(at 255.27 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "3"
-			(uuid "a0e439c5-8010-4d8f-a8ca-9038710089ee")
-		)
-		(pin "2"
-			(uuid "9affd58b-01f5-4c4e-9462-516b8de21531")
-		)
-		(pin "5"
-			(uuid "ada88e57-ff8a-406f-9608-f2d2a492c91f")
-		)
-		(pin "7"
-			(uuid "0c438eb4-62e9-4378-b44b-829ee3a7ea71")
-		)
-		(pin "1"
-			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f8")
-		)
-		(pin "8"
-			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab14")
-		)
-		(pin "6"
-			(uuid "a1617702-db45-4f28-8018-3cf9c4b226ac")
-		)
-		(pin "4"
-			(uuid "30ae1cff-2241-4b67-b887-2c0a52a11149")
-		)
-		(instances
-			(project "GMOS-LIA"
-				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U13")
-					(unit 2)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "SparkFun:R")
 		(at 97.79 115.57 180)
 		(unit 1)
@@ -9567,6 +9478,103 @@
 		)
 	)
 	(symbol
+		(lib_id "Amplifier_Operational:OPA2196xD")
+		(at 124.46 118.11 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d77f0b3e-7c17-4cea-bbda-61c11cc522b3")
+		(property "Reference" "U12"
+			(at 124.46 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OPA2196xD"
+			(at 124.46 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 127 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
+			(at 130.81 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, SOIC-8"
+			(at 124.46 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "06fd786e-838c-428c-ad50-99f181ff3518")
+		)
+		(pin "2"
+			(uuid "002e83e7-db62-40d4-98ff-6ac4707706d0")
+		)
+		(pin "5"
+			(uuid "fd98c3f7-c02b-4e52-840e-0c5a5ca1787d")
+		)
+		(pin "7"
+			(uuid "d0699a09-a7c7-401b-a3ff-8861a57bbef6")
+		)
+		(pin "1"
+			(uuid "c22b7df0-1d5e-4247-8a59-1c8d1b3753e2")
+		)
+		(pin "8"
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab16")
+		)
+		(pin "6"
+			(uuid "bd34949e-86c7-4b25-a43a-a2e0677885f1")
+		)
+		(pin "4"
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a1114b")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
+					(reference "U12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5VA")
 		(at 85.09 40.64 0)
 		(unit 1)
@@ -10211,13 +10219,13 @@
 			(uuid "cd68700c-90fd-46f5-8f89-ac96d3e603f9")
 		)
 		(pin "8"
-			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab16")
+			(uuid "590150c3-d5ce-42e3-95d9-e8a74bbbab17")
 		)
 		(pin "6"
 			(uuid "d3ee90d2-c627-488f-b08c-482b62b522dd")
 		)
 		(pin "4"
-			(uuid "30ae1cff-2241-4b67-b887-2c0a52a1114b")
+			(uuid "30ae1cff-2241-4b67-b887-2c0a52a1114c")
 		)
 		(instances
 			(project "GMOS-LIA"

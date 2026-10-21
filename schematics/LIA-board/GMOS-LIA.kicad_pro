@@ -650,7 +650,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "#PWR1-10,#PWR13-24,#PWR47-48,#PWR91-125,C1-15,C43-46,D1,D4-5,J2,L1-3,P1,Q1,R2-5,R8,R10-13,R47-53,U1,U3-5,U18-23",
+    "used_designators": "#PWR1-24,#PWR38,#PWR42-43,#PWR47-48,#PWR61-64,#PWR69,#PWR72,#PWR91-126,C1-15,C27-29,C36,C41-48,D1,D4-5,IC6-7,J2-3,L1-3,P1,Q1,R2-6,R8,R10-13,R47-63,U1,U3-5,U13,U18-25",
     "variants": []
   },
   "sheets": [
@@ -668,7 +668,7 @@
     ],
     [
       "7546a70f-ea65-4898-abe1-9938b48cd568",
-      "oscillator"
+      "Excitation"
     ],
     [
       "24d58a37-277c-4dbe-a5fe-38b4ef83cb3e",

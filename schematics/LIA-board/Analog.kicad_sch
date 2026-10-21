@@ -147,7 +147,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "7546a70f-ea65-4898-abe1-9938b48cd568")
-		(property "Sheetname" "oscillator"
+		(property "Sheetname" "Excitation"
 			(at 55.88 81.8384 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -158,7 +158,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "oscillator.kicad_sch"
+		(property "Sheetfile" "excitation.kicad_sch"
 			(at 55.88 125.0446 0)
 			(show_name no)
 			(do_not_autoplace no)
