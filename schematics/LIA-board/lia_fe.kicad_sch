@@ -3121,6 +3121,12 @@
 		(uuid "e278f6ba-a7cd-471f-9441-8986812f83ca")
 	)
 	(junction
+		(at 25.4 168.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ed350b8a-0b7c-4e21-b210-5068d516721f")
+	)
+	(junction
 		(at 104.14 115.57)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3187,6 +3193,16 @@
 			(type default)
 		)
 		(uuid "04412023-120c-491c-9718-4913c555d76f")
+	)
+	(wire
+		(pts
+			(xy 25.4 168.91) (xy 31.75 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0870b25a-f5c6-4c3e-87c8-1ac09020623d")
 	)
 	(wire
 		(pts
@@ -3360,6 +3376,16 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 130.81) (xy 34.29 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d9f91ec-f2eb-4b34-b355-c639d4c942ef")
+	)
+	(wire
+		(pts
 			(xy 189.23 59.69) (xy 189.23 63.5)
 		)
 		(stroke
@@ -3467,6 +3493,16 @@
 			(type default)
 		)
 		(uuid "2cb3f318-bda9-4270-b02a-41b2dd756585")
+	)
+	(wire
+		(pts
+			(xy 25.4 177.8) (xy 25.4 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2eb0e333-1519-42e2-9716-ea2001ac4e5f")
 	)
 	(wire
 		(pts
@@ -4200,6 +4236,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 130.81) (xy 165.1 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e23786e-284a-4748-aca6-2c8928a81771")
+	)
+	(wire
+		(pts
 			(xy 116.84 120.65) (xy 113.03 120.65)
 		)
 		(stroke
@@ -4277,6 +4323,16 @@
 			(type default)
 		)
 		(uuid "a07f1330-0066-4815-b0c1-5af71d95507f")
+	)
+	(wire
+		(pts
+			(xy 25.4 157.48) (xy 25.4 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1ad3f05-e7f4-4a9f-a011-2705caa61391")
 	)
 	(wire
 		(pts
@@ -4407,6 +4463,16 @@
 			(type default)
 		)
 		(uuid "b802c933-48cd-4151-a066-296127a08bda")
+	)
+	(wire
+		(pts
+			(xy 25.4 168.91) (xy 25.4 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b80ccaa4-c492-4f5b-8351-5843df55f5de")
 	)
 	(wire
 		(pts
@@ -4720,6 +4786,16 @@
 	)
 	(wire
 		(pts
+			(xy 25.4 167.64) (xy 25.4 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2fd4547-8e43-4a66-a568-4a05b62c99ba")
+	)
+	(wire
+		(pts
 			(xy 85.09 40.64) (xy 85.09 41.91)
 		)
 		(stroke
@@ -4988,6 +5064,26 @@
 		)
 		(uuid "7bf31f64-9961-4434-9485-97cb19f0afba")
 	)
+	(label "Vmid"
+		(at 31.75 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "83646c97-59b6-495a-8be5-88f9f51389de")
+	)
+	(label "Vmid"
+		(at 161.29 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cbc91ce4-1e77-4159-8496-bb0fbfd3e3f7")
+	)
 	(label "readout"
 		(at 228.6 52.07 0)
 		(effects
@@ -4997,6 +5093,16 @@
 			(justify left bottom)
 		)
 		(uuid "d57b14b0-9a65-43b9-ab4a-3ed310d8438a")
+	)
+	(label "Vmid"
+		(at 30.48 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "dc9304ca-a6a7-4de6-8d9d-ec562691d205")
 	)
 	(hierarchical_label "X_readout"
 		(shape output)
@@ -5020,7 +5126,7 @@
 		)
 		(uuid "33c91a69-5250-4d2a-bbee-650c525a8e5a")
 	)
-	(hierarchical_label "sin"
+	(hierarchical_label "X_chop"
 		(shape input)
 		(at 30.48 125.73 180)
 		(effects
@@ -5064,7 +5170,7 @@
 		)
 		(uuid "8fa75dfa-7b21-472f-ada4-e6e1c4be7511")
 	)
-	(hierarchical_label "cos"
+	(hierarchical_label "Y_chop"
 		(shape input)
 		(at 161.29 125.73 180)
 		(effects
@@ -5098,7 +5204,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0167a041-ccb2-4165-9e3c-08557a04a16f")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR017"
 			(at 78.74 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -5158,7 +5264,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR028")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -5176,7 +5282,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "024853ec-eb06-4c61-8739-d6784199bf29")
-		(property "Reference" "#PWR057"
+		(property "Reference" "#PWR014"
 			(at 184.15 102.87 0)
 			(hide yes)
 			(show_name no)
@@ -5236,7 +5342,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR057")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -5253,7 +5359,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "09fdbc10-c8b1-4725-b911-1c429a49a2de")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR015"
 			(at 24.13 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -5313,7 +5419,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR029")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -5331,7 +5437,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "124b96b7-d0e7-4a0c-9d50-58ecba588472")
-		(property "Reference" "C24"
+		(property "Reference" "C13"
 			(at 123.19 95.25 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5393,7 +5499,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C24")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -5410,7 +5516,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "13ff7447-7b87-406a-b6b1-45f0b0d52594")
-		(property "Reference" "U11"
+		(property "Reference" "U3"
 			(at 85.09 167.6399 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5492,7 +5598,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U11")
+					(reference "U3")
 					(unit 3)
 				)
 			)
@@ -5509,7 +5615,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "1422c7b6-982c-4d47-bcb1-139ef6010511")
-		(property "Reference" "U12"
+		(property "Reference" "U4"
 			(at 255.27 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5589,7 +5695,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U12")
+					(reference "U4")
 					(unit 2)
 				)
 			)
@@ -5605,9 +5711,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "192812b4-9119-4a4f-b150-340e79bcd019")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR019"
 			(at 83.82 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -5619,7 +5724,7 @@
 			)
 		)
 		(property "Value" "+3V3_D"
-			(at 83.82 123.19 0)
+			(at 88.138 125.984 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5667,85 +5772,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR047")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 34.29 130.81 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1abae674-4546-4cff-b2e2-25e416b74e8b")
-		(property "Reference" "#PWR027"
-			(at 34.29 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 34.29 135.89 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 34.29 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 34.29 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 34.29 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "33b80cfc-cf69-4c37-a6f9-77a82ec3d763")
-		)
-		(instances
-			(project "GMOS-LIA"
-				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR027")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -5763,7 +5790,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "20f27d29-cbb6-49e8-8119-93a92f49b6ce")
-		(property "Reference" "#PWR053"
+		(property "Reference" "#PWR027"
 			(at 76.2 160.02 0)
 			(hide yes)
 			(show_name no)
@@ -5823,7 +5850,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR053")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -5841,7 +5868,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "24a280a9-4d09-4101-9a56-6573250b8a60")
-		(property "Reference" "R31"
+		(property "Reference" "R18"
 			(at 86.36 133.3499 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5916,7 +5943,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R31")
+					(reference "R18")
 					(unit 1)
 				)
 			)
@@ -5934,7 +5961,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "37693912-3e0f-4e98-9a77-7a46774b331e")
-		(property "Reference" "R33"
+		(property "Reference" "R19"
 			(at 217.17 133.3499 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6009,7 +6036,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R33")
+					(reference "R19")
 					(unit 1)
 				)
 			)
@@ -6027,7 +6054,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "39c0cf61-2d16-4b6f-9bd6-256aec262cca")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR021"
 			(at 104.14 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -6087,7 +6114,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR030")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -6105,7 +6132,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "39d908bb-b556-4e81-b696-b9902a72d93c")
-		(property "Reference" "R28"
+		(property "Reference" "R12"
 			(at 182.88 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6178,7 +6205,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R28")
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -6196,7 +6223,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4059af71-81be-473f-83b1-cf7a1cfa83de")
-		(property "Reference" "R24"
+		(property "Reference" "R10"
 			(at 66.04 48.2599 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6271,7 +6298,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R24")
+					(reference "R10")
 					(unit 1)
 				)
 			)
@@ -6289,7 +6316,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "40e0592b-0651-4823-b014-6428dd7e821f")
-		(property "Reference" "C35"
+		(property "Reference" "C20"
 			(at 153.67 173.9899 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6353,7 +6380,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C35")
+					(reference "C20")
 					(unit 1)
 				)
 			)
@@ -6370,7 +6397,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "4822101b-f8be-4024-8383-5f3bbe756197")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR016"
 			(at 156.21 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -6430,7 +6457,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR034")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -6448,7 +6475,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4989cec4-5763-4923-a771-0e089b218306")
-		(property "Reference" "C30"
+		(property "Reference" "C17"
 			(at 72.39 162.5599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6512,7 +6539,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C30")
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -6530,7 +6557,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "519a1c7b-57d2-4e5c-8a90-6e580d40fce4")
-		(property "Reference" "C25"
+		(property "Reference" "C16"
 			(at 238.76 120.6499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6594,7 +6621,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C25")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -6612,7 +6639,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "59984cce-b958-4cf1-8f42-8484a318d09f")
-		(property "Reference" "U12"
+		(property "Reference" "U4"
 			(at 124.46 167.6399 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6694,7 +6721,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U12")
+					(reference "U4")
 					(unit 3)
 				)
 			)
@@ -6712,7 +6739,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5cda8c7d-ef61-47b6-bc67-6b7386b73c32")
-		(property "Reference" "C31"
+		(property "Reference" "C21"
 			(at 72.39 175.2599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6776,7 +6803,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C31")
+					(reference "C21")
 					(unit 1)
 				)
 			)
@@ -6794,7 +6821,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5dffffa5-ec20-4a42-9f0a-c6153d7112f9")
-		(property "Reference" "#PWR050"
+		(property "Reference" "#PWR034"
 			(at 115.57 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -6854,7 +6881,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR050")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -6872,7 +6899,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "658ec382-a326-4f1c-bf4e-4930adfdba1f")
-		(property "Reference" "#PWR054"
+		(property "Reference" "#PWR028"
 			(at 115.57 160.02 0)
 			(hide yes)
 			(show_name no)
@@ -6932,7 +6959,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR054")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -6950,7 +6977,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6f6dc771-5a5c-4f58-b95d-223ef2cf41ce")
-		(property "Reference" "U9"
+		(property "Reference" "U6"
 			(at 186.2933 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7068,7 +7095,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U9")
+					(reference "U6")
 					(unit 1)
 				)
 			)
@@ -7086,7 +7113,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "761e8e65-dcc9-4911-905b-aeef2fe111d1")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR031"
 			(at 59.69 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -7146,7 +7173,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR044")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -7164,7 +7191,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "78567c25-17d5-41d7-826a-94cabe879f0c")
-		(property "Reference" "C20"
+		(property "Reference" "C11"
 			(at 123.19 41.91 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7226,7 +7253,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C20")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -7244,7 +7271,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7e880dfc-d0d4-4fed-8eb8-5d326acca11d")
-		(property "Reference" "C22"
+		(property "Reference" "C12"
 			(at 193.04 54.6099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7308,7 +7335,85 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C22")
+					(reference "C12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 25.4 179.07 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "81fc8385-ff90-40aa-8e53-0a95c9d949fd")
+		(property "Reference" "#PWR0129"
+			(at 25.4 185.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 25.4 184.15 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 25.4 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 25.4 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2bbb6ce8-90fd-4f92-b18c-f45dc1f66428")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
+					(reference "#PWR0129")
 					(unit 1)
 				)
 			)
@@ -7326,7 +7431,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "82b38bf1-a9cb-427e-a926-99b4eea73bf9")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR025"
 			(at 53.34 138.43 0)
 			(hide yes)
 			(show_name no)
@@ -7386,7 +7491,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR055")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -7404,7 +7509,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8b3922c5-1ae2-484a-af54-d8a0dcd789c9")
-		(property "Reference" "#PWR052"
+		(property "Reference" "#PWR029"
 			(at 149.86 160.02 0)
 			(hide yes)
 			(show_name no)
@@ -7464,7 +7569,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR052")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -7480,9 +7585,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "8bb9e52d-fa3a-4767-b2cd-813b43effd1d")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR020"
 			(at 214.63 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -7494,7 +7598,7 @@
 			)
 		)
 		(property "Value" "+3V3_D"
-			(at 214.63 123.19 0)
+			(at 218.948 125.984 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7542,7 +7646,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR048")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -7560,7 +7664,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8d40e4c8-d501-40e3-9cd9-d71a2e351e52")
-		(property "Reference" "#PWR051"
+		(property "Reference" "#PWR035"
 			(at 149.86 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -7620,7 +7724,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR051")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -7638,7 +7742,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8d98d14c-6001-4548-8a9d-5709519f70d5")
-		(property "Reference" "U10"
+		(property "Reference" "U2"
 			(at 97.79 43.1098 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7718,7 +7822,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U10")
+					(reference "U2")
 					(unit 1)
 				)
 			)
@@ -7736,7 +7840,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8ea37e0f-fd7e-4d13-8f70-d867e37ae89a")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR010"
 			(at 92.71 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -7796,7 +7900,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR033")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -7814,7 +7918,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8fed8912-c669-4f6c-ab2f-125a791af96d")
-		(property "Reference" "C32"
+		(property "Reference" "C18"
 			(at 111.76 162.5599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7878,7 +7982,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C32")
+					(reference "C18")
 					(unit 1)
 				)
 			)
@@ -7896,7 +8000,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "916afbc6-fb7d-4293-bbc8-f3a1772cc2a8")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR033"
 			(at 76.2 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -7956,7 +8060,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR049")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -7974,7 +8078,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "94002e36-3186-4ff9-98bd-7c9935558afd")
-		(property "Reference" "C21"
+		(property "Reference" "C9"
 			(at 208.28 29.21 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8036,7 +8140,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C21")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -8054,7 +8158,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "967f1bb4-ce54-4381-bbd5-3bc130af942f")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR018"
 			(at 209.55 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -8114,7 +8218,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR036")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -8132,7 +8236,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "97b3fb38-e3e0-43e1-8cb3-50fff4a2edd7")
-		(property "Reference" "R25"
+		(property "Reference" "R13"
 			(at 132.08 54.6099 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8207,85 +8311,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R25")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 165.1 130.81 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "97c300ba-79e8-41b5-8f38-7b77bc81bc28")
-		(property "Reference" "#PWR035"
-			(at 165.1 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 165.1 135.89 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 165.1 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 165.1 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 165.1 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f499591d-ea6d-4bf0-a5ad-56146a213abb")
-		)
-		(instances
-			(project "GMOS-LIA"
-				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR035")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -8303,7 +8329,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "99558797-25da-4fea-b66c-805afe1b97d1")
-		(property "Reference" "R30"
+		(property "Reference" "R15"
 			(at 97.79 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8376,7 +8402,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R30")
+					(reference "R15")
 					(unit 1)
 				)
 			)
@@ -8394,7 +8420,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9e26dead-5ea0-439f-bd30-ff7098088da8")
-		(property "Reference" "C23"
+		(property "Reference" "C15"
 			(at 107.95 120.6499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8458,7 +8484,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C23")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -8476,7 +8502,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9eda0581-5602-43fe-9f4d-ec124342a0ae")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR012"
 			(at 189.23 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -8536,7 +8562,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR032")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -8554,7 +8580,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a53b6bd0-ece5-455b-82eb-ec9fd44dc26f")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR032"
 			(at 101.6 179.07 0)
 			(hide yes)
 			(show_name no)
@@ -8614,7 +8640,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR045")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -8632,7 +8658,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a8254c8e-02a2-4659-b405-092666f6d3f3")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR022"
 			(at 234.95 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -8692,7 +8718,84 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR037")
+					(reference "#PWR022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 25.4 157.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ace56bb9-c52c-4ba7-9fc8-11111eaac838")
+		(property "Reference" "#PWR024"
+			(at 25.4 161.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_D"
+			(at 29.718 155.194 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 25.4 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 25.4 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f0138865-afe4-4dcd-a7e5-f958083aa87e")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -8709,7 +8812,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "af293398-ef2a-4916-94c8-dffeaa38aee1")
-		(property "Reference" "U11"
+		(property "Reference" "U3"
 			(at 148.59 41.91 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8789,7 +8892,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U11")
+					(reference "U3")
 					(unit 1)
 				)
 			)
@@ -8807,7 +8910,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b8e16b45-10a6-488d-913e-f2028eb3515d")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR030"
 			(at 140.97 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -8867,7 +8970,193 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR046")
+					(reference "#PWR030")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 25.4 173.99 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bbe7dc02-0e99-4977-a5f5-1ac53ab18844")
+		(property "Reference" "R53"
+			(at 27.94 172.7199 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 27.94 175.2599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 20.828 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 16.51 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 13.97 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 18.542 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "52f78664-30ab-4234-af6b-3d32fcf06ec0")
+		)
+		(pin "2"
+			(uuid "264d4c30-b511-4835-aaf5-a141c136ec7c")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
+					(reference "R53")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SparkFun:R")
+		(at 25.4 163.83 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bc740582-5b34-4b31-a8e4-8b97547ca610")
+		(property "Reference" "R52"
+			(at 27.94 162.5599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 27.94 165.0999 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "SparkFun-Resistor:R_0603_1608Metric"
+			(at 20.828 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 16.51 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 13.97 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PROD_ID" "RES-07856"
+			(at 18.542 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "54e0df32-4bdf-41b4-aacf-7f729704c2ea")
+		)
+		(pin "2"
+			(uuid "00579453-b2e4-4d61-a652-c8c0be0779b7")
+		)
+		(instances
+			(project "GMOS-LIA"
+				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
+					(reference "R52")
 					(unit 1)
 				)
 			)
@@ -8885,7 +9174,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cc724caa-f172-41a4-b61a-ec0164716495")
-		(property "Reference" "C26"
+		(property "Reference" "C14"
 			(at 254 95.25 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8947,7 +9236,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C26")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -8965,7 +9254,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cd423a64-8dd9-49e3-9aef-fb1873d5c24f")
-		(property "Reference" "C34"
+		(property "Reference" "C19"
 			(at 153.67 163.8299 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9029,7 +9318,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C34")
+					(reference "C19")
 					(unit 1)
 				)
 			)
@@ -9047,7 +9336,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cd9193c7-3387-4b55-bc08-67e72beb3e19")
-		(property "Reference" "R27"
+		(property "Reference" "R11"
 			(at 167.64 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9120,7 +9409,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R27")
+					(reference "R11")
 					(unit 1)
 				)
 			)
@@ -9138,7 +9427,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d16dba28-9733-487c-8d81-f9a13609922a")
-		(property "Reference" "R32"
+		(property "Reference" "R16"
 			(at 213.36 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9211,7 +9500,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R32")
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -9229,7 +9518,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d2ac69bb-4e03-485c-be1e-b93b8eec9bfe")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR011"
 			(at 129.54 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -9289,7 +9578,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR031")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -9307,7 +9596,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d7006f7a-e6f9-4e18-87ac-d67d91db0848")
-		(property "Reference" "R29"
+		(property "Reference" "R14"
 			(at 82.55 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9380,7 +9669,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R29")
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -9398,7 +9687,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d70b6c3c-2c37-49ef-ad3e-335cf2b6e8b2")
-		(property "Reference" "R34"
+		(property "Reference" "R17"
 			(at 228.6 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9471,7 +9760,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R34")
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -9488,7 +9777,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "d77f0b3e-7c17-4cea-bbda-61c11cc522b3")
-		(property "Reference" "U12"
+		(property "Reference" "U4"
 			(at 124.46 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9568,7 +9857,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U12")
+					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -9586,7 +9875,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e03577a1-2123-46d8-ad22-264eee2c5a3e")
-		(property "Reference" "#PWR060"
+		(property "Reference" "#PWR08"
 			(at 85.09 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -9646,7 +9935,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR060")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -9664,7 +9953,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ebbab88c-4fb7-49cb-b204-0ad1202d1816")
-		(property "Reference" "R26"
+		(property "Reference" "R9"
 			(at 148.59 30.48 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9737,7 +10026,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "R26")
+					(reference "R9")
 					(unit 1)
 				)
 			)
@@ -9755,7 +10044,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ec2024d2-01e8-46b8-8152-b23a6a8eaa6e")
-		(property "Reference" "C33"
+		(property "Reference" "C22"
 			(at 111.76 175.2599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9819,7 +10108,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C33")
+					(reference "C22")
 					(unit 1)
 				)
 			)
@@ -9837,7 +10126,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f369295d-ff1b-4e87-b053-15d11e8f0aab")
-		(property "Reference" "#PWR058"
+		(property "Reference" "#PWR026"
 			(at 184.15 138.43 0)
 			(hide yes)
 			(show_name no)
@@ -9897,7 +10186,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR058")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -9915,7 +10204,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f7382080-341a-4d44-8ca7-3a2fa598deb7")
-		(property "Reference" "#PWR059"
+		(property "Reference" "#PWR09"
 			(at 85.09 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -9975,7 +10264,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR059")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -9993,7 +10282,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f985ad9a-d84d-4604-955d-ae7303862fed")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR013"
 			(at 53.34 102.87 0)
 			(hide yes)
 			(show_name no)
@@ -10053,7 +10342,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "#PWR056")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -10071,7 +10360,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fbce1f09-fbdd-4514-8dc1-935949ca3519")
-		(property "Reference" "C19"
+		(property "Reference" "C10"
 			(at 107.95 41.91 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10133,7 +10422,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "C19")
+					(reference "C10")
 					(unit 1)
 				)
 			)
@@ -10150,7 +10439,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "fd5e8393-8a27-41f5-87cb-d3b8a7845fba")
-		(property "Reference" "U11"
+		(property "Reference" "U3"
 			(at 209.55 41.91 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10230,7 +10519,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U11")
+					(reference "U3")
 					(unit 2)
 				)
 			)
@@ -10248,7 +10537,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "febf9607-ab25-4c5b-9d62-a44a1762f51e")
-		(property "Reference" "U8"
+		(property "Reference" "U5"
 			(at 55.4833 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10366,7 +10655,7 @@
 		(instances
 			(project "GMOS-LIA"
 				(path "/87b3d1ed-39bd-4cff-a405-e580c48ff0ef/057bc398-9cad-4fbf-82b0-6414e0e9ecb2/55ee5068-026f-40c4-b2a7-6004f4cd46ce"
-					(reference "U8")
+					(reference "U5")
 					(unit 1)
 				)
 			)

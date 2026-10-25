@@ -536,7 +536,7 @@
     "annotate_start_num": 0,
     "annotation": {
       "method": 0,
-      "sort_order": 0
+      "sort_order": 1
     },
     "bom_export_filename": "${PROJECTNAME}.csv",
     "bom_fmt_presets": [],
@@ -650,7 +650,7 @@
         "uuid": "87b3d1ed-39bd-4cff-a405-e580c48ff0ef"
       }
     ],
-    "used_designators": "#PWR1-24,#PWR38,#PWR42-43,#PWR47-48,#PWR61-64,#PWR69,#PWR72,#PWR91-126,C1-15,C27-29,C36,C41-48,D1,D4-5,IC6-7,J2-3,L1-3,P1,Q1,R2-6,R8,R10-13,R47-63,U1,U3-5,U13,U18-25",
+    "used_designators": "#PWR1-139,AO3407A1,C1-51,D1-8,IC1-7,J1-7,L1-3,P1,Q1,R1-63,U1-25",
     "variants": []
   },
   "sheets": [
@@ -669,10 +669,6 @@
     [
       "7546a70f-ea65-4898-abe1-9938b48cd568",
       "Excitation"
-    ],
-    [
-      "24d58a37-277c-4dbe-a5fe-38b4ef83cb3e",
-      "GMOS_MUX"
     ],
     [
       "55ee5068-026f-40c4-b2a7-6004f4cd46ce",
@@ -701,6 +697,10 @@
     [
       "bc9db269-b6e3-4963-a650-1fdcbd7049f2",
       "Connectors"
+    ],
+    [
+      "1f704319-125d-448e-a523-e11c3ef05d33",
+      "GMOS_soc"
     ]
   ],
   "text_variables": {},
