@@ -1,156 +1,190 @@
-# GMOS LIA Board — Schematic Review (Netlist 2026-10-20)
+# GMOS LIA Board — Schematic Task List (netlist 2026-10-24 17:20)
 
-Review of `GMOS-LIA.net` (KiCad 10.0.7, exported 2026-10-20 22:04; power items re-checked against the 2026-10-21 export) against the design in [schematic_overview.md](schematic_overview.md) and the decisions in [README.md §9.1](README.md#91-decision-log). Use it as a checklist while editing in KiCad: tick an item when fixed, and delete this file (or archive it as `schematic_review_<date>.md`) once all items are closed and the docs match the schematic.
+Step-by-step plan for finishing the KiCad schematic, written to be executed with Claude Code in the local repo. It replaces the 2026-10-22 list. Designators are those of the **2026-10-24 17:20** export; if you re-annotate, update this file and `tools/checks/` first.
 
-**Severity:** 🔴 board will not work / damage risk · 🟠 wrong value or deviates from design · 🟡 cleanup / missing data.
-
----
-
-## How to Use This File Locally
-
-1. Work sheet by sheet in the order of [§C](#c-work-order). Each item has an ID (e.g. `PWR-3`) so commits can reference it (`git commit -m "PWR-3: IBB ground to -7V"`).
-2. After each sheet: run ERC, export the netlist (`File → Export → Netlist`, KiCad format) to the repo root, and run `tools/netcheck.py` ([§D](#d-net-check-script)). Every single-node net it lists must be either intentional (test point, documented spare) or fixed.
-3. When a value is decided, write it **once** in [schematic_overview.md](schematic_overview.md) (implemented values) and put the same value in the KiCad symbol `Value` field. Requirement targets stay in [requirements.md](requirements.md).
-4. When a decision changes, add a row to README §9.1 rather than editing old rows.
-5. Before layout: all 🔴 and 🟠 items closed, every symbol has footprint + MPN + datasheet field, net-check script clean.
+Design references: [schematic_overview.md](schematic_overview.md) (circuits and values), [requirements.md](requirements.md) (targets), [simulations.md](simulations.md) (verification, decision matrix), [firmware.md](firmware.md) (pin/trigger needs), [README.md §9](README.md#9-decisions--open-items) (decision log).
 
 ---
 
-## A. Global Findings
+## 0. Instructions for Claude Code
 
-| ID | Sev | Finding | Fix |
-|----|-----|---------|-----|
-| G-1 | 🔴 | **Hierarchical label mismatches.** Twenty-one single-node nets exist because labels on parent and child sheets have different names: `LIA_FE/active_readout` ≠ `GMOS_MUX/active_out`, `LIA_FE/blind_readout` ≠ `GMOS_MUX/blind_out`, `LIA_FE/sin`/`cos` ≠ `oscillator/sin`/`cos`, `oscillator/gate_dc_bias` not connected to any DAC, `oscillator/v_gate` ≠ `GMOS_MUX/gate_voltage`, `DAC/GMOS_Vadj0…3` not connected to any heater, `GMOS_MUX/*_heater_voltage`, `*_drain_voltage` unconnected, `GMOS_Imeas2/3` unconnected (IC4, IC5 are deleted anyway, DAC-5) | Adopt the net names of [§1.2](schematic_overview.md#12-net-naming) and use identical hierarchical labels on both sides |
-| G-2 | 🟡 | 57 symbols without footprint or with a resistor footprint on a capacitor (e.g. C1, C2, C6–C15, C16, C43, C44 use `SparkFun-Resistor:R_0603`) | Assign `Capacitor_SMD:*` footprints; footprints for all ICs (IC1–IC7, U10), L1/L2, J2, Q1 |
-| G-3 | 🟡 | Many values still placeholder (`C`, `L`, `1k` everywhere in filters) | Use the value tables in schematic_overview §3.4, §4.5, §4.8, §4.9 |
-| G-4 | 🟡 | **Symbol fields copied from the library part they were derived from, not from the real part.** Each KiCad symbol carries `Datasheet` and `Description` fields that end up in the BOM. U10 has value `INA828` but its Datasheet link and Description are those of the INA128 (`ina128.pdf`, "DIP-8/SOIC-8"); every resistor, including R_D (R47–R50) and the filter resistors, links to Vishay's CRCW thick-film datasheet (1 %/5 %), while these must be 0.1 % thin film; D4/D5 have the unresolved value `${DEVICE}`. Someone ordering from the BOM would buy the wrong parts | For every symbol: set `Value`, `Datasheet` to the actual part's datasheet, and add an `MPN` field (e.g. `TNPW0603330KBEEA` for R_D, `INA828IDR` for U10). For generic passives the MPN can be added at BOM time, but precision parts (R_D, filter R/C, attenuator, R_G, shunts) need it now. `tools/netcheck.py --mpn` lists what is missing |
-| G-5 | 🟠 | Op-amp type OPA2196 in schematic vs OPA2192 in old docs | Resolved by D-11 (OPA2196); docs updated |
-| G-6 | 🟠 | Stray rail label `+3V3` (only R31, R33) is a separate net from `+3V3_D` | Merge into `+3V3_D` |
+Read this section before every session.
 
-## B. Punch List per Sheet
+**Repo layout assumed:** KiCad project in the repo root (`GMOS-LIA.kicad_pro`, `*.kicad_sch`), docs in `docs/`, tools in `docs/tools/` (`netcheck.py`, `netquery.py`, `checks/Txx*.txt`), simulations in `simulations/`. Adjust paths if different.
 
-### B.1 `/DC/USB_PD/` and `/Connectors/` (PWR-x)
+**Loop for each task (one task per session or commit):**
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| PWR-1 | 🔴 | J2, VBUS | Net `VBUS` connects only to J2 pins A9/B9 — nothing is powered | VBUS → STUSB4500 VDD and VBUS_VS_DISCH (per datasheet) and to the source of the input P-MOSFET |
-| PWR-2 | 🔴 | Q1 | Generic SPICE symbol `NMOS` (VDMOS model), source unconnected, drain on STUSB4500 VDD (pin 24). An N-channel FET cannot be used here: as a high-side switch its gate would need to be driven above VBUS, while VBUS_EN_SNK can only pull low | **AO3407A** (P-ch, −30 V, ±20 V V_GS, SOT-23, LCSC C15155 ≈ USD 0.11; clones ≈ USD 0.04). Symbol `Device:Q_PMOS_GSD` (check the SOT-23 pin order G=1, S=2, D=3 against the AO3407A datasheet). Source = connector VBUS, drain = VIN; 100 kΩ gate–source; R53 = 22 kΩ gate → U21 VBUS_EN_SNK (pin 16) (ST example values). U21 VDD (24) and VBUS_VS_DISCH (18) move to connector-side VBUS |
-| PWR-3 | 🔴 | U21 | GND pins 10 and 25 on isolated net `Net-(U21-GND-Pad10)` | Connect to GND |
-| PWR-4 | 🔴 | U21 | CC1/CC2 (pins 2, 4) unconnected; J2 CC lines go only to D1 | J2 CC1/CC2 → U21 CC1/CC2; tie CC1DB→CC1, CC2DB→CC2 |
-| PWR-5 | 🟠 | U21 | VREG_1V2 (21), VREG_2V7 (23) unconnected; RESET, ADDR0/1 floating; SCL/SDA unconnected | 1 µF on each VREG; RESET, ADDR0, ADDR1 → GND; I²C to MCU I²C1 with pull-ups; ALERT/POWER_OK2 → MCU GPIO (optional) |
-| PWR-6 | 🟠 | U21 | VSYS on +3V3_D | Acceptable per datasheet (or GND); confirm, and keep NVM PDO setting "≥ 9 V only" so VBUS_EN_SNK never closes on 5 V |
-| PWR-7 | 🔴 | U1/U18 | `Net-(U1-EN)` (VIN of both converters) has no source and no TVS | Connect to Q1 drain (rename `VIN`). **SMAJ18A** TVS (V_RWM 18 V, V_C 29.2 V, SMA, LCSC C908771 ≈ USD 0.03) on connector-side VBUS next to J2; optional DNP SMAJ18A footprint on VIN |
+1. Read the task. If it depends on a decision in §1 that is still open, stop and ask the user.
+2. Do the `[CC]` steps yourself by editing the `.kicad_sch` text. Allowed `[CC]` edits: a symbol instance's `Value`, `Footprint`, `Datasheet`, `Description`, `Reference`, or adding an `MPN` property, copying the exact property format used elsewhere in the same file. KiCad must be closed (or the sheet reloaded) while you edit. Never move, add or delete wires, labels or symbols in the file.
+3. Print the `[GUI]` steps for the user as a numbered list, then wait until the user says they are done and saved.
+4. Export and check:
+   ```bash
+   kicad-cli sch export netlist --format kicadsexpr -o GMOS-LIA.net GMOS-LIA.kicad_sch
+   python3 docs/tools/netquery.py GMOS-LIA.net check docs/tools/checks/Txx.txt
+   python3 docs/tools/netcheck.py GMOS-LIA.net
+   kicad-cli sch erc -o erc.rpt GMOS-LIA.kicad_sch
+   ```
+5. If a check fails, show the failing lines and `netquery.py GMOS-LIA.net net <PIN>` output, propose the fix, go back to 3.
+6. When all checks pass: tick the box in §3, add a line to the log in §5, commit (`git commit -m "Txx: <title>"`).
 
-### B.2 `/DC/Regulators/` (REG-x)
+**Rules:** never change a value this file does not specify; enter values exactly as written (check files compare strings); when a task adds a symbol, use the next free designator and record it in the task.
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| REG-1 | 🔴 | U18 | IBB: IC GND (pin 1) on system GND | IC GND → `-7V` (VEE). Inductor L2 SW→GND is already correct |
-| REG-2 | 🟠 | R4, R5 | IBB feedback 1 kΩ / 1 kΩ | R4 (GND→FB) = 107 kΩ, R5 (FB→−7V) = 10.0 kΩ |
-| REG-3 | 🟠 | U18 | No C_IN between VIN and −7V | Add 2 × 4.7 µF 50 V VIN↔−7V |
-| REG-4 | 🟠 | R2, R3 | Buck feedback 5.1 kΩ / 820 Ω → 4.33 V | R2 = 107 kΩ, R3 = 10.0 kΩ → 7.02 V |
-| REG-5 | 🟡 | L1, L2 | L1 = 6.2 µH, L2 = "L" | 8.2 µH both (6.2 µH acceptable for L1), I_sat ≥ 1.5 A |
-| REG-6 | 🔴 | U4, U5, U20 + dividers | Adjustable ADP7118ACPZN with dividers; +5VA set to **3.29 V** by R12/R13 | Use the **fixed** versions, same LFCSP-6 footprint: U4, U5 → **ADP7118ACPZN5.0-R7** (LCSC C659349), U20 → **ADP7118ACPZN3.3-R7** (C659348). **Delete R10, R11 (U4), R12, R13 (U5), R51, R52 (U20)** and connect each SENSE/ADJ (pin 2) directly to its VOUT (pin 1), with the trace taken at the load side of C_OUT. EN (4) stays on VIN, SS (5) stays open (380 µs start-up; do not ground it). C_OUT ≥ 2.2 µF X7R |
-| REG-7 | 🟠 | U4 | `+5VP` (5.03 V) is used by nothing | Keep as heater rail (D-10): heater op-amp V+ and heater current |
-| REG-8 | ✅ | U4, U5, U20 | SS pins unconnected | OK: datasheet allows SS open (380 µs typical start-up). No change |
-| REG-9 | 🟠 | U3 | LT3094 ILIM (6) and VIOC (7) unconnected, PGFB tied to IN | Follow LT3094 datasheet for unused ILIM/VIOC/PG (ILIM normally to GND or a resistor; verify) |
-| REG-10 | 🟡 | R8 | R_SET 50 kΩ (doc 49.9 kΩ 0.1 %) | Either is fine (−5.00 V / −4.99 V); use 0.1 % for low drift |
-| REG-11 | 🟠 | D4, D5 | Rail clamps added (D4 cathode +5VA, D5 anode −5VA) but value `${DEVICE}`, no footprint; π-filter placeholders missing | D4, D5 = **B5819W** (40 V, 1 A Schottky, SOD-123, LCSC C7420330 / C64885, JLC preferred, ≈ USD 0.02); footprint `Diode_SMD:D_SOD-123`. Check D5 orientation: anode −5VA, cathode GND. Add 0 Ω + 2× DNP cap π placeholders between switchers and LDOs |
+---
 
-### B.3 `/Analog/oscillator/` → rename `excitation` (EXC-x)
+## 1. Decisions
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| EXC-1 | 🟠 | U6, U7A, D2, D3, R6, R7, R9, R14–R20, C16, C17 | Analog 3-op-amp oscillator (f₀ = 1/(2π·310 kΩ·1 nF) ≈ 513 Hz). Note: it is not the 2-op-amp SLYT164 circuit described in the old docs, and its diode limiter is **asymmetric** (R15/R16 = 1 kΩ/12.1 kΩ on the D2 side vs R18/R19 = 12.1 kΩ/1 kΩ on the D3 side: only the negative peak is limited, at ≈ −1.1 V) | Remove (D-3) |
-| EXC-2 | 🟠 | U7A | Becomes the reconstruction LPF | SK Butterworth 5 kHz: 10.2 kΩ, 10.2 kΩ, 2.2 nF (to GND), 4.4 nF (feedback); input `EXC_DAC` from MCU sheet |
-| EXC-3 | 🟠 | R21, R22, R23 | AC attenuation 1 kΩ/300 kΩ | R21 = 120 kΩ 0.1 % via 1 µF film from U7A output; R22 = 1.00 kΩ; R23 1 kΩ OK |
-| EXC-4 | 🔴 | U7B | `gate_dc_bias` and `v_gate` not connected | `gate_dc_bias` ← DAC80508 ch4 (`GATE_DC`); `v_gate` → 100 Ω → `GATE` (J1 gate pins) |
+| ID | Question | Status | Outcome / options |
+|----|----------|--------|-------------------|
+| D-A | Lock-in references | **Closed** 2026-10-22 | MCU timer square waves (TIM8 CH1/CH2, PC6/PC7, `VERIFY-CUBEMX`) |
+| D-B | Split gate | **Closed** | Keep: `GATE_A` (1–3), `GATE_B` (4–6), same sine |
+| D-D | VDDA source | Open | Ferrite L3 from +3V3_D (as drawn) + firmware amplitude calibration / precision 3.3 V reference |
+| D-F | Drain bias | **Closed** 2026-10-24 | U10 coarse/fine difference amplifier, k = 0.1, R_D on the board side (R25/R31) |
+| D-18 | Front-end architecture | **Open — gates T03, T04** | FE-A (AD630, ±5 V, as drawn) / FE-B (switch demodulator, ±5 V) / FE-C (switch demodulator, single 5 V). Decide with the procedure in [simulations.md §7.4](simulations.md#74-decision-matrix-for-d-18-fill-in-from-73-and-research) (Claude Code prompt: `docs/prompts/frontend_decision.md`) |
+| D-19 | Readout muxes IC5/IC6 | **Closed** 2026-10-24 (user) | Removed; in-amp taps the R_D/switch node |
+| D-20 | SPI clock pin | Open — **verify** | Schematic uses PA1; a third-party pinout lists SPI1_SCK only on PA5 (taken by DAC1_OUT2). Confirm in CubeMX ([firmware.md §F.2.1](firmware.md#f21-pin-and-trigger-verification-gate-do-first)); if PA1 is invalid, move SCK (e.g. PB3) |
+| D-21 | UART cable power | Open | FTDI TTL-232R-3V3 supplies 5 V on VCC: confirm its RXD tolerates 5 V logic, or add a 3.3 V LDO on the isolated side, or specify the TTL-232R-5V |
 
-### B.4 `/Analog/LIA_FE/` (LIA-x)
+---
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| LIA-1 | 🔴 | R24 | INA828 R_G = 1 kΩ → G = 51; ±200 mV drain mismatch → ±10 V (saturates) | 5.56 kΩ 0.1 % → G = 10 |
-| LIA-2 | 🟠 | R25–R28, C19–C22 | HPF/LPF placeholders (1 kΩ, "C") | Values in schematic_overview §4.8 |
-| LIA-3 | 🔴 | — | ×4 stage missing; LPF output drives the AD630s directly | Add on spare U12A (3.01 kΩ / 1.00 kΩ) |
-| LIA-4 | 🔴 | U8, U9 | AD630: CHA+ (2) and CHB+ (18) floating; V_OUT (13) not connected to the feedback resistor (RF/RB); RB (14) grounded and RF (15) shorted to CHA−/CHB− | Re-draw from the AD630 datasheet gain ±1 lock-in configuration; simulate (SIM-7) |
-| LIA-5 | 🔴 | U8/U9 pins 9/10 | SEL B on `LIA_FE/sin`/`cos` (unconnected), SEL A on GND | SEL B ← REF_X/REF_Y, SEL A ← REF_XN/REF_YN, 100 Ω series at MCU side |
-| LIA-6 | 🟡 | U8/U9 pin 7 | `X_sync`/`Y_sync` pulled up to stray `+3V3`, go nowhere | Pull-up to +3V3_D, route to MCU input-capture pins |
-| LIA-7 | 🟠 | U12B, U13B, R29–R34, C23–C26 | Post-filter is a unity-gain SK with 1 kΩ; no gain, no level shift; outputs not connected to the ADC | Replace by the inverting LPF of §4.9 (100 kΩ, 301 kΩ ∥ 1.66 µF film, V₊ = VMID/4); outputs → ADC sheet |
-| LIA-8 | 🟡 | U13A | Unused op-amp: inputs must not float | Tie as follower to GND (reserved for the optional split-gate summing amp, D-13) |
+## 2. Findings Summary (2026-10-24 17:20 netlist)
 
-### B.5 `/GMOS_MUX/` (MUX-x)
+`netcheck.py`: SINGLE-NODE 9, NO-FOOTPRINT 50, CAP-ON-R-FP 16, NO-VALUE 42.
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| MUX-1 | 🔴 | J1 pins 10, 22, 4, 18 | Pixels 2 (active) and 6 (blind), drain and heater, unconnected | Connect to the new muxes (MUX-2) |
-| MUX-2 | 🟠 | IC1, IC6, IC7 (3× TMUX6136) | Dual SPDT reaches only 2 of 3 pixels per side; drain node, drain supply and heater use three separate chips | Replace all three with **2× TMUX1109** (dual 4:1): U_MA = active side (S1–S3 = pixels 1–3, S4 = CAL/off), U_MB = blind side (pixels 4–6). Section A switches the drain node, section B the heater force line. Independent A0/A1/EN per chip (D-12, schematic_overview §4.7) |
-| MUX-3 | 🔴 | IC1 / IC6 grouping | Side named `blind` (IC1 S1B/S2B, `blind_sel`) is wired to drains 1 and 3, which are **active** pixels; side `active` to drains 4 and 5 (blind) | Active = pixels 1–3, blind = 4–6. Rename nets, connect active pixels to U_MA → INA828 +IN (`ACT_D`), blind to U_MB → −IN (`BLD_D`) |
-| MUX-4 | 🟠 | R47–R50 | Four R_D on the pixel side of the mux; drain supply switched by IC6 | **Two** R_D on the board side of the mux (`SUP_A`→R_D→`ACT_D`, `SUP_B`→R_D→`BLD_D`), 330 kΩ 0.1 % thin film ≤ 25 ppm/°C, matched pair placed together. Drain supply is then not switched at all |
-| MUX-5 | 🟡 | C36, C41, C42 | Decoupling caps, value "C" | 100 nF per mux VDD; TMUX1109 on single +5VA (VSS = GND) |
-| MUX-6 | 🟠 | — | Calibration network missing | CAL_P on U_MA S4A, CAL_N on U_MB S4A; S4B open (heater off) |
+| Sev | Sheet | Finding | Task |
+|-----|-------|---------|------|
+| 🔴 | USB_PD | R42 (Q1 gate pull-up) goes to Q1 **drain** (V_USB_PD); with Q1 off the drain is ≈ 0 V, so it pulls the gate low and turns Q1 on regardless of the STUSB4500. Must go to **VBUS_PD** (source) | T03 |
+| 🔴 | Regulators | U14/U16/U17 still adjustable ADP7118ACPZN with SENSE tied to VOUT → 1.2 V outputs | T03 |
+| 🟠 | Regulators | Buck/IBB dividers 5.1 k/820 and 1 k/1 k; L2, many C values placeholders; Q1, D1, D2 without footprint | T03 |
+| 🔴 | MCU/isolator | ISO6721 (U11) MCU side swapped: PA2 (TX, output) on OUTB pin 6, PA3 (RX) on INA pin 7. Correct: PA2 → pin 7 (INA), PA3 ← pin 6 (OUTB) | T08 |
+| 🔴 | Connectors | J6 pin 5 on board GND (defeats isolation); J6 not in FTDI pin order | T08 |
+| 🔴 | DAC | IC2/IC4 (INA190) across R_D (R25/R31) and on the drain node: saturate at 10 µA and load the most sensitive node | T06 |
+| 🟠 | DAC | R21/R27 and R23/R29 = 50 k/50 k (k = 1, no resolution gain); no output RC filter; no drain-sense buffer (PC2/PC3 wired to IC2/IC4) | T06 |
+| 🟠 | GMOS_soc | R54/R55 (R_CAL) 100 kΩ → node ≈ 0.7 V; R56 dummy heater 100 kΩ and only on U21 | T02 |
+| 🔴 | Excitation | `mcu_sin_ref` (R2, R6) not connected to PA4; values are placeholders | T01 |
+| 🔴 | LIA_FE | Architecture pending D-18; as drawn: R10 = 1 kΩ (G = 51), filter placeholders, unity SK post-filters, AD630 SEL B on unconnected `X_chop/Y_chop`, `Vmid` divider 1 k/1 k | T04 |
+| 🟠 | ADC | CS, DRDY, CLK, inputs unconnected | T07 |
+| 🔴 | MCU | VBAT, VCAP, VDDUSB, BOOT0, PA4, PC6/PC7, CS lines, mux GPIO, PH0 unconnected; no XO, no decoupling | T08 |
+| 🟡 | All | Footprints, MPN and datasheet fields | T09 |
 
-### B.6 `/DAC/` (DAC-x)
+Fixed since 2026-10-22 ✓: U1B inputs; both gate stages on one sine net; heater Kelvin feedback (R20/R26); R22/R28 to GND; USB D+/D− (now replaced by isolated UART); R_D 330k on the board side; IC5/IC6 removed; mux_en pull-down R38; D7 back-feed diode; D8 TVS; Q1 real P-FET with correct S/D; SWD 33 Ω + NRST on J5; USART2 on PA2/PA3; I²C pull-ups 4.7 kΩ.
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| DAC-1 | 🟠 | U15 | One DAC80508, 4 drain/heater channels used, DAC4–7 dangling, gate DC not connected | Keep **one** DAC80508 with the allocation of schematic_overview §4.6.1 (D-13): heater A/B, drain supply A/B, gate DC, VMID, 2 spares to test points |
-| DAC-2 | 🔴 | IC2, IC3 | Outputs of two INA190 shorted on net `GMOS_Imeas1` | One net per INA190 (`IHTR_A`, `IHTR_B`) |
-| DAC-3 | 🟠 | U16 (R36, R37 / R41, R42) | Heater-driver feedback taken at the op-amp output (before the 15 Ω shunt): shunt drop outside the loop, contrary to AN-13 | Take feedback from the heater side of the shunt (`ACT_HTR`/`BLD_HTR`, before the mux) |
-| DAC-4 | 🟠 | IC2, IC3 | INA190 VS on +5VA: output can exceed the MCU ADC range on a fault | VS = VDDA (INA190 CM range is independent of VS) |
-| DAC-5 | 🟠 | U16, U17, IC4, IC5 | Four heater drivers and four INA190 | **Two** heater drivers (one dual, U16), two INA190 (IC2, IC3); delete IC4, IC5; U17 becomes the drain-sense dual (§4.6.4). Heater op-amp V+ = +5VP |
-| DAC-6 | 🟡 | U15 | REF pin unconnected; SPI pins unconnected | REF decoupling per datasheet; SPI2 + CS to MCU |
-| DAC-7 | 🟡 | R43–R46 | Four 15 Ω shunts | Two, 0.1 %; value pending heater resistance (README §9.2 item 2) |
+---
 
-### B.7 `/ADC/` (ADC-x)
+## 3. Tasks
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| ADC-1 | 🟠 | U14 | All analog inputs, REF and SPI unconnected | AIN0 = X_OUT, AIN1 = VMID, AIN2 = Y_OUT, AIN3 = VMID, RC filters; internal ref; SPI2 + CS + DRDY |
+Order: **T00 first** (decision), then T01 → T02 → T03 → T04 → T05, then T06–T10 in any order.
 
-### B.8 `/MCU/` (MCU-x)
+- [ ] T00 Decide D-18 (front-end architecture) and D-20 (SPI pin)
+- [ ] T01 Excitation sheet
+- [ ] T02 GMOS_soc (selection, calibration loads)
+- [ ] T03 Power (USB_PD + Regulators), per D-18
+- [ ] T04 LIA front end, per D-18
+- [ ] T05 Net naming pass
+- [ ] T06 DAC sheet (drain bias, drain sense, heaters)
+- [ ] T07 ADC sheet
+- [ ] T08 MCU sheet and isolated UART
+- [ ] T09 Footprints, MPNs, datasheet fields
+- [ ] T10 Docs sync
 
-| ID | Sev | Ref | Finding | Fix |
-|----|-----|-----|---------|-----|
-| MCU-1 | 🔴 | U2 | VDD (19, 32, 64), VDDA (13), VBAT (1), VCAP (30), VDDUSB (48), NRST (7), PH3-BOOT0 (60) unconnected | Per schematic_overview §5.2 |
-| MCU-2 | 🟠 | — | No clock source | 16 MHz XO on PH0 (§5.3) |
-| MCU-3 | 🟠 | L3, C46 | VDDA is now fed from +3V3_D through a ferrite (L3). That filters noise but makes VDDA (= the MCU DAC/ADC reference on LQFP64) only as accurate and stable as the ADP7118 output (percent-level accuracy over line, load and temperature; see its datasheet), far from a ≤ 10 ppm/°C reference, which sets the excitation amplitude (AN-7) and the drain-sense scale | Decide: (a) keep L3 and accept it, calibrating amplitude against the DAC80508 internal reference (e.g. measure a DAC80508 spare channel with ADC1 and correct in firmware, §4.6.1 ch7); or (b) precision 3.3 V reference from +5VA as in §3.3. (a) is cheaper and is enough if firmware calibration is implemented |
-| MCU-4 | 🟠 | U19, P1 | CP2102N ground on isolated net, no ISO7721, no supply. New P1 is a USB-C **plug** symbol (`USB_C_Plug_USB2.0`, the cable side), all pins unconnected | Use a **receptacle** symbol/footprint for the board (`Connector:USB_C_Receptacle_USB2.0_16P`, with 5.1 kΩ Rd on CC1/CC2); P1 VBUS → CP2102N supply, D+/D− → CP2102N, P1 GND = isolated ground; add ISO7721 |
-| MCU-5 | 🟡 | — | Missing SWD header, TMP117, SHT40, LEDs | Add |
-| MCU-6 | 🟠 | — | Pin allocation | Start from schematic_overview §5.4, confirm in CubeMX, export the `.ioc` to the repo |
+### T00 Decide D-18 and D-20
 
-## C. Work Order
+Run the prompt in `docs/prompts/frontend_decision.md`. Output: `docs/decisions/D-18_frontend.md` with the filled decision matrix and a recommendation; the user decides and records it in README §9.1. In the same session confirm the pin/trigger gate of [firmware.md §F.2.1](firmware.md#f21-pin-and-trigger-verification-gate-do-first) in CubeMX (D-20, TIM8 pins, TIM2←TIM8 trigger).
 
-Order agreed on 2026-10-21. Steps marked "any order" can be done in parallel. Draw the new circuits (steps 1–4) directly with the net names of [§1.2](schematic_overview.md#12-net-naming); step 5 then only has to rename what is left.
+### T01 Excitation Sheet (`/Analog/Excitation/`)
 
-1. **Excitation sheet (EXC).** Delete the oscillator (U6, D2, D3 and its network), rename the sheet to `excitation`, draw the reconstruction filter and the gate summing amp. Hierarchical inputs `EXC_DAC`, `GATE_DC`; output `GATE`.
-2. **MUX sheet (MUX).** Delete IC1/IC6/IC7, place 2× TMUX1109 (symbol `kicad/TMUX1109.kicad_sym`), two matched R_D on the board side, calibration network, pixels 2 and 6, fix the active/blind grouping (MUX-3). Outputs `ACT_D`, `BLD_D`; inputs `ACT_HTR`, `BLD_HTR`, `SUP_A`, `SUP_B`, `CAL_DAC`, `MUXA_*`, `MUXB_*`.
-3. **Power (PWR, REG).** VBUS path and AO3407A, STUSB4500 pins, SMAJ18A, IBB ground and both converter dividers, fixed-voltage ADP7118 (delete the LDO dividers), B5819W values on D4/D5, VDDA decision (MCU-3).
-4. **LIA_FE (LIA).** INA gain, filter values, ×4 stage, AD630 wiring from the datasheet, new post-filters. Inputs `ACT_D`, `BLD_D`, `REF_X/XN`, `REF_Y/YN`; outputs `X_OUT`, `Y_OUT`.
-5. **Net naming (G-1).** Rename the remaining labels per §1.2 on all sheets in one pass; rerun `tools/netcheck.py`; the single-node list should shrink to signals not drawn yet.
-6. **Rest, any order:**
-   - **MCU sheet (MCU-1…6).** Power pins, XO, SWD, then the CubeMX project to freeze the pin map (PA4/PA5 and the TIM1 pins are fixed by silicon).
-   - **DAC sheet (DAC).** One DAC80508 (allocation §4.6.1), two heater drivers with Kelvin feedback, two INA190 on VDDA, delete IC4/IC5, outputs `SUP_A`/`SUP_B`, `ACT_HTR`/`BLD_HTR`, `GATE_DC`, `VMID`.
-   - **ADC sheet (ADC-1).**
-   - **Footprints, MPNs, datasheet fields (G-2…G-4)**, then ERC = 0 errors and `tools/netcheck.py --mpn` clean.
-   - **Docs sync.** Update the "Schematic now" columns in schematic_overview, close items here, update README §1.1 status.
+**[GUI]**
+1. Rename `mcu_sin_ref` → `EXC_DAC` and connect it (hierarchical label) to PA4 on the MCU sheet.
+2. Rename `Exct1` → `GATE_A`, `Exct0` → `GATE_B`; `GMOS_Vadj4` → `GATE_DC_A`, `GMOS_Vadj5` → `GATE_DC_B` (on both sheets).
+3. Recommended: 100 Ω between each U1 output and its gate net (feedback stays on the op-amp side).
+4. Test points on `EXC_DAC`, `GATE_A`, `GATE_B` (AN-34).
 
-## D. Net-Check Script
+**[CC] values:** R2, R6 `120k` (0.1 %); R1, R5, R3, R7 `1k` (0.1 %); C3, C7 `47n` (C0G 1 %); C1, C6 `22n` (C0G 1 %); R4, R8 `10k`; C5, C8 `1u`; C2, C4 `100n`. Check file `T01.txt`.
 
-`tools/netcheck.py` (committed next to the docs). Run it after each netlist export:
+### T02 GMOS_soc (`/Analog/GMOS_soc/`)
 
-```bash
-python3 tools/netcheck.py GMOS-LIA.net                 # dangling nets, footprints, placeholder values
-python3 tools/netcheck.py GMOS-LIA.net --mpn           # also require an MPN field (before layout)
-python3 tools/netcheck.py GMOS-LIA.net --ignore TP1 /DAC/DAC7   # skip intentional spares / test points
-```
+**[GUI]**
+1. Add a dummy heater on U20 pin 10 (S4B) to GND, like R56 on U21.
+2. Optional tone injection (only if wanted): return R54 to GND through a new 100 Ω; add 10 kΩ from `CAL_DAC` (PA5) to that node; return R55 through 100 Ω to GND.
+3. Rename `ch_sel_0/1` → `MUXA_A0/A1`, `ch_sel_2/3` → `MUXB_A0/A1`, `mux_en` → `MUX_EN`; connect them to MCU GPIO (T08).
+4. 100 nF at each TMUX1109 VDD.
 
-It reports single-node nets (excluding KiCad's explicit `unconnected-` nets), symbols without a footprint, capacitors on resistor footprints, placeholder values (`C`, `R`, `L`, `?`) and, with `--mpn`, symbols without an MPN field. Exit code is 1 when anything is found, so it can run as a pre-commit hook or in CI.
+**[CC] values:** R54, R55 `18k` (0.1 %, MPN e.g. RT0603BRD0718KL); R56 + new dummy `1k` (0.1 %, 0603 ≥ 0.1 W) or `680`; U20/U21 `TMUX1109PW`, footprint TSSOP-16, MPN TMUX1109PWR. Check file `T02.txt`.
 
-Baseline: 2026-10-20 netlist SINGLE-NODE 21, NO-FOOTPRINT 41, CAP-ON-R-FP 15, NO-VALUE 37; 2026-10-21 netlist 23 / 45 / 17 / 40 (new parts D4, D5, L3, P1, C45, C46 not finished yet).
+### T03 Power (depends on D-18)
 
-## E. Keeping Docs and Schematic Consistent
+**[GUI], all options**
+1. Move R42 pin 1 from `V_USB_PD` to `VBUS_PD` (gate-to-source pull-up).
+2. Footprints: Q1 SOT-23, D1/D2/D4/D7 SOD-123, D8 SMA, J4 terminal block.
 
-- A design value appears in the docs only in [schematic_overview.md](schematic_overview.md) and must equal the KiCad `Value` field. If you change one, change the other in the same commit.
-- Theory and derivations never contain part designators except as examples; if a derivation needs a value, it links to the overview.
-- When this review is closed, remove the "Schematic now" columns from schematic_overview §4.8 and the "schematic has …" remarks in §3.4.
+**[GUI], FE-C only**
+3. Delete U18, L2, R35, R36, C37, C39, C41, C42 (IBB), U19, R37, C40, C43 (LT3094), D2; delete the `-7V`/`-5VA` nets; connect every former −5VA pin per T04-C.
+4. Add REF3325 (+5VA in, `VREF_2V5` out, 1 µF in, 1 µF out) and LM7705 (+5VA in, −0.23 V out to the in-amp V− only, capacitors per datasheet).
+
+**[CC] values:** R32 `22k`; R33 `107k`, R34 `10k`; (FE-A/B) R35 `107k`, R36 `10k`, R37 `49.9k`; L1/L2 `8.2u` (SWPA4020S8R2MT); U14, U16 `ADP7118ACPZN5.0-R7`; U17 `ADP7118ACPZN3.3-R7`; C29, C38 `4.7u` 50 V; C27, C31, C41, C42 `22u` 25 V; C40 `10u`; C43 `4.7u`. Check file `T03.txt` (FE-C: lines tagged `[AB]` are removed).
+
+### T04 LIA Front End (`/Analog/LIA_FE/`), per D-18
+
+Common to all options:
+1. Rename `readout` → `BPF_OUT`, `X_readout`/`Y_readout` → `X_OUT`/`Y_OUT`, `X_chop`/`Y_chop` → `REF_X`/`REF_Y` (→ PC6/PC7).
+2. Post-filters U4A/U4B become inverting first-order LPFs: R14/R16 input, R15/R17 feedback, C13/C14 feedback (film), +IN from the mid reference ([schematic_overview §4.9](schematic_overview.md#49-front-end-architecture-options-decision-d-18)).
+3. Test point on `BPF_OUT` and the mid reference (AN-34).
+
+**FE-A (keep AD630):** R10 `5.62k`; HPF C10, C11 `33n`, R9 `4.64k`, R13 `18.7k`; LPF R11, R12 `4.64k`, C12 `33n`, C9 4 × `33n`; AD630 SEL B ← REF_X/REF_Y, SEL A ← `Vmid` (R52/R53 → `10k`/`10k` + 100 nF); post-filter R14/R16 `100k`, R15/R17 `301k`, C13/C14 `1.5u` + `150n` film, +IN divider `30.1k`/`10k` from VMID. Check `T04_FEA.txt`.
+
+**FE-B (switch demodulator, ±5 V):** delete U5, U6, R18, R19, R52, R53; add TMUX6136 (dual SPDT, ±5 V) + OPA2196 + 4 × 10.0 kΩ 0.1 %; wiring per [schematic_overview §4.9](schematic_overview.md#49-front-end-architecture-options-decision-d-18) (zero input = GND); band-pass K = 2: R9, R13 → `9.31k` as the two equal R of the HPF (re-wire as equal-component SK), C10, C11 `33n`; LPF R11, R12 `9.31k`, C9, C12 `33n`; add gain resistors 10.0 kΩ/10.0 kΩ per section; post-filter R14/R16 `200k`, R15/R17 `301k`, +IN = VMID·(1/2.5) divider. In-amp unchanged (R10 `5.62k`). Check `T04_FEB.txt`.
+
+**FE-C (single supply):** as FE-B, but: U2 → INA333 (V+ = +5VA, V− = LM7705 output, REF = `VREF_2V5`, R10 `11k`); U3, U4 and the demodulator op-amp → OPA2365 on +5VA/GND; switches 2× TMUX1219 (zero input = `VREF_2V5`); all band-pass returns, post-filter +IN, ADS1220 AIN1/AIN3 → `VREF_2V5`. Check `T04_FEC.txt`.
+
+### T05 Net Naming Pass
+
+Rename per [schematic_overview §1.2](schematic_overview.md#12-net-naming); `netcheck.py` SINGLE-NODE should then list only items of T06–T08.
+
+### T06 DAC Sheet (`/DAC/`)
+
+**[GUI]**
+1. Delete IC2, IC4 (INA190 across R_D) and their decoupling.
+2. Add the U10 output filter per side: 1 kΩ in series between U10A output (feedback node) and R25, 10 µF X7R from the junction to GND (same for U10B/R31).
+3. Add a dual OPA2196 drain-sense buffer: +IN ← `DRN_A`/`DRN_B` (R25/R31 lower node = `GMOS_Vadj2/3`), ×8 (7.15 kΩ / 1.02 kΩ), 10 kΩ + 1 µF → PC2/PC3 (`DSENSE_A/B`).
+4. INA190 IC3/IC1 outputs → 1 kΩ + 100 nF → PC0/PC1.
+5. DAC80508 REF pin decoupling per datasheet; DAC_CS → MCU GPIO.
+
+**[CC] values:** R21, R27 `10k` (0.1 %); R23, R29 `100k` (0.1 %); R25, R31 `330k` (MPN TC0325B3303T5F or RT0603BRD07330KL, one reel); R24, R30 `15` (0.1 %); R20, R22, R26, R28 `50k` (0.1 %); U8 `DAC80508ZRTER`. Check `T06.txt`.
+
+### T07 ADC Sheet (`/ADC/`)
+
+**[GUI]** AIN0 ← X_OUT (100 Ω + 10 nF), AIN1/AIN3 ← mid reference, AIN2 ← Y_OUT (100 Ω + 10 nF); CLK → DGND; DRDY → MCU EXTI pin; CS → MCU GPIO; AVDD/DVDD decoupling. Check `T07.txt`.
+
+### T08 MCU Sheet and Isolated UART
+
+**[GUI]**
+1. U11 (ISO6721): PA2 → pin 7 (INA), PA3 ← pin 6 (OUTB); pins 1–4 on the cable side (VCC1 = `ISO_VCC`, GND1 = `ISO_GND`), pins 5/8 on GND/+3V3_D; 100 nF on each side.
+2. J6: 6-pin header in FTDI order: 1 `ISO_GND`, 2 CTS (→ `ISO_GND` or NC), 3 `ISO_VCC`, 4 cable TXD → U11 pin 3 (INB), 5 cable RXD ← U11 pin 2 (OUTA), 6 RTS NC. **No board GND on J6.** Per D-21: 3.3 V LDO on `ISO_VCC` if needed.
+3. MCU power pins and decoupling per [schematic_overview §5.1](schematic_overview.md#51-mcu-stm32u575rgt6-u12); XO on PH0; PA4 ← `EXC_DAC`; PA5 ← `CAL_DAC` (if used); PC6/PC7 → `REF_X/REF_Y` via 100 Ω; DAC_CS, ADC_CS, ADC_DRDY, MUX lines to free GPIO; SPI SCK per D-20.
+4. TMP117, SHT40 on I²C1.
+
+Check `T08.txt`.
+
+### T09 Footprints, MPNs, Datasheet Fields
+
+**[CC]** For every symbol: datasheet link of the real part, description, footprint, `MPN`. Done when `netcheck.py GMOS-LIA.net --mpn` reports nothing and ERC = 0 errors.
+
+### T10 Docs Sync
+
+**[CC]** Make [schematic_overview.md](schematic_overview.md) values equal to the KiCad values; update README §9; archive this file as `schematic_review_<date>.md` when all tasks are ticked.
+
+---
+
+## 4. Tools
+
+| Tool | Use |
+|------|-----|
+| `tools/netcheck.py NETLIST [--mpn]` | Dangling nets, missing footprints/values/MPNs |
+| `tools/netquery.py NETLIST net PIN` / `part REF` / `check FILE` | Pin/net/part queries and assertions (`same`, `diff`, `nc`, `conn`, `name`, `between`, `value`, `valuein`, `fp`, `field`, `exists`, `absent`) |
+| `kicad-cli sch export netlist`, `kicad-cli sch erc` | Netlist export, ERC |
+
+## 5. Log
+
+| Date | Task | Result | Commit |
+|------|------|--------|--------|
+| 2026-10-22 | — | Task list created (11:42 export) | |
+| 2026-10-24 | review | 17:20 export reviewed; list rebuilt (this version) | |

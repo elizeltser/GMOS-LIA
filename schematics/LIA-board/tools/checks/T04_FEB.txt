@@ -1,0 +1,32 @@
+# T04 FE-B: INA828, K=2 equal-component SK band-pass, switch demodulator (TMUX6136 + OPA2196), post-filter -1.5
+name U2.2 DRN_A
+name U2.3 DRN_B
+name U2.5 GND
+value R10 5.62k
+absent U5
+absent U6
+absent R52
+absent R53
+value R9 9.31k
+value R13 9.31k
+value C10 33n
+value C11 33n
+value R11 9.31k
+value R12 9.31k
+value C9 33n
+value C12 33n
+name U3.7 BPF_OUT
+value R14 200k
+value R16 200k
+value R15 301k
+value R17 301k
+value C13 1.5u
+value C14 1.5u
+between R15 U4.2 U4.1
+between C13 U4.2 U4.1
+diff U4.1 U4.2
+name U4.1 X_OUT
+between R17 U4.6 U4.7
+between C14 U4.6 U4.7
+diff U4.6 U4.7
+name U4.7 Y_OUT

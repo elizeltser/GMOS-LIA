@@ -4,18 +4,7 @@ Simulations and measurements that verify the design values in [measurement_princ
 
 ## 7. Simulation
 
-Netlists and scripts live in `simulations/`. Record every run here; a superseded simulation stays listed with status "obsolete".
-
-| ID | Simulation | Tool / file | Verifies | Status |
-|----|------------|-------------|----------|--------|
-| SIM-1 | Quadrature oscillator transient | ngspice, `simulations/quad_osc_tran.cir` | Rev A oscillator | Obsolete (D-3) |
-| SIM-2 | System CMRR Monte-Carlo (50 000 trials) | Python, `simulations/cmrr_mc.py` (TODO: commit) | [§2.7](measurement_principles.md#27-common-mode-rejection) | Done (results in §2.7) |
-| SIM-3 | CMRR SPICE cross-check (60 runs) | ngspice (TODO: commit) | §2.7 | Done |
-| SIM-4 | Band-pass tolerance Monte-Carlo | Python (TODO: commit) | [§2.8](measurement_principles.md#28-band-pass-filter-design) | Done |
-| SIM-5 | Excitation chain: DAC ZOH + reconstruction LPF + AC coupling + summing amp; THD, images, phase at f₀ | ngspice / Python | AN-4, AN-7b, [§2.12](measurement_principles.md#212-excitation-requirements) | TODO |
-| SIM-6 | Front end with real INA828 / OPA2196 models: DC headroom at ±200 mV mismatch, gain/phase at f₀ | ngspice / TINA | AN-12b, AN-20 | TODO |
-| SIM-7 | AD630 ±1 configuration + post-filter: scale factor, ripple at 2f₀, settling | ngspice (AD630 model) | AN-24…AN-26, [§2.9](measurement_principles.md#29-gain-distribution-headroom-and-demodulator-output) | TODO |
-| SIM-8 | Heater driver with Kelvin feedback driving 600 Ω (and 300 Ω): stability, headroom from +5VP | ngspice | AN-13, AN-14 | TODO |
+Moved to [simulations.md](simulations.md) (2026-10-28), which holds the simulation index, the required simulations SIM-10…SIM-20 with pass criteria, the results table and the D-18 decision matrix. Earlier IDs map as follows: SIM-1…SIM-4 unchanged; SIM-5 → SIM-19; SIM-6 → SIM-13; SIM-7 → SIM-10/SIM-13 (FE-A); SIM-8 kept as a TODO in simulations.md §7.1.
 
 ---
 
@@ -41,7 +30,7 @@ Results measured with lab equipment are collected here. Raw data (scope screensh
 |----|------|----------|---------------|--------|
 | [LAB-1](#lab-1-drain-node-waveforms-oscilloscope) | Drain node waveforms | Drain DC, AC swing, CM level, excitation amplitude unit ([§2.4](measurement_principles.md#24-transistor-operating-point)) | Bench (now) | Not started |
 | [LAB-2](#lab-2-bench-lock-in-reference-levels-sr560--sr860) | Bench lock-in reference levels | Signal level ([§2.5](measurement_principles.md#25-expected-signal-level-from-bench-data)) | Bench (now) | Not started |
-| [LAB-3](#lab-3-power-rails-and-pd-negotiation) | Power rails and PD negotiation | DC-1…DC-7, [§3.4](schematic_overview.md#34-design-calculations) | Board | Not started |
+| [LAB-3](#lab-3-power-rails-and-pd-negotiation) | Power rails and PD negotiation | DC-1…DC-7, [§3.4](schematic_overview.md#33-design-calculations) | Board | Not started |
 | [LAB-4](#lab-4-excitation-and-references) | Excitation and references | AN-1…AN-7b | Board | Not started |
 | [LAB-5](#lab-5-band-pass-response) | Band-pass response | AN-20…AN-22 | Board | Not started |
 | [LAB-6](#lab-6-common-mode-rejection) | Common-mode rejection | AN-23 | Board | Not started |
@@ -94,24 +83,24 @@ Results measured with lab equipment are collected here. Raw data (scope screensh
 
 #### LAB-4 Excitation and References
 
-**Purpose.** Verify the MCU-generated excitation and lock-in references (AN-1…AN-7b).
+**Purpose.** Verify the MCU-generated excitation and lock-in references (AN-1…AN-7b, FW-1…FW-10). Bench procedure for the firmware side: [firmware.md §F.8](firmware.md#f8-verification-bench-lab-4).
 
 **Setup.** Scope CH1 on the gate net (AC coupled, averaging), CH2 on REF_X, CH3 on REF_Y; frequency from the scope counter; THD from scope FFT or SR860 harmonic measurement at the reconstruction-filter output (larger signal) and at the gate; phase REF_X → REF_Y and gate → REF_X from scope cursors.
 
 | Run | Date | f set / measured (Hz) | Amplitude set / measured at gate (mVpp) | THD at filter output / gate (%) | Image level at ≈ N·f₀ (dBc) | REF_X → REF_Y (°) | Gate → REF_X (°) | Gate DC set / measured (V) | Files | Notes |
 |-----|------|-----------------------|------------------------------------------|---------------------------------|-----------------------------|-------------------|------------------|----------------------------|-------|-------|
-| Expected | — | 518.0 / ±50 ppm | 5.0 / ±1 % | ≤ 0.3 | ≤ −40 at gate | 90.0 ± 0.1 | fixed, recorded | 0.990 / ±0.5 mV | — | SIM-5 |
+| Expected | — | 518.0 / ±50 ppm | 5.0 / ±1 % | ≤ 0.3 | ≤ −40 at gate | 90.0 ± 0.1 | fixed, recorded | 0.990 / ±0.5 mV | — | SIM-19 |
 | | | | | | | | | | | |
 
 #### LAB-5 Band-Pass Response
 
-**Purpose.** Verify the INA + band-pass + ×4 chain ([§2.8](measurement_principles.md#28-band-pass-filter-design)).
+**Purpose.** Verify the INA + band-pass chain (measured at the LPF output, U3 pin 7) ([§2.8](measurement_principles.md#28-band-pass-filter-design)).
 
-**Setup.** Function generator, 10 mVpp differential (or single-ended into one INA input with the other grounded through 330 kΩ), swept 100 Hz–5 kHz; measure at the ×4 output with the SR860 (gain and phase). Repeat with the on-board calibration tone (LAB-10) at a few frequencies and compare.
+**Setup.** Function generator, 10 mVpp differential (or single-ended into one INA input with the other grounded through 330 kΩ), swept 100 Hz–5 kHz; measure at the LPF output (U3 pin 7) with the SR860 (gain and phase). Repeat with the on-board calibration tone (LAB-10) at a few frequencies and compare.
 
 | Run | Date | Gain at 518 Hz (V/V) | Phase at 518 Hz (°) | f_L −3 dB (Hz) | f_H −3 dB (Hz) | Gain at 1036 Hz rel. | Gain at 50 Hz rel. | Files | Notes |
 |-----|------|----------------------|--------------------|----------------|----------------|----------------------|--------------------|-------|-------|
-| Expected | — | 40 | 0 ± 1.6 | 377 | 711 | −10 dB | −41 dB | — | |
+| Expected | — | 10 | 0 ± 1.6 | 377 | 711 | −10 dB | −41 dB | — | |
 | | | | | | | | | | |
 
 #### LAB-6 Common-Mode Rejection
@@ -146,7 +135,7 @@ Results measured with lab equipment are collected here. Raw data (scope screensh
 
 #### LAB-9 Full Chain vs SR860
 
-**Purpose.** Compare the board X/Y with the SR860 on the same sensor and operating point, and confirm the scale factor of [§2.9](measurement_principles.md#29-gain-distribution-headroom-and-demodulator-output) (|V_X,ADC| ≈ 76.4·v̂_diff·cos θ). Record the sign of X for a known Δg_m polarity (§2.13).
+**Purpose.** Compare the board X/Y with the SR860 on the same sensor and operating point, and confirm the scale factor of [§2.9](measurement_principles.md#29-gain-distribution-headroom-and-demodulator-output) (|V_X,ADC| ≈ 38.2·v̂_diff·cos θ, the same for FE-A/B/C, D-18). Record the sign of X for a known Δg_m polarity (§2.13).
 
 | Run | Date | Operating point | SR860 X / Y (Vrms, drain-referred) | Board X / Y (V at ADC) | Board X / Y drain-referred | Ratio | Phase offset (°) | Files | Notes |
 |-----|------|-----------------|------------------------------------|------------------------|----------------------------|-------|------------------|-------|-------|

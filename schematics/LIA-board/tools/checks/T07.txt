@@ -1,0 +1,9 @@
+# T07 ADC sheet
+conn U7:AIN0
+conn U7:AIN2
+same U7:AIN1 U7:AIN3
+name U7:CLK GND
+name U7:SCLK SPI_SCK
+name U7:DIN SPI_MOSI
+name U7:~{CS} ADC_CS
+name U7:~{DRDY} ADC_DRDY

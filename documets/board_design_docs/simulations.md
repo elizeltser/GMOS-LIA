@@ -1,82 +1,76 @@
+# GMOS LIA Board — Simulations
 
-## 7. Simulation
- 
-The netlists in [`simulations/`](simulations/) use ideal op-amps and behavioral blocks so they run anywhere; each one notes where to drop in vendor models (TI OPA2192 and INA828 PSpice models, ADI AD630 macro-model) for a device-level run. They were cross-checked in ngspice with equivalent control scripts; the reference values below are from those runs.
- 
-| File | Analysis | What it shows |
-|------|----------|---------------|
-| `simulations/bpf_mc.cir` | AC + Monte Carlo (`.step` + `mc()`) | Band-pass gain/phase at 518 Hz, −3 dB edges, tolerance spread |
-| `simulations/cmrr_mc.cir` | AC + Monte Carlo | System CMRR from R_D and drain-node capacitance mismatch |
-| `simulations/chain_tran.cir` | Transient, 4 s | Full chain at a selected operating point: drain swing, X/Y after the τ = 500 ms filter |
-| `simulations/quad_osc_tran.cir` | Transient, 0.8 s + `.four` | Quadrature oscillator start-up, amplitude, frequency, THD, reference divider level |
- 
-### 7.1 Running in LTspice
- 
-1. **File → Open**, set the file type to *Netlists (\*.cir, \*.net, …)*, open the `.cir` file, then **Run**. No schematic is needed; LTspice simulates the netlist directly.
-2. **Results of `.meas`:** *View → SPICE Error Log*. For a stepped (Monte-Carlo) run, right-click inside the log → *Plot .step'ed .meas data*. This plots each measurement against the run index; export it with *File → Export data as text* for histograms.
-3. **Nominal vs Monte-Carlo:** in `bpf_mc.cir` and `cmrr_mc.cir`, set `.param Nrun=1` and the tolerances to 0 for the nominal run; `Nrun=500` with the given tolerances for Monte-Carlo. `mc(x,tol)` draws a uniform value in x·(1 ± tol) for every step.
-4. **Waveforms:** click a node in the waveform viewer, or use *Plot Settings → Add Trace* with e.g. `V(out)`, `V(xlpf)`, `V(dA)-V(dB)`.
-5. **Vendor models:** download the TI/ADI model file, add `.include <file>` to the netlist, and replace the `E` element of the stage with an `X` subcircuit instance using the model's pin order.
-### 7.2 Running in PSpice (e.g. the free PSpice for TI)
- 
-1. Draw the same circuit in the schematic editor, using `Rbreak`/`Cbreak` parts for the toleranced components and giving each a model with a deviation, e.g. `.model RTOL RES(R=1 DEV=0.1%)`, `.model CTOL CAP(C=1 DEV=1%)`.
-2. *Simulation Settings → Analysis: AC Sweep*, and enable *Monte Carlo/Worst Case* with e.g. 500 runs, output variable `V(out)`.
-3. In *Probe*, use *Performance Analysis* with the measurement `YatX(V(out),518)` for gain and `YatX(VP(out),518)` for phase; plot them as histograms over the runs.
-4. TI's OPA2192 and INA828 models are native PSpice models and drop in directly.
-### 7.3 Reference Values (ideal models)
- 
-| Simulation | Quantity | Python analytic | ngspice (60 runs) |
-|------------|----------|-----------------|-------------------|
-| Band-pass, nominal | Gain / phase at 518 Hz | 1.000 / 0° | 0.9999 / 0.76° (finite E-source gain) |
-| Band-pass, nominal | −3 dB edges | 377 / 711 Hz | 379 / 713 Hz |
-| Band-pass MC (0.1 % R, 1 % C) | Gain σ / phase σ | 0.06 dB / 0.66° | 0.06 dB / 0.56° |
-| CMRR MC (0.1 % R_D, ±10 % C_node) | Median / worst | 56 dB / 48 dB (99 %) | 57 dB / 49 dB (min of 60) |
-| Full chain, 5 % Δg_m, I_D = 7.5 µA | X / Y after 3.5 s | −0.190 V / 0 V | −0.190 V / +1.6 mV |
-| Quadrature oscillator | Amplitude / frequency / THD (sin) | 517.6 Hz (ideal RC) | 6.33 Vpp / 520.7 Hz / 0.52 % |
- 
-### 7.4 Simulation Results (to be filled in)
- 
-#### Monte-Carlo
- 
-| Simulation | Runs | Tolerances | Gain at 518 Hz (mean / σ / min–max) | Phase at 518 Hz (mean / σ / min–max) | CMRR (median / min) | Notes |
-|------------|------|------------|--------------------------------------|---------------------------------------|---------------------|-------|
-| `bpf_mc.cir` | | | | | — | |
-| `cmrr_mc.cir` | | | — | — | | |
-| Device-level (vendor models) | | | | | | |
- 
-<!-- Add plots: -->
-<!-- ![Band-pass Monte-Carlo gain histogram](simulations/results/bpf_mc_gain.png) -->
-<!-- ![Band-pass Monte-Carlo phase histogram](simulations/results/bpf_mc_phase.png) -->
-<!-- ![CMRR distribution](simulations/results/cmrr_mc.png) -->
- 
-#### Quadrature Oscillator
- 
-| Quantity | Simulation (vendor models) | Measured (board) |
-|----------|----------------------------|------------------|
-| Amplitude sin / cos (Vpp) | | |
-| Frequency (Hz) | | |
-| THD sin / cos (%) | | |
-| Phase sin → cos (°) | | |
-| Start-up time (s) | | |
- 
-<!-- ![Oscillator start-up and steady state](simulations/results/quad_osc_tran.png) -->
-<!-- ![Oscillator spectrum](simulations/results/quad_osc_fft.png) -->
- 
-#### Selected Operating Point
- 
-| Parameter | Value |
-|-----------|-------|
-| I_D (A / B) | |
-| V_D (A / B) | |
-| Gate DC / excitation | |
-| Δg_m assumed | |
-| Drain AC swing, A (Vpp) | |
-| Drain differential (Vpp) | |
-| AD630 input (V peak) | |
-| X / Y at ADC input (V) | |
-| Settling time to 0.1 % (s) | |
- 
-<!-- Add plots: -->
-<!-- ![Band-pass Bode plot](simulations/results/bpf_bode.png) -->
-<!-- ![Full chain transient: drains, AD630 input, X/Y](simulations/results/chain_tran.png) -->
- 
+Single place for every simulation: what it must show, how it is set up, pass criteria, and the recorded result. Lab measurements are in [preliminary_lab_test_results.md](preliminary_lab_test_results.md); theory in [measurement_principles.md](measurement_principles.md); requirement IDs in [requirements.md](requirements.md).
+
+**Rules**
+- Each simulation has an ID `SIM-xx`. Files live in `simulations/SIM-xx/` (netlist / schematic, model files, raw output, plots, a `README.md` with date, tool, version, and the result in one paragraph).
+- Use vendor models (TI PSpice / ADI LTspice) for every active part in a decision-relevant simulation. Generic models (ideal SPDT, ideal op-amp) are allowed only for topology checks and must be labelled so.
+- Plot **averages over an integer number of reference periods after settling**, never `max()` of a demodulated output (it includes the 2f₀ ripple).
+- Record numbers, not only plots: every pass criterion below is a number.
+- A superseded simulation stays listed with status "obsolete".
+
+---
+
+## 7. Simulation Index
+
+### 7.1 Completed / Historical
+
+| ID | Simulation | Tool / file | Verifies | Status / result |
+|----|------------|-------------|----------|-----------------|
+| SIM-1 | Analog quadrature oscillator transient | ngspice | Rev A oscillator | Obsolete (D-3) |
+| SIM-2 | System CMRR Monte-Carlo (50 000 trials, C_node = 20 pF) | Python | [§2.7](measurement_principles.md#27-common-mode-rejection) | Done; **re-run needed with C_node = 50–60 pF** (SIM-12) |
+| SIM-3 | CMRR SPICE cross-check (60 runs) | ngspice | §2.7 | Done |
+| SIM-4 | Band-pass tolerance Monte-Carlo (unity-gain SK, 4:1 ratios) | Python | [§2.8](measurement_principles.md#28-band-pass-filter-design) | Done; superseded by SIM-14 if the K = 2 band-pass is chosen |
+| SIM-8 | Heater driver with Kelvin feedback driving 600 Ω (and 300 Ω): stability, headroom from +5VP | ngspice | AN-13, AN-14 | TODO (not decision-relevant for D-18) |
+| SIM-D1 | Discrete switch demodulator, topology check: ideal SPDT + OPA192, single 5 V, V_REF = 2.5 V, input 2 V pk at 517 Hz, phase swept 0–180° | PSpice (user, 2026-10-26) | Switch-demodulator principle ([§2.16](measurement_principles.md#216-switch-based-synchronous-demodulator)) | **Pass (topology).** X = 2.5 − 1.273·cos θ V, Y = 2.5 + 1.273·sin θ V, matching (2/π)·2 V = 1.273 V. Generic switch model, max() plotting; must be repeated with vendor models (SIM-10…SIM-13) |
+
+### 7.2 Front-End Architecture Decision (D-18): Required Simulations
+
+The three candidate architectures are defined in [schematic_overview.md §4.9](schematic_overview.md#49-front-end-architecture-options-decision-d-18):
+- **FE-A** — ±5 V, INA828, unity-gain SK band-pass, 2× AD630 (gain ±2), post-filter −3 (as drawn 2026-10-24).
+- **FE-B** — ±5 V, INA828, K = 2 SK band-pass, discrete demodulator (TMUX6136 + OPA2196, gain ±1), post-filter −1.5.
+- **FE-C** — single 5 V + V_REF 2.5 V (REF3325), INA333 with LM7705 (−0.23 V) on V−, K = 2 SK band-pass, discrete demodulator (2× TMUX1219), signal-path op-amps **OPA2365** (zero-crossover; the OPA2196 input transition region is 2.0–3.5 V on a 5 V rail, see [§2.15](measurement_principles.md#215-single-supply-referencing-v_ref)), post-filter −1.5. Removes the −7 V / −5 V rails.
+
+For FE-C, SIM-11 must also be run with the OPA2196 model in place of the OPA2365 to quantify the transition-region error (distortion and offset step around 2–3.5 V); for FE-B, check at full scale (2.14 V pk) that the OPA2196 inputs stay below +2 V.
+
+Simulations marked **all** are run for every candidate still under consideration; the decision matrix in §7.4 is filled from them.
+
+| ID | What | Applies to | Setup | Pass criteria |
+|----|------|-----------|-------|---------------|
+| SIM-10 | Demodulator transfer with vendor models | B, C (A: AD630 model) | Input = sine at f₀ around the reference (0 V for A/B, V_REF for C), amplitudes **0.4 V pk (default)** and **2.1 V pk (full scale)** at the demodulator input; θ = 0…360° in 15° steps; references = ideal 0/3.3 V squares, Y delayed T/4. Average the demodulator output over 20 periods after 10 periods settling | X(θ), Y(θ) within ±0.5 % of (2/π)·A·{cos, sin} after a single gain/phase calibration; X/Y orthogonality error ≤ 0.2° |
+| SIM-11 | Demodulator linearity and offset | all | θ = 0 and 90°; amplitude 1 mV → 2.1 V pk in decade steps; plus input = reference level (zero signal) | Gain deviation ≤ 0.1 % over 10 mV…2.1 V; zero-input offset at the demodulator output recorded (it is subtracted in firmware); offset ≤ 1 mV |
+| SIM-12 | System CMRR with real node capacitance | all | Drain nodes: R_D = 330 kΩ (0.1 % MC), C_node = 50 pF ± 10 % (mux on-cap + INA input + traces), common-mode drive 300 mVpp at f₀ through both R_D; Monte-Carlo ≥ 200 runs | Median system CMRR ≥ 48 dB; leakage reported separately in X and Y |
+| SIM-13 | Full chain with vendor models | all | Drain-node sources → in-amp → band-pass → demodulator → post-filter (τ may be reduced to 50 ms to shorten the run; scale the ripple result). DC drain mismatch 0, +200 mV, −200 mV. Excitation 10 mV pk differential | Scale factor at the ADC within ±1 % of the design value (−38.2·v̂·cos θ for all three candidates); no stage clips at ±200 mV mismatch; ripple at the ADC input ≤ 1 LSB-equivalent of the 20-SPS noise (≈ 3 µV) after the analog + ADS1220 digital filter |
+| SIM-14 | Band-pass tolerance (K = 2 equal-component SK) | B, C | Monte-Carlo: R 0.1 %, C 1 % C0G, ≥ 1000 runs | Gain at f₀ 4.00 ± 1 %, phase at f₀ 0 ± 2°, f₀ 518 ± 1 % |
+| SIM-15 | Harmonic and interference rejection | all | Inject at the in-amp input: 2f₀, 3f₀, 500 Hz, 550 Hz (mains harmonics), 50 Hz, each 10 mV pk; measure X/Y | Rejection relative to an f₀ signal of the same amplitude: 2f₀ ≥ 40 dB, 3f₀ ≥ 25 dB (square-wave demodulation passes 1/3), 50 Hz ≥ 60 dB, 500/550 Hz ≥ 30 dB with τ = 0.5 s (the 18 Hz beat between 518 Hz and the 10th mains harmonic is only attenuated ≈ 35 dB by a 0.5 s first-order filter; longer software τ or moving f₀ to ≈ 525 Hz improves it) |
+| SIM-16 | Noise (.NOISE + transient) | all | Two drain shot-noise current sources √(2qI_D), I_D = 7.5 µA, in parallel with R_D; R_D thermal noise; vendor op-amp/in-amp noise. Output noise at the ADC in 0.5 Hz ENBW | Total ≈ 31 µV rms (sensor-limited); amplifier contribution ≤ 10 % of total noise power |
+| SIM-17 | Post-demodulator offset drift | all | Vendor-model offset and drift (or datasheet worst case in a spreadsheet), ΔT = 20 °C, referred to the drain | ≤ 0.2 µV/°C referred to the drain differential |
+| SIM-18 | Power-up / sequencing | all (C: LM7705 + REF3325) | Ramp each rail in all orders (5 ms ramps), references off | No latch-up, no op-amp output stuck at a rail after all rails are up, demodulator recovers within 1 s |
+| SIM-19 | Excitation chain | all | DAC1 sample-and-hold source (128 samples/period, 12-bit quantization) → MFB stage (gain −1/120) → gate capacitance (3 pixels + socket ≈ 50 pF) | Gate amplitude 5.0 mVpp ± 1 %; THD ≤ 0.3 %; image at 66 kHz ≤ −40 dBc at the gate; phase lag at f₀ recorded (≈ 8°); A/B stage mismatch ≤ 0.2 % / 0.1° in Monte-Carlo |
+| SIM-20 | Drain bias difference amplifier | all | U10A: V_out = (1+k)·V_DAC2 − k·V_DAC6, k = 0.1, with 1 kΩ + 10 µF output filter, DAC noise source 100 nV/√Hz | Output range 0.5–3.5 V; noise at the drain node ≤ 50 nV/√Hz at f₀ (≤ 1 % of the shot-noise power) |
+
+### 7.3 Simulation Results (fill in)
+
+| ID | Date | Candidate | Tool / models | Key numbers | Pass? | Files |
+|----|------|-----------|---------------|-------------|-------|-------|
+| SIM-D1 | 2026-10-26 | B/C topology | PSpice, ideal SPDT, OPA192 | X: 1.227…3.773 V, Y: 2.5…3.773 V over θ = 0…180° | ✓ topology | `simulations/SIM-D1/` |
+| | | | | | | |
+
+### 7.4 Decision Matrix for D-18 (fill in from §7.3 and research)
+
+Scores 1–5 (5 = best). Weight in brackets. A criterion that fails a pass threshold above disqualifies the candidate unless a fix is identified.
+
+| Criterion (weight) | FE-A (AD630, ±5 V) | FE-B (switch, ±5 V) | FE-C (switch, single 5 V) | Evidence |
+|--------------------|--------------------|---------------------|---------------------------|----------|
+| First-pass success risk (×3) | | | | SIM-10…13, 18; maturity of each topology |
+| Accuracy: scale factor, linearity, X/Y orthogonality (×2) | | | | SIM-10, 11, 13 |
+| Baseline drift after the demodulator (×2) | | | | SIM-17 |
+| Noise (×1) | | | | SIM-16 |
+| CMRR / interference (×2) | | | | SIM-12, 15 |
+| Part availability (JLC stock, second source) (×2) | | | | Research: AD630 not stocked at JLC; TMUX6136 ≈ 158 pcs at JLC (2026-10-24) |
+| BOM cost (×1) | | | | Research |
+| Board area / routing / number of rails (×1) | | | | Layout estimate |
+| Schematic change effort from the 2026-10-24 netlist (×1) | | | | schematic_review.md |
+| **Weighted total** | | | | |
+
+**Decision rule.** Choose the highest weighted total among candidates with no failed pass criterion. If FE-B and FE-C are within 10 %, prefer FE-C only if SIM-18 passes and the single-supply front end shows no clipping at ±200 mV drain mismatch (SIM-13); otherwise FE-B.
