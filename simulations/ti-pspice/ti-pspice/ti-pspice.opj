@@ -1,9 +1,11 @@
 (ExpressProject "ti-pspice"
   (ProjectVersion "19981106")
-  (SoftwareVersion "23.1-2024 S001-[10/07/26]")
+  (SoftwareVersion "23.1-2024 S001-[10/27/26]")
   (ProjectType "Analog or A/D Mixed Mode")
   (Folder "Design Resources"
-    (Folder "Library")
+    (Folder "Library"
+      (File ".\vendor\tmux6136\tmux6136_beh.olb"
+        (Type "Schematic Library")))
     (Allegro Netlist Directory "allegro")
     (DOCKED "TRUE")
     (DOCKING_POSITION "59420")
@@ -16,17 +18,13 @@
     (RootChangedForceReNetlist "x"))
   (Folder "Layout")
   (Folder "Outputs"
-    (File ".\ti-pspice-pspicefiles\schematic1\schematic1.net"
-      (Type "Report"))
     (File
        ".\ti-pspice-pspicefiles\differential-amplifier\differential-amplifier.net"
+      (Type "Report"))
+    (File ".\ti-pspice-pspicefiles\lia\lia.net"
       (Type "Report")))
   (Folder "PSpice Resources"
     (Folder "Simulation Profiles"
-      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
-         ".\ti-pspice-pspicefiles\quadrature-oscillator\quad_osc.sim"
-        (DisplayName "quadrature-oscillator-quad_osc")
-        (Type "PSpice Profile"))
       (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
          ".\ti-pspice-pspicefiles\differential-amplifier\frequency_analysis.sim"
         (DisplayName "differential-amplifier-frequency_analysis")
@@ -35,14 +33,22 @@
          ".\ti-pspice-pspicefiles\differential-amplifier\time_analysis.sim"
         (DisplayName "differential-amplifier-time_analysis")
         (Type "PSpice Profile"))
-      (ActiveProfile
-         ".\ti-pspice-pspicefiles\differential-amplifier\frequency_analysis.sim"))
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\ti-pspice-pspicefiles\lia\lia_sanity.sim"
+        (DisplayName "LIA-lia_sanity")
+        (Type "PSpice Profile")))
     (Folder "Stimulus Files"
       (Sort User))
     (Folder "Include Files"
-      (Sort User))
+      (Sort User)
+      (File ".\options.inc"
+        (Type "PSpiceLibrary")
+        (DisplayName ".\options.inc")))
     (Folder "Model Libraries"
       (Sort User)
+      (File ".\vendor\tmux6136\tmux6136_beh.lib"
+        (Type "PSpiceLibrary")
+        (DisplayName ".\vendor\tmux6136\tmux6136_beh.lib"))
       (File ".\vendor\sbom862f\opax192.lib"
         (Type "PSpiceLibrary")
         (DisplayName ".\vendor\sbom862f\opax192.lib"))))
@@ -57,20 +63,15 @@
       (LibraryName
          "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SPECIAL.OLB")
       (DeviceIndex "0"))
-    (VSIN
-      (FullPartName "VSIN.Normal")
-      (LibraryName
-         "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
-      (DeviceIndex "0"))
-    (VAC
-      (FullPartName "VAC.Normal")
-      (LibraryName
-         "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
-      (DeviceIndex "0"))
     (C
       (FullPartName "C.Normal")
       (LibraryName
          "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (VSIN
+      (FullPartName "VSIN.Normal")
+      (LibraryName
+         "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
       (DeviceIndex "0"))
     (R
       (FullPartName "R.Normal")
@@ -82,14 +83,29 @@
       (LibraryName
          "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\VENDOR\SBOM862F\OPAX192.OLB")
       (DeviceIndex "0"))
-    (INA828
-      (FullPartName "INA828.Normal")
-      (LibraryName "C:\CDS_SPB_HOME\CDSSETUP\PSPTILIBDIR\INA828.OLB")
-      (DeviceIndex "0"))
     (VPULSE
       (FullPartName "VPULSE.Normal")
       (LibraryName
          "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (VDC
+      (FullPartName "VDC.Normal")
+      (LibraryName
+         "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (SPDT_PREC
+      (FullPartName "SPDT_PREC.Normal")
+      (LibraryName
+         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\VENDOR\TMUX6136\TMUX6136_BEH.OLB")
+      (DeviceIndex "0"))
+    (VAC
+      (FullPartName "VAC.Normal")
+      (LibraryName
+         "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (INA828
+      (FullPartName "INA828.Normal")
+      (LibraryName "C:\CDS_SPB_HOME\CDSSETUP\PSPTILIBDIR\INA828.OLB")
       (DeviceIndex "0"))
     (BA220
       (FullPartName "BA220.Normal")
@@ -108,14 +124,9 @@
       (DeviceIndex "0"))
     (GND
       (LibraryName "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
-      (DeviceIndex "0"))
-    (VDC
-      (FullPartName "VDC.Normal")
-      (LibraryName
-         "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
       (DeviceIndex "0")))
   (LastUsedLibraryBrowseDirectory
-     "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\sbom862f")
+     "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\tmux6136")
   (MPSSessionName "LW")
   (GlobalState
     (FileView
@@ -124,40 +135,32 @@
          "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice.dsn")
       (Path "Design Resources"
          "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice.dsn"
-         "differential-amplifier")
+         "LIA")
       (Path "Design Resources"
          "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice.dsn"
-         "quadrature-oscillator")
+         "differential-amplifier")
+      (Path "Design Resources" "Library")
       (Path "Outputs")
       (Path "PSpice Resources")
+      (Path "PSpice Resources" "Include Files")
       (Path "PSpice Resources" "Model Libraries")
       (Path "PSpice Resources" "Simulation Profiles")
       (Select "PSpice Resources" "Simulation Profiles"
-         ".\ti-pspice-pspicefiles\differential-amplifier\frequency_analysis.sim"))
+         "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice-pspicefiles\lia\lia_sanity.sim"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
       (Frame
-        (Placement "44 0 1 -1 -1 -1 -1 0 301 0 605"))
+        (Placement "44 0 1 -1 -1 -1 -1 0 200 0 587"))
       (Tab 0))
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 0 1 -1 -1 -1 -1 5 783 24 623")
-        (Scroll "0 0")
-        (Zoom "100")
+        (Placement "44 0 1 -1 -1 5 24 5 884 24 605")
+        (Scroll "0 33")
+        (Zoom "150")
         (Occurrence "/"))
       (Path
          "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\TI-PSPICE.DSN")
-      (Schematic "differential-amplifier")
-      (Page "diff-amp"))
-    (Doc
-      (Type "COrSchematicDoc")
-      (Frame
-        (Placement "44 0 1 -1 -1 -1 -1 5 783 24 623")
-        (Scroll "0 0")
-        (Zoom "100"))
-      (Path
-         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\TI-PSPICE.DSN")
-      (Schematic "quadrature-oscillator")
-      (Page "quad-osc"))))
+      (Schematic "LIA")
+      (Page "lia"))))

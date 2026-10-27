@@ -2,22 +2,22 @@
 
 @Settings: 0 1
 @General:
-ProfileName= "quad_osc" 
-ProfileFile= "quad_osc.sim" 
-Connectivity= "quadrature-oscillator.net" 
-NetlistFile= "quad_osc.cir" 
-DataFile= "quad_osc.dat" 
-OutFile= "quad_osc.out" 
+ProfileName= "lia_sanity" 
+ProfileFile= "lia_sanity.sim" 
+Connectivity= "LIA.net" 
+NetlistFile= "lia_sanity.cir" 
+DataFile= "lia_sanity.dat" 
+OutFile= "lia_sanity.out" 
 Notes=
 @#$BEGINNOTES
 @#$ENDNOTES
 @End General
 @Analysis: 0 1
 +1 0 0 0 
-+0 "500mm" 
++0 "2" 
 +1 "" 
-+2 "103m" 
-+3 "" 
++2 "" 
++3 "20u" 
 +4 "" 
 +5 "" 
 +6 "" 
@@ -61,16 +61,16 @@ Notes=
 LoadFile 0 "" 
 SaveFile 0 "" 
 @End Analysis
-@Analysis: 5 0
-+0 0
+@Analysis: 5 1
++0 2
 +0 "" 
-+1 "" 
++1 "ost" 
 +2 "" 
 +3 "" 
-+4 "" 
-+5 "" 
-+6 "" 
-+7 "" 
++4 "-2" 
++5 "2" 
++6 "0.1" 
++7 "0 20 30 50 70 90 150 170" 
 @End Analysis
 @Analysis: 6 0
 +1 
@@ -113,7 +113,7 @@ SaveFile 0 ""
 + 0 0 0 0 0 0 0 0 0
 @End Analysis
 @Analysis: 12 0
-+2236960 0 1
++2368576 0 1
 @End Analysis
 @Analysis: 13 1
 +0 1 1 1

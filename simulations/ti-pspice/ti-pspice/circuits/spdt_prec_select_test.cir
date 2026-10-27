@@ -1,0 +1,12 @@
+* SPDT_PREC select polarity test
+* Checks which throw the SPDT_PREC switch selects. Expected: D = 1 V (S1) while SEL is low, D = 2 V (S2) while SEL is high.
+* Run: python tools/run_sim.py circuits/spdt_prec_select_test.cir --name spdt_test --probe "V(D)" "V(SEL)"
+.INC "../vendor/tmux6136/tmux6136_beh.lib"
+V1 S1 0 1
+V2 S2 0 2
+VSEL SEL 0 PULSE 0 5 1m 1u 1u 1m 2m
+VDD VDD 0 5
+X1 S1 S2 D SEL VDD 0 SPDT_PREC
+RL D 0 1MEG
+.TRAN 0 3m 0 1u
+.END

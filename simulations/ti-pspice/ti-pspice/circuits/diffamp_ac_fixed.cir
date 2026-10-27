@@ -1,0 +1,42 @@
+* diffamp_ac_fixed.cir: differential amplifier (INA828 + OPAx192 band-pass) with a common-mode
+* reference (R_CM1, R_CM2) on the floating V6 input. Scratch fix only, not a schematic change.
+* Run from project root: python tools/run_sim.py circuits/diffamp_ac_fixed.cir --name diffamp_ac_fixed
+.LIB "../vendor/sbom862f/opax192.lib"
+.LIB "nom_pspti.lib"
+.LIB "nom.lib"
+
+* source TI-PSPICE
+X_U3         N08020 VSAMPLE +5V -5V VSAMPLE OPAX192
+R_R16         N07227 N07217  5k TC=0,0 
+R_R15         N07080 -5V  3 TC=0,0 
+R_R21         N08401 N08020  4.64k TC=0,0 
+C_C1         VDIFF N07625  33n  TC=0,0 
+D_D3         -5V +5V BA220 
+R_R22         HPF N08401  4.64k TC=0,0 
+V_V5         0 N07080 DC 5 
++PULSE 0 5 1m 1m 
+R_R17         N07625 HPF  4.64k TC=0,0 
+R_R20         0 N07747  1k TC=0,0 
+V_V4         N06938 0 DC 5 
++PULSE 0 5 1m 1m 
+X_U1         N09301 N09296 +5V -5V VDIFF 0 N07217 N07227 INA828
+R_R24         0 N08320  1k TC=0,0 
+R_R14         N06938 +5V  3 TC=0,0 
+C_C3         0 N08020  33n  TC=0,0 
+R_R19         0 N07747  1k TC=0,0 
+C_C2         N07625 N07629  33n  TC=0,0 
+C_C4         VSAMPLE N08401  130n  TC=0,0 
+R_R18         0 N07629  18.7k TC=0,0 
+R_R23         0 N08320  1k TC=0,0 
+X_U2         N07629 HPF +5V -5V HPF OPAX192
+V_V6         N09301 N09296 DC 0Vdc AC 1Vac SIN(0 15m {f} 0 0 0)
+V_V7         M_UN0001 0  
++SIN 250m 15m {f} 0 0 0
+.PARAM  f=518
+
+* SCRATCH FIX: common-mode reference for the floating INA828 input source
+R_CM1 N09301 0 100k
+R_CM2 N09296 0 100k
+
+.AC DEC 100 10 100k
+.END

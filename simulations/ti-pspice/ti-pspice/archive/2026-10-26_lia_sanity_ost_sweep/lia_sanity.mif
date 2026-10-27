@@ -1,5 +1,5 @@
+ lib=C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\tmux6136\tmux6136_beh.lib, offset=672, size=823
  lib=C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\sbom862f\opax192.lib, offset=3818, size=8449
- lib=c:\cadence\pspiceti\tools\PSpice\Library\cdn_psp_tipspice.lib, offset=378860, size=499
  lib=C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\sbom862f\opax192.lib, offset=12268, size=119
  lib=C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\sbom862f\opax192.lib, offset=12388, size=118
  lib=C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\sbom862f\opax192.lib, offset=12507, size=119

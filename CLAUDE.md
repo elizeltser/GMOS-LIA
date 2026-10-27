@@ -10,3 +10,4 @@ GMOS-LIA is a hardware automation framework for testing GMOS (Gas MOS) gas senso
 
 - [`python/`](python/CLAUDE.md) — Python instrument drivers and experiment automation; setup, commands, architecture, and key files
 - [`docs/Thesis/`](docs/Thesis/CLAUDE.md) — LaTeX thesis; build commands, dependencies, acronym and figure management
+- [`simulations/ti-pspice/ti-pspice/`](simulations/ti-pspice/ti-pspice/CLAUDE.md) — PSpice for TI project of the LIA analog front end; headless simulation tools, design READMEs, subagents

@@ -1,0 +1,34 @@
+* lia_baseline_p90.cir: copy of lia_baseline.cir with the input phase set to p = 90 deg (only the .PARAM line differs). Used by docs/simulation-index.md entry P-03b. Run: python tools/run_sim.py circuits/lia_baseline_p90.cir --name <ID> --analysis "<.TRAN line>" --probe "V(VX)" "V(VY)"
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.LIB "../vendor/sbom862f/opax192.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.TRAN 0 1 0 20u SKIPBP
+.OPTIONS ADVCONV
+.OPTIONS FILEMODELSEARCH
+X_U1         N00890 N00333 N00695 N00261 VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P VTH=1.4
+V_V2         N00261 0
++PULSE 0 5 0 {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+V_V3         N00333 0 2.5
+X_U2         N00695 N00610 VDC 0 VX_DEMOD OPAX192
+V_V1         VDC 0 {Vdc}
+R_R1         N00610 VX_DEMOD  10k TC=0,0
+R_R2         N00890 N00610  10k TC=0,0
+V_V4         N00890 0
++SIN {Vdc/2+ost} 2 {f_osc} 0 0 {p}
+R_R3         VX_DEMOD VX  10k TC=0,0
+C_C1         0 VX  10u  TC=0,0
+X_U3         N00890 N01599 N01681 N01577 VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P VTH=1.4
+V_V6         N01577 0
++PULSE 0 5 482.6u {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+V_V5         N01599 0 2.5
+C_C2         0 VY  10u  TC=0,0
+X_U4         N01681 N02737 VDC 0 VY_DEMOD OPAX192
+R_R5         VY_DEMOD VY  10k TC=0,0
+R_R6         N02737 VY_DEMOD  10k TC=0,0
+R_R4         N00890 N02737  10k TC=0,0
+.PARAM  ost=0 p=90 f_osc=517 vdc=5 t_slope=100n
+.END

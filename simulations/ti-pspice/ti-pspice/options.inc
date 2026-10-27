@@ -1,0 +1,3 @@
+* PSpice solver options for the LIA simulation
+.OPTIONS PTRANABSTOL=1e-5 PTRANVNTOL=1e-4
+.OPTIONS ITL4=100 ABSTOL=1n VNTOL=1u

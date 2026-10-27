@@ -1,0 +1,13 @@
+* INA828 gain check: 1 V AC differential input, RG = 5 kOhm, REF = 0 V, +/-5 V supplies.
+* Expected from the datasheet formula G = 1 + 50 kOhm / RG = 11 V/V (formula not in the model file).
+* Run: python tools/run_sim.py circuits/ina828_gain_test.cir --name ina828_gain --probe "V(OUT)" "V(IN+)"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+VIN IN+ 0 AC 1
+VM IN- 0 0
+VCC VCC 0 5
+VEE VEE 0 -5
+RG1 RG+ RG- 5k
+X1 IN+ IN- VCC VEE OUT 0 RG+ RG- INA828
+.AC DEC 10 10 10k
+.END

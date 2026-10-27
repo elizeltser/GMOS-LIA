@@ -1,0 +1,36 @@
+* lia_v2.cir: frozen copy of the LIA page as netlisted on 27 October 2026, 14:38 (V4 SIN with {Vampl} and {fin}, V7 harmonic source in series, V8 = Vref). Defaults changed to fin = 517 Hz and Vharm_ampl = 0 so the circuit matches lia_baseline.cir.
+* Used by docs/simulation-index.md entries P-04 to P-07. Run: python tools/run_sim.py circuits/lia_v2.cir --name <ID> --analysis "<.TRAN line>" [--analysis "<.STEP line>"] --probe "V(VX)" "V(VY)"
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.LIB "../vendor/sbom862f/opax192.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.TRAN 0 1 0 5u SKIPBP
+.OPTIONS ADVCONV
+.OPTIONS FILEMODELSEARCH
+X_U1         N00890 REF N00695 N00261 VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P VTH=1.4
+V_V2         N00261 0  
++PULSE 0 5 0 {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+X_U2         N00695 N00610 VDC 0 VX_DEMOD OPAX192
+V_V1         VDC 0 {Vdc}
+R_R1         N00610 VX_DEMOD  10k TC=0,0 
+R_R2         N00890 N00610  10k TC=0,0 
+V_V4         N00890 N07229  
++SIN {Vdc/2+ost} {Vampl} {fin} 0 0 {p}
+R_R3         VX_DEMOD VX  10k TC=0,0 
+C_C1         0 VX  10u  TC=0,0 
+X_U3         N00890 REF N01681 N01577 VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P VTH=1.4
+V_V6         N01577 0  
++PULSE 0 5 482.6u {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+C_C2         0 VY  10u  TC=0,0 
+X_U4         N01681 N02737 VDC 0 VY_DEMOD OPAX192
+R_R5         VY_DEMOD VY  10k TC=0,0 
+R_R6         N02737 VY_DEMOD  10k TC=0,0 
+R_R4         N00890 N02737  10k TC=0,0 
+V_V7         N07229 0  
++SIN 0 {Vharm_ampl} {f_osc*n_harm} 0 0 {p}
+V_V8         REF 0 {Vref}
+.PARAM  ost=0 p=0 vharm_ampl=0 vref=2.5 vampl=2 f_osc=517 n_harm=3 vdc=5 fin=517 t_slope=100n
+.END

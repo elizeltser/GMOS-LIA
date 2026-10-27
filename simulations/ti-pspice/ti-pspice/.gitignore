@@ -27,9 +27,11 @@
 *.als
 *.cir
 !models/**/*.cir
+!circuits/*.cir
 
 # --- External libraries and models ---
-vendor/
+vendor/*
+!vendor/README.md
 
 # --- Backups, locks, journals, temp files ---
 *.DBK
@@ -63,3 +65,7 @@ vendor/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# --- Headless runs made by tools/run_sim.py ---
+sim-runs/
+__pycache__/
