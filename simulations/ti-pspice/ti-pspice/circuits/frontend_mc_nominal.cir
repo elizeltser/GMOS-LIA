@@ -1,0 +1,29 @@
+* frontend_mc_nominal.cir: diagnostic copy of frontend_mc.cir with the .MC line removed (nominal AC only), to separate a bias-point failure from the Monte Carlo setup (P-14 quirk check).
+* Run: python tools/run_sim.py circuits/frontend_mc_nominal.cir --name P14_nominal_diag --extra ".OPTIONS NUMDGT=8" --probe "VP([VSAMPLE])" "VM([VSAMPLE])"
+.LIB "../vendor/sbom862f/opax192.lib"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.MODEL RTOL RES(R=1 DEV={tolr})
+.MODEL CTOL CAP(C=1 DEV={tolc})
+V_V1         VDC 0 5
+V_VREF       VREF 0 2.5
+V_CM         CM 0 2.5
+V_SIN        INP CM DC 0 AC 1
+R_CM1        INP VREF 100k
+R_CM2        CM VREF 100k
+X_U1         INP CM VDC 0 VDIFF VREF N07217 N07227 INA828
+R_R16        N07227 N07217  RTOL 5k
+C_C1         VDIFF N07625  CTOL 33n
+C_C2         N07625 N07629  CTOL 33n
+R_R17        N07625 HPF  RTOL 4.64k
+R_R18        VREF N07629  RTOL 18.7k
+X_U2         N07629 HPF VDC 0 HPF OPAX192
+R_R22        HPF N08401  RTOL 4.64k
+R_R21        N08401 N08020  RTOL 4.64k
+C_C4         VSAMPLE N08401  CTOL 130n
+C_C3         VREF N08020  CTOL 33n
+X_U3         N08020 VSAMPLE VDC 0 VSAMPLE OPAX192
+.PARAM tolr=1% tolc=5%
+.OPTIONS ADVCONV
+.AC LIN 1 517 517
+.END

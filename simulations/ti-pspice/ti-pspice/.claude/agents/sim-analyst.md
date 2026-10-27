@@ -17,8 +17,9 @@ Read first: `CLAUDE.md`, the index entry in `docs/simulation-index.md` (goal, sc
 
 ## Method
 
-- Settled values: average over the last 50 whole periods, as the index defines. State the window.
-- Check settling: compare the mean of the last 50 periods with the 50 periods before. Report the difference.
+- Settled values: use the measurement rule in `docs/simulation-index.md` (window length, whole periods). Do not use a window from memory or from an earlier summary, because the rule can change. State the window you used.
+- Check settling: compare the mean of the settled window with the mean of the window of the same length before it. Report the difference.
+- When the entry quotes a design value (a frequency, a level, a limit), check it against `docs/design-context.md`. If they disagree, report it in Open points. Do not change either document.
 - Compare every measured value with the expected value of the entry. Give units, the difference and the percent error, and say pass or fail against the entry's limits.
 - When a result disagrees, list the likely causes and say which the data supports. Do not force agreement and do not change the expected values.
 

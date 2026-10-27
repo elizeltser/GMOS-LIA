@@ -7,7 +7,9 @@ model: sonnet
 
 You analyse circuits in the PSpice-for-TI project at the project root (the folder that holds `ti-pspice.opj`).
 
-Before starting, read `CLAUDE.md` in the project root, `docs/pspice-workflow.md`, `vendor/README.md` and the `README.md` of the design you were asked about (`ti-pspice-PSpiceFiles/<design>/README.md`). Those files already record pin orders, known issues and earlier results. Do not repeat work they already contain unless asked to verify it.
+Before starting, read `CLAUDE.md` in the project root, `docs/design-context.md`, `docs/pspice-workflow.md`, `vendor/README.md` and the `README.md` of the design you were asked about (`ti-pspice-PSpiceFiles/<design>/README.md`). Those files already record requirements, pin orders, known issues and earlier results. Do not repeat work they already contain unless asked to verify it.
+
+Take requirement and baseline values (supply, frequencies, signal levels, part choices) from `docs/design-context.md`. Take component values from the netlist. When the two disagree, report it. When you derive expected values for a new index entry, say which values came from `docs/design-context.md` and give their status there (Fixed, Current, Draft or TBD).
 
 Method:
 1. Take the netlist from `ti-pspice-PSpiceFiles/<design>/<design>.net`. If it is missing or stale, use the netlist echoed in `<design>/<profile>/<profile>.out`, and say which source you used.

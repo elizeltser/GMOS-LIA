@@ -1,0 +1,54 @@
+* lia_v3_fast_P11m.cir: vampl=0.2 and ost=-0.3 V (fixed), all other fixed parameters default. Used by P11m with step dr1.
+* Run: python tools/run_sim.py circuits/lia_v3_fast_P11m.cir --name P11m_mismatch --analysis ".TRAN 0 0.15 0 5u SKIPBP" --analysis ".STEP PARAM dr1 LIST 0 1m -1m 10m -10m" --extra ".OPTIONS NUMDGT=8" --extra ".IC V(VX)=2.5 V(VY)=2.5" --probe "V(VX)" "V(VY)"
+* lia_v3_fast.cir: lia_v2.cir with fault-injection parameters for P-08 and P-10 to P-13, and the output capacitors as {cout} (default 1 uF, tau = 10 ms, fast settling).
+* Added: rser (series R at the demodulator input), dr1 (relative change of R1), vos (offset in series with IN+ of U2 and U4), aref/pref (ripple on Vref), kref (0 = ideal Vref, 1 = Vref buffered from V(VDC)/2),
+* arail/prail (ripple in series with the 5 V source), rrail (rail source resistance), iexc (excitation current from the rail, square wave synchronous with the X reference, high in the first half period).
+* Defaults reproduce lia_v2.cir except cout. Run: python tools/run_sim.py circuits/lia_v3_fast.cir --name <ID> --analysis ".TRAN 0 0.15 0 5u SKIPBP" [--analysis "<.STEP line>"] --extra ".OPTIONS NUMDGT=8" --extra ".IC V(VX)=2.5 V(VY)=2.5" --probe "V(VX)" "V(VY)"
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.LIB "../vendor/sbom862f/opax192.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.TRAN 0 0.15 0 5u SKIPBP
+.OPTIONS ADVCONV
+.OPTIONS FILEMODELSEARCH
+* X channel
+X_U1         N00890 REF N00695 N00261 VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P VTH=1.4
+V_V2         N00261 0
++PULSE 0 5 0 {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+V_VOSX       N00695 N00695P {vos}
+X_U2         N00695P N00610 VDC 0 VX_DEMOD OPAX192
+R_R1         N00610 VX_DEMOD  {10k*(1+dr1)} TC=0,0
+R_R2         N00890 N00610  10k TC=0,0
+R_R3         VX_DEMOD VX  10k TC=0,0
+C_C1         0 VX  {cout}  TC=0,0
+* Y channel
+X_U3         N00890 REF N01681 N01577 VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P VTH=1.4
+V_V6         N01577 0
++PULSE 0 5 482.6u {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+V_VOSY       N01681 N01681P {vos}
+X_U4         N01681P N02737 VDC 0 VY_DEMOD OPAX192
+R_R4         N00890 N02737  10k TC=0,0
+R_R6         N02737 VY_DEMOD  10k TC=0,0
+R_R5         VY_DEMOD VY  10k TC=0,0
+C_C2         0 VY  {cout}  TC=0,0
+* Input: V4 (fundamental) + V7 (harmonic) in series, then the driver resistance rser
+V_V4         VIN N07229
++SIN {Vdc/2+ost} {Vampl} {fin} 0 0 {p}
+V_V7         N07229 0
++SIN 0 {Vharm_ampl} {f_osc*n_harm} 0 0 {p}
+R_RSER       VIN N00890 {rser}
+* Supply: ideal source + ripple + source resistance, loaded by the excitation current
+V_V1         VDC1 0 {Vdc}
+V_VRAILRIP   VDC2 VDC1 SIN(0 {arail} {f_osc} 0 0 {prail})
+R_RRAIL      VDC2 VDC {rrail}
+I_IEXC       VDC 0 PULSE(0 {iexc} 0 {t_slope} {t_slope} {0.5/f_osc} {1/f_osc})
+* Reference: ideal Vref + ripple, or V(VDC)/2 through an ideal buffer
+V_V8         REFI0 0 {Vref}
+V_VREFRIP    REFI REFI0 SIN(0 {aref} {f_osc} 0 0 {pref})
+E_REF        REF 0 VALUE {(1-kref)*V(REFI) + kref*0.5*V(VDC)}
+.PARAM  ost=-0.3 p=0 vharm_ampl=0 vref=2.5 vampl=0.2 f_osc=517 n_harm=3 vdc=5 fin=517 t_slope=100n
+.PARAM  cout=1u rser=1m dr1=0 vos=0 aref=0 pref=0 kref=0 arail=0 prail=0 rrail=1m iexc=0
+.END

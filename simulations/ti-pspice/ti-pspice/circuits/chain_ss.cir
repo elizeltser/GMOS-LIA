@@ -1,0 +1,63 @@
+* chain_ss.cir: full chain on a single 0 V to 5 V rail for P-09, P-15, P-16 and P-17. Sensor stand-in -> INA828 (G = 11, REF = 2.5 V) -> Sallen-Key HP (U2) -> Sallen-Key LP (U3) -> X/Y demodulator of lia_v3_fast.cir.
+* Front-end values as diffamp_tran_fixed.cir, with the -5 V rail moved to 0 V, and R18, C3 and the INA828 REF returned to the 2.5 V reference VREF instead of ground. Each INA828 input is biased to VREF through 100 kOhm (D-02 recommendation).
+* Sensor stand-in (sensor model TBD in docs/design-context.md): floating differential source = sine {asin} (phase {p}) + square {asq} (high in the first half period, in phase with the sine at p = 0) + gated burst {aburst}, common mode {vcm}, DC differential {vdiff}, series resistance {rsens} per leg.
+* Run: python tools/run_sim.py circuits/chain_ss.cir --name <ID> --analysis "<line>" --extra ".OPTIONS NUMDGT=8" --probe ...  (see the index entry for the analysis line)
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.LIB "../vendor/sbom862f/opax192.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.TRAN 0 0.15 0 5u
+.OPTIONS ADVCONV
+.OPTIONS FILEMODELSEARCH
+* Supply and reference (ideal, buffered)
+V_V1         VDC 0 {vdc}
+V_VREF       VREF 0 {vref}
+* Sensor stand-in. Differential voltage between SP and SN, centred on the common-mode source V_CM.
+V_CM         CM 0 {vcm}
+V_SIN        SP1 CM DC {vdiff/2} AC {acmag} SIN({vdiff/2} {asin/2} {f_osc} 0 0 {p})
+V_SQ         SP2 SP1 PULSE({-asq/2} {asq/2} 0 {t_slope} {t_slope} {0.5/f_osc-t_slope} {1/f_osc})
+E_BURST      SP3 SP2 VALUE {V(GATE)*aburst/2*sin(2*3.14159265358979*f_osc*TIME)}
+V_GATE       GATE 0 PULSE(0 1 {tburst} 1n 1n {nburst/f_osc} 10)
+V_SINN       CM SN1 DC {vdiff/2} SIN({vdiff/2} {asin/2} {f_osc} 0 0 {p})
+V_SQN        SN1 SN2 PULSE({-asq/2} {asq/2} 0 {t_slope} {t_slope} {0.5/f_osc-t_slope} {1/f_osc})
+E_BURSTN     SN2 SN3 VALUE {V(GATE)*aburst/2*sin(2*3.14159265358979*f_osc*TIME)}
+R_SP         SP3 INP {rsens}
+R_SN         SN3 INN {rsens}
+R_CM1        INP VREF 100k
+R_CM2        INN VREF 100k
+* INA828, G = 1 + 50k/5k = 11
+X_U1         INP INN VDC 0 VDIFF VREF N07217 N07227 INA828
+R_R16        N07227 N07217  5k
+* Sallen-Key high-pass (U2), R18 returned to VREF
+C_C1         VDIFF N07625  33n
+C_C2         N07625 N07629  33n
+R_R17        N07625 HPF  4.64k
+R_R18        VREF N07629  18.7k
+X_U2         N07629 HPF VDC 0 HPF OPAX192
+* Sallen-Key low-pass (U3), C3 returned to VREF
+R_R22        HPF N08401  4.64k
+R_R21        N08401 N08020  4.64k
+C_C4         VSAMPLE N08401  130n
+C_C3         VREF N08020  33n
+X_U3         N08020 VSAMPLE VDC 0 VSAMPLE OPAX192
+* Demodulator, as lia_v3_fast.cir with the input node N00890 = VSAMPLE and REF = VREF
+X_UX         VSAMPLE VREF NXP NSELX VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P
+V_SELX       NSELX 0 PULSE 0 5 0 {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+X_UXA        NXP NXM VDC 0 VX_DEMOD OPAX192
+R_R2         VSAMPLE NXM 10k
+R_R1         NXM VX_DEMOD 10k
+R_R3         VX_DEMOD VX 10k
+C_CX         0 VX {cout}
+X_UY         VSAMPLE VREF NYP NSELY VDC 0 SPDT_PREC PARAMS:  RON=120 CS=4P
++  CD=6P QINJ=0.4P TAU=30N ILK=0.5P
+V_SELY       NSELY 0 PULSE 0 5 482.6u {t_slope} {t_slope} {0.5/f_osc} {1/f_osc}
+X_UYA        NYP NYM VDC 0 VY_DEMOD OPAX192
+R_R4         VSAMPLE NYM 10k
+R_R6         NYM VY_DEMOD 10k
+R_R5         VY_DEMOD VY 10k
+C_CY         0 VY {cout}
+.PARAM vdc=5 vref=2.5 vcm=2.5 vdiff=0 f_osc=517 p=0 t_slope=100n cout=1u rsens=1m acmag=0
+.PARAM asin=15m asq=0 aburst=0 tburst={50/f_osc} nburst=10
+.END
