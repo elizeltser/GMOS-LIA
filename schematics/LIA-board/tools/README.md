@@ -1,6 +1,6 @@
 # GMOS LIA Board — Netlist Tools
 
-Two dependency-free Python 3 scripts (3.10+, standard library only) that read a KiCad netlist export and check the schematic from the command line. They are used in the task loop of [schematic_review.md §0](../schematic_review.md#0-instructions-for-claude-code).
+Two dependency-free Python 3 scripts (3.10+, standard library only) that read a KiCad netlist export and check the schematic from the command line. They are used in the task loop of [schematic_review.md §0](../docs/schematic_review.md#0-instructions-for-claude-code).
 
 | File | Purpose |
 |------|---------|
@@ -79,7 +79,7 @@ One assertion per line; `#` starts a comment; blank lines are ignored.
 
 Notes:
 - `value` is an exact string compare: enter values in KiCad exactly as written in the check file (`4.7u`, not `4u7` or `4.7µF`).
-- `name` matches a substring of the full hierarchical net name (`/Analog/EXC_DAC` contains `EXC_DAC`), so give nets the names listed in [schematic_overview.md §1.2](../schematic_overview.md#12-net-naming).
+- `name` matches a substring of the full hierarchical net name (`/Analog/EXC_DAC` contains `EXC_DAC`), so give nets the names listed in [schematic_overview.md §1.2](../docs/schematic_overview.md#12-net-naming).
 - Option-dependent lines: `T03.txt` has lines prefixed `# [AB]` (front-end options FE-A/FE-B, ±5 V) and `# [C]` (FE-C, single supply). After decision D-18, delete the `# [..] ` prefix of the chosen option's lines. `T04` has one file per option (`T04_FEA.txt`, `T04_FEB.txt`, `T04_FEC.txt`); run only the chosen one.
 
 ### 2.4 Writing a new check
@@ -110,16 +110,16 @@ Ends with a summary line, e.g. `Summary: SINGLE-NODE=9, NO-FOOTPRINT=50, CAP-ON-
 
 ```bash
 kicad-cli sch export netlist --format kicadsexpr -o GMOS-LIA.net GMOS-LIA.kicad_sch
-python3 docs/tools/netquery.py GMOS-LIA.net check docs/tools/checks/T01.txt
-python3 docs/tools/netcheck.py GMOS-LIA.net
+python3 tools/netquery.py GMOS-LIA.net check tools/checks/T01.txt
+python3 tools/netcheck.py GMOS-LIA.net
 kicad-cli sch erc -o erc.rpt GMOS-LIA.kicad_sch
 ```
 
 Run all checks at once (summary per file):
 
 ```bash
-for f in docs/tools/checks/T0*.txt; do
-  printf '%-32s %s\n' "$f" "$(python3 docs/tools/netquery.py GMOS-LIA.net check "$f" | tail -1)"
+for f in tools/checks/T0*.txt; do
+  printf '%-32s %s\n' "$f" "$(python3 tools/netquery.py GMOS-LIA.net check "$f" | tail -1)"
 done
 ```
 

@@ -31,13 +31,13 @@ lint = ["ruff"]
 typecheck = ["pyright"]
 
 [tool.setuptools]
-package-dir = {"" = "python/sources"}
+package-dir = {"" = "ate_lia/sources"}
 
 [tool.setuptools.packages.find]
-where = ["python/sources"]
+where = ["ate_lia/sources"]
 
 [tool.pytest.ini_options]
-testpaths = ["python/tests"]
+testpaths = ["ate_lia/tests"]
 
 [tool.ruff]
 line-length = 88
@@ -47,7 +47,7 @@ select = ["E", "F"] # Basic errors and formatting; import sorting (I) is disable
                     # this codebase orders imports by dependency, not alphabetically.
 
 [tool.pyright]
-include = ["python"]
+include = ["ate_lia"]
 venvPath = "."
 venv = ".venv"
 typeCheckingMode = "basic" # Avoids "strict" mode which is way too loud for beginners
@@ -56,8 +56,8 @@ pythonVersion = "3.12" # Matches the interpreter actually installed in .venv
 # Tests use duck-typed fakes (_FakeLIA/_FakeSCU) in place of the real instrument
 # wrappers, which pyright reports as type errors; relax only these rules there.
 [[tool.pyright.executionEnvironments]]
-root = "python/tests"
-extraPaths = ["python/sources"]
+root = "ate_lia/tests"
+extraPaths = ["ate_lia/sources"]
 reportArgumentType = "none"
 reportAttributeAccessIssue = "none"
 reportOptionalMemberAccess = "none"

@@ -4,10 +4,39 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GMOS-LIA is a hardware automation framework for testing GMOS (Gas MOS) gas sensors using laboratory instruments controlled over GPIB/VISA, paired with a LaTeX thesis documenting the research.
+GMOS-LIA is the MSc-thesis project on GMOS (Gas MOS) gas sensors. It contains lab automation for the current bench setup (instruments over GPIB/VISA), the design of a dedicated lock-in readout board, its simulations and firmware, and the LaTeX thesis.
 
-## Subdirectories
+Each area has its own CLAUDE.md with its rules, commands and key files. Read the one for the area you work in before starting. Design values live in the documents those files point to; do not copy them into CLAUDE.md or agent files.
 
-- [`python/`](python/CLAUDE.md) — Python instrument drivers and experiment automation; setup, commands, architecture, and key files
-- [`docs/Thesis/`](docs/Thesis/CLAUDE.md) — LaTeX thesis; build commands, dependencies, acronym and figure management
-- [`simulations/ti-pspice/ti-pspice/`](simulations/ti-pspice/ti-pspice/CLAUDE.md) — PSpice for TI project of the LIA analog front end; headless simulation tools, design READMEs, subagents
+## Areas
+
+| Folder | Contents | Read first |
+|--------|----------|------------|
+| `ate_lia/` | Python instrument drivers, experiments, MCP server for the bench setup; instrument manuals in `ate_lia/manuals/` | [ate_lia/CLAUDE.md](ate_lia/CLAUDE.md) |
+| `schematics/LIA-board/` | KiCad project of the LIA readout board; design docs in `docs/`, netlist tools in `tools/` | [schematics/LIA-board/CLAUDE.md](schematics/LIA-board/CLAUDE.md), then the doc map [docs/README.md](schematics/LIA-board/docs/README.md) |
+| `schematics/existing_boards/` | Earlier GMOS boards (schematic PDFs, Visio drawings, operating procedure) kept as references | — |
+| `simulations/` | General simulation documents (plan, index, design context, issues, reviews) and the simulation projects | [simulations/CLAUDE.md](simulations/CLAUDE.md), [simulations/README.md](simulations/README.md) |
+| `firmware/` | STM32CubeMX project of the board MCU; specification in `schematics/LIA-board/docs/firmware.md` | — |
+| `thesis/` | LaTeX thesis | [thesis/CLAUDE.md](thesis/CLAUDE.md) |
+| `Results/` | Experiment output written by `ate_lia` (git-ignored) | — |
+
+Subagents for the simulation workflow are in `.claude/agents/` and are described in [simulations/ti-pspice/CLAUDE.md](simulations/ti-pspice/CLAUDE.md).
+
+## Where facts live
+
+| Facts | Owner document |
+|-------|----------------|
+| Board requirements and target values | `schematics/LIA-board/docs/requirements.md` |
+| Board circuits, values, net names, pins | `schematics/LIA-board/docs/schematic_overview.md` |
+| Board decisions and open items | `schematics/LIA-board/docs/README.md` §9 (evidence in `docs/decisions/`) |
+| Simulation baseline values and review limits | `simulations/design-context.md` |
+| Bench hardware connectivity, PSU mapping | `ate_lia/FSD.md` |
+| MCP safety bounds | `ate_lia/sources/mcp_server/bounds.py` |
+
+The board docs and `simulations/design-context.md` currently disagree on several values (supply, excitation, gain, time constant). Until the owner reconciles them, report any disagreement you rely on instead of choosing.
+
+## Repository-wide rules
+
+- The Python package and its tools are configured in the root `pyproject.toml` (pytest, ruff, pyright). The virtualenv is `.venv/` at the repository root.
+- `.mcp.json` starts the `gmos-operating-point` MCP server with paths relative to the repository root; it needs `.venv/` to exist.
+- Paths in documentation are relative to the file that contains them, unless the file states otherwise.
