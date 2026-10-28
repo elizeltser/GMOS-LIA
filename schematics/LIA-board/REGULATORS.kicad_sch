@@ -4779,7 +4779,7 @@
 		)
 		(uuid "3d59fde1-bdc5-496e-93de-239e23cf9261")
 	)
-	(hierarchical_label "Vin"
+	(hierarchical_label "VIN"
 		(shape input)
 		(at 36.83 43.18 180)
 		(effects

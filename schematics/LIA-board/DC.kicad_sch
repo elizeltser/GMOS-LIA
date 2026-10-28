@@ -342,7 +342,7 @@
 		)
 		(uuid "fcf11fde-dbfc-44c2-87d0-1aeada7f9927")
 	)
-	(hierarchical_label "Vin"
+	(hierarchical_label "VIN_LAB"
 		(shape input)
 		(at 101.6 39.37 180)
 		(effects
@@ -397,7 +397,7 @@
 		)
 		(uuid "ae5a21ac-de42-4591-adff-6a022d5a0b6e")
 	)
-	(hierarchical_label "i2c_sda"
+	(hierarchical_label "I2C_SDA"
 		(shape bidirectional)
 		(at 43.18 106.68 180)
 		(effects
@@ -408,7 +408,7 @@
 		)
 		(uuid "be3bd432-e591-424b-bf95-de7691611fa9")
 	)
-	(hierarchical_label "i2c_scl"
+	(hierarchical_label "I2C_SCL"
 		(shape bidirectional)
 		(at 43.18 101.6 180)
 		(effects
@@ -628,7 +628,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "regulators.kicad_sch"
+		(property "Sheetfile" "REGULATORS.kicad_sch"
 			(at 177.8 102.1846 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -639,7 +639,7 @@
 				(justify left top)
 			)
 		)
-		(pin "Vin" input
+		(pin "VIN" input
 			(at 177.8 73.66 180)
 			(uuid "9596c56d-acc1-4817-a91e-26f9e38f6f74")
 			(effects
@@ -714,7 +714,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "usb_pd.kicad_sch"
+		(property "Sheetfile" "USB_PD.kicad_sch"
 			(at 66.04 119.9646 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -755,7 +755,7 @@
 				(justify left)
 			)
 		)
-		(pin "i2c_scl" tri_state
+		(pin "I2C_SCL" tri_state
 			(at 66.04 101.6 180)
 			(uuid "73a83474-11aa-4f04-931f-ce9bce9fee38")
 			(effects
@@ -765,7 +765,7 @@
 				(justify left)
 			)
 		)
-		(pin "i2c_sda" tri_state
+		(pin "I2C_SDA" tri_state
 			(at 66.04 106.68 180)
 			(uuid "0680a6ec-8b41-4a91-a189-ec129ec0523c")
 			(effects
@@ -795,7 +795,7 @@
 				(justify right)
 			)
 		)
-		(pin "usb_pd_alert" output
+		(pin "PD_ALERT" output
 			(at 101.6 101.6 0)
 			(uuid "6045aac7-3197-4dca-bf47-a817504bdf56")
 			(effects

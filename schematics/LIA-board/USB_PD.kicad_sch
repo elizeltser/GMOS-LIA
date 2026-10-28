@@ -2357,7 +2357,7 @@
 		)
 		(uuid "fcbfca06-3e8b-4ce8-9420-666155c8e71b")
 	)
-	(hierarchical_label "i2c_sda"
+	(hierarchical_label "I2C_SDA"
 		(shape tri_state)
 		(at 217.17 123.19 0)
 		(effects
@@ -2368,7 +2368,7 @@
 		)
 		(uuid "1b1a3827-01a7-4ee5-847c-0213546fd907")
 	)
-	(hierarchical_label "i2c_scl"
+	(hierarchical_label "I2C_SCL"
 		(shape tri_state)
 		(at 217.17 119.38 0)
 		(effects
@@ -2401,7 +2401,7 @@
 		)
 		(uuid "aba01bc1-cf4d-4ffc-ba74-a310b67c619d")
 	)
-	(hierarchical_label "usb_pd_alert"
+	(hierarchical_label "PD_ALERT"
 		(shape output)
 		(at 217.17 130.81 0)
 		(effects

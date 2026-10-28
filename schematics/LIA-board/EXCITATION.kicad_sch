@@ -1708,7 +1708,7 @@
 		)
 		(uuid "fcb3557c-34de-42ac-b7e1-c4513033be90")
 	)
-	(label "Exct1"
+	(label "GATE_A"
 		(at 182.88 127 0)
 		(effects
 			(font
@@ -1718,7 +1718,7 @@
 		)
 		(uuid "0334d55b-4bc6-4165-b225-de69dab94fba")
 	)
-	(label "Exct0"
+	(label "GATE_B"
 		(at 182.88 55.88 0)
 		(effects
 			(font
@@ -1728,7 +1728,7 @@
 		)
 		(uuid "5941f35a-9307-4035-8a70-fd625731c7de")
 	)
-	(hierarchical_label "Exct[0..1]"
+	(hierarchical_label "{GATE_A GATE_B}"
 		(shape output)
 		(at 199.39 46.99 0)
 		(effects
@@ -1739,7 +1739,7 @@
 		)
 		(uuid "0e0dea68-b3be-44bd-9aff-38b64dcc8155")
 	)
-	(hierarchical_label "ext1_vadj"
+	(hierarchical_label "GATE_DC_A"
 		(shape input)
 		(at 119.38 144.78 180)
 		(effects
@@ -1750,7 +1750,7 @@
 		)
 		(uuid "0e9d1839-5371-4fd6-afb6-ddb32d0ec1a7")
 	)
-	(hierarchical_label "mcu_sin"
+	(hierarchical_label "EXC_DAC"
 		(shape input)
 		(at 119.38 124.46 180)
 		(effects
@@ -1761,7 +1761,7 @@
 		)
 		(uuid "24e0f811-c33c-4f43-bbf0-c1424badc5b0")
 	)
-	(hierarchical_label "mcu_sin"
+	(hierarchical_label "EXC_DAC"
 		(shape input)
 		(at 119.38 53.34 180)
 		(effects
@@ -1772,7 +1772,7 @@
 		)
 		(uuid "261d9e53-32fa-497f-a7f4-06e3fef2f31a")
 	)
-	(hierarchical_label "ext0_vadj"
+	(hierarchical_label "GATE_DC_B"
 		(shape input)
 		(at 119.38 73.66 180)
 		(effects

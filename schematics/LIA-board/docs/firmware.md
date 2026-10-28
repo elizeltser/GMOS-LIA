@@ -94,7 +94,7 @@ Verified on 2026-10-28 from the STM32CubeMX 6.16.1 database (evidence and reprod
 | USART2 | PC link via ISO6721 | 921 600 baud 8N1, DMA RX circular + idle line, DMA TX |
 | I²C1 | STUSB4500, TMP117, SHT40 | 100/400 kHz |
 | ADC1 | PC0 IHTR_A, PC1 IHTR_B | 14-bit, scan, oversampling ×16, triggered at ≈ 1 kHz, DMA |
-| GPIO | ch_sel_0…3, mux_en (out, low at reset), DAC_CS/ADC_CS (out, high), ADC_DRDY (EXTI falling) | |
+| GPIO | MUXA_A0/A1, MUXB_A0/A1, MUX_EN (out, low at reset), DAC_CS/ADC_CS (out, high), ADC_DRDY (EXTI falling) | |
 
 ### F.2.4 CubeMX Checklist
 
@@ -131,7 +131,7 @@ Everything the `.ioc` (`firmware/firmware.ioc` in the repository root) must cont
 | G-8 | PC0, PC1 | ADC1_IN1, IN2 (IHTR_A, IHTR_B), single-ended | F.2.3 |
 | G-9 | 2 free GPIO | `DAC_CS`, `ADC_CS`: output push-pull, initial **high** | F.2.3 |
 | G-10 | 1 free GPIO | `ADC_DRDY`: EXTI, falling edge, NVIC line enabled | F.2.3 |
-| G-11 | 5 free GPIO | `ch_sel_0…3`, `mux_en`: output push-pull, initial **low** | F.2.3, schematic_overview §4.7 (R38 pull-down on `mux_en`) |
+| G-11 | 5 free GPIO | `MUXA_A0/A1`, `MUXB_A0/A1`, `MUX_EN`: output push-pull, initial **low** | F.2.3, schematic_overview §4.7 (R38 pull-down on `MUX_EN`) |
 | G-12 | 1 free GPIO | `PD_ALERT` (STUSB4500 alert, open drain): input with EXTI or polled. | schematic_overview §1.2, §5.3 |
 
 The pins of G-9…G-12 are not yet assigned in the schematic (§5.3 "to connect"). They are chosen after the board layout, to suit the routing; then set them in CubeMX with the user labels above and copy the result into §5.3.

@@ -79,7 +79,7 @@ Order: **T00 first** (decision), then T01 → T02 → T03 → T04 → T05, then 
 - [ ] T02 GMOS_soc (selection, calibration loads)
 - [ ] T03 Power (USB_PD + Regulators), per D-18
 - [ ] T04 LIA front end, per D-18
-- [ ] T05 Net naming pass
+- [x] T05 Net naming pass (2026-10-28; nets not yet drawn are named when added)
 - [ ] T06 DAC sheet (drain bias, drain sense, heaters)
 - [ ] T07 ADC sheet
 - [ ] T08 MCU sheet and isolated UART
@@ -93,8 +93,8 @@ Run the prompt in [prompts/frontend_decision.md](prompts/frontend_decision.md). 
 ### T01 Excitation Sheet (`/Analog/Excitation/`)
 
 **[GUI]**
-1. Rename `mcu_sin_ref` → `EXC_DAC` and connect it (hierarchical label) to PA4 on the MCU sheet.
-2. Rename `Exct1` → `GATE_A`, `Exct0` → `GATE_B`; `GMOS_Vadj4` → `GATE_DC_A`, `GMOS_Vadj5` → `GATE_DC_B` (on both sheets).
+1. ~~Rename `mcu_sin_ref` → `EXC_DAC`~~ (done 2026-10-28; `EXC_DAC` already reaches PA4).
+2. ~~Rename `Exct1` → `GATE_A`, `Exct0` → `GATE_B`; `GMOS_Vadj4` → `GATE_DC_A`, `GMOS_Vadj5` → `GATE_DC_B`~~ (done 2026-10-28).
 3. Recommended: 100 Ω between each U1 output and its gate net (feedback stays on the op-amp side).
 4. Test points on `EXC_DAC`, `GATE_A`, `GATE_B` (AN-34).
 
@@ -105,7 +105,7 @@ Run the prompt in [prompts/frontend_decision.md](prompts/frontend_decision.md). 
 **[GUI]**
 1. Add a dummy heater on U20 pin 10 (S4B) to GND, like R56 on U21.
 2. Optional tone injection (only if wanted): return R54 to GND through a new 100 Ω; add 10 kΩ from `CAL_DAC` (PA5) to that node; return R55 through 100 Ω to GND.
-3. Rename `ch_sel_0/1` → `MUXA_A0/A1`, `ch_sel_2/3` → `MUXB_A0/A1`, `mux_en` → `MUX_EN`; connect them to MCU GPIO (T08).
+3. ~~Rename `ch_sel_0/1` → `MUXA_A0/A1`, `ch_sel_2/3` → `MUXB_A0/A1`, `mux_en` → `MUX_EN`~~ (done 2026-10-28); connect them to MCU GPIO (T08).
 4. 100 nF at each TMUX1109 VDD.
 
 **[CC] values:** R54, R55 `18k` (0.1 %, MPN e.g. RT0603BRD0718KL); R56 + new dummy `1k` (0.1 %, 0603 ≥ 0.1 W) or `680`; U20/U21 `TMUX1109PW`, footprint TSSOP-16, MPN TMUX1109PWR. Check file `T02.txt`.
@@ -125,7 +125,7 @@ Run the prompt in [prompts/frontend_decision.md](prompts/frontend_decision.md). 
 ### T04 LIA Front End (`/Analog/LIA_FE/`), per D-18
 
 Common to all options:
-1. Rename `readout` → `BPF_OUT`, `X_readout`/`Y_readout` → `X_OUT`/`Y_OUT`, `X_chop`/`Y_chop` → `REF_X`/`REF_Y` (→ PC6/PC7).
+1. ~~Rename `readout` → `BPF_OUT`, `X_readout`/`Y_readout` → `X_OUT`/`Y_OUT`, `X_chop`/`Y_chop` → `REF_X`/`REF_Y`~~ (done 2026-10-28); connect `REF_X`/`REF_Y` to PC6/PC7 (T08).
 2. Post-filters U4A/U4B become inverting first-order LPFs: R14/R16 input, R15/R17 feedback, C13/C14 feedback (film), +IN from the mid reference ([schematic_overview §4.9](schematic_overview.md#49-front-end-architecture-options-decision-d-18)).
 3. Test point on `BPF_OUT` and the mid reference (AN-34).
 
@@ -139,12 +139,14 @@ Common to all options:
 
 Rename per [schematic_overview §1.2](schematic_overview.md#12-net-naming); `netcheck.py` SINGLE-NODE should then list only items of T06–T08.
 
+Done 2026-10-28 for every net that exists in the schematic (text rename of labels, hierarchical labels and sheet pins; netlist pin partition and ERC unchanged). Bus labels are now unnamed groups (`{GATE_A GATE_B}`, `{IHTR_A IHTR_B}`, `{MUXA_A0 …}`, `{HTR_A … GATE_DC_B}`). Added `VIN_LAB` (J4 → D4) to separate it from `VIN`. The old labels were crossed inside the Analog subtree (`Vdrain_active`, `active_heater_force`, `active_gate_voltage` sat on the blind side U21 / pixels 4–6, undone by crossed labels at the root and in ANALOG); the names were swapped in ANALOG, GMOS_MUX, LIA_FE and on the root Analog sheet pins so every label now matches its side (verified per hierarchy level). Still to name when drawn: `VREF_2V5`, `CAL_DAC`, `DSENSE_A/B`, `ADC_DRDY`. Sheet files renamed to upper case (`ANALOG`, `ADC`, `CONNECTORS`, `DAC`, `EXCITATION`, `GMOS_MUX` (was `gmos_mux2`), `LIA_FE`, `MCU`, `REGULATORS`, `USB_PD`); the empty, unreferenced old `GMOS_MUX.kicad_sch` was deleted. Remaining SINGLE-NODE (8): `ADC_CS`, `DAC_CS`, `MUXA_A0/A1`, `MUXB_A0/A1`, `REF_X`, `REF_Y` — all T07/T08 wiring.
+
 ### T06 DAC Sheet (`/DAC/`)
 
 **[GUI]**
 1. Delete IC2, IC4 (INA190 across R_D) and their decoupling.
 2. Add the U10 output filter per side: 1 kΩ in series between U10A output (feedback node) and R25, 10 µF X7R from the junction to GND (same for U10B/R31).
-3. Add a dual OPA2196 drain-sense buffer: +IN ← `DRN_A`/`DRN_B` (R25/R31 lower node = `GMOS_Vadj2/3`), ×8 (7.15 kΩ / 1.02 kΩ), 10 kΩ + 1 µF → PC2/PC3 (`DSENSE_A/B`).
+3. Add a dual OPA2196 drain-sense buffer: +IN ← `DRN_A`/`DRN_B` (R25/R31 lower node), ×8 (7.15 kΩ / 1.02 kΩ), 10 kΩ + 1 µF → PC2/PC3 (`DSENSE_A/B`).
 4. INA190 IC3/IC1 outputs → 1 kΩ + 100 nF → PC0/PC1.
 5. DAC80508 REF pin decoupling per datasheet; DAC_CS → MCU GPIO.
 
@@ -188,3 +190,4 @@ Check `T08.txt`.
 |------|------|--------|--------|
 | 2026-10-22 | — | Task list created (11:42 export) | |
 | 2026-10-24 | review | 17:20 export reviewed; list rebuilt (this version) | |
+| 2026-10-28 | T05 | Net rename + sheet-file rename; pin partition identical (207 nets), ERC unchanged (120); T01 26/38, T02 39/39, T04_FEA 22/47, T06 25/33 | |

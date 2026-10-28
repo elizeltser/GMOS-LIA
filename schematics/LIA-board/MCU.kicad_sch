@@ -3139,7 +3139,7 @@
 		(uuid "da8d0f22-596b-46c6-b798-4bb2b3631799")
 	)
 	(bus_entry
-		(at 113.03 72.39)
+		(at 127 72.39)
 		(size 2.54 2.54)
 		(stroke
 			(width 0)
@@ -3148,7 +3148,7 @@
 		(uuid "588caa11-5d15-4cc5-bf19-d8ecefa5bbda")
 	)
 	(bus_entry
-		(at 113.03 69.85)
+		(at 127 69.85)
 		(size 2.54 2.54)
 		(stroke
 			(width 0)
@@ -3168,7 +3168,7 @@
 	)
 	(wire
 		(pts
-			(xy 115.57 72.39) (xy 143.51 72.39)
+			(xy 129.54 72.39) (xy 143.51 72.39)
 		)
 		(stroke
 			(width 0)
@@ -3178,7 +3178,7 @@
 	)
 	(wire
 		(pts
-			(xy 115.57 74.93) (xy 143.51 74.93)
+			(xy 129.54 74.93) (xy 143.51 74.93)
 		)
 		(stroke
 			(width 0)
@@ -3228,7 +3228,7 @@
 	)
 	(bus
 		(pts
-			(xy 113.03 55.88) (xy 113.03 72.39)
+			(xy 127 63.5) (xy 127 72.39)
 		)
 		(stroke
 			(width 0)
@@ -3358,7 +3358,7 @@
 	)
 	(bus
 		(pts
-			(xy 104.14 55.88) (xy 113.03 55.88)
+			(xy 121.92 63.5) (xy 127 63.5)
 		)
 		(stroke
 			(width 0)
@@ -3826,7 +3826,7 @@
 		)
 		(uuid "0ea132ff-7aff-4fc7-93fe-2f83b60efa57")
 	)
-	(label "V_imeas1"
+	(label "IHTR_B"
 		(at 143.51 74.93 180)
 		(effects
 			(font
@@ -3846,7 +3846,7 @@
 		)
 		(uuid "0fdcac45-17ec-4bed-aeff-6238c68e57e7")
 	)
-	(label "V_imeas0"
+	(label "IHTR_A"
 		(at 143.51 72.39 180)
 		(effects
 			(font
@@ -3896,7 +3896,7 @@
 		)
 		(uuid "e8473766-a53e-4ccc-a8f2-23d526ac2454")
 	)
-	(hierarchical_label "mcu_i2c_sda"
+	(hierarchical_label "I2C_SDA"
 		(shape tri_state)
 		(at 190.5 113.03 0)
 		(effects
@@ -3907,7 +3907,7 @@
 		)
 		(uuid "0a64c7e9-1b4b-4049-ad8a-77256d827467")
 	)
-	(hierarchical_label "spi_mosi"
+	(hierarchical_label "SPI_MOSI"
 		(shape output)
 		(at 190.5 69.85 0)
 		(effects
@@ -3929,7 +3929,7 @@
 		)
 		(uuid "21fe6794-ee24-4658-9c72-fb3d406f000a")
 	)
-	(hierarchical_label "mcu_sin_ref"
+	(hierarchical_label "EXC_DAC"
 		(shape output)
 		(at 190.5 62.23 0)
 		(effects
@@ -3940,9 +3940,9 @@
 		)
 		(uuid "22e3b5dc-b59e-4b74-9781-219a3a931efa")
 	)
-	(hierarchical_label "V_imeas[0..1]"
+	(hierarchical_label "{IHTR_A IHTR_B}"
 		(shape input)
-		(at 104.14 55.88 180)
+		(at 121.92 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3973,7 +3973,7 @@
 		)
 		(uuid "732ddf6e-a442-4606-a236-b13f89cfbbeb")
 	)
-	(hierarchical_label "spi_miso"
+	(hierarchical_label "SPI_MISO"
 		(shape input)
 		(at 190.5 67.31 0)
 		(effects
@@ -4028,7 +4028,7 @@
 		)
 		(uuid "ca4bd069-8da1-4cfa-937e-acb5751ed5c3")
 	)
-	(hierarchical_label "mcu_i2c_scl"
+	(hierarchical_label "I2C_SCL"
 		(shape tri_state)
 		(at 190.5 110.49 0)
 		(effects
@@ -4039,7 +4039,7 @@
 		)
 		(uuid "dfeb6064-766a-49be-a4f6-6ce80b136bf6")
 	)
-	(hierarchical_label "spi_sck"
+	(hierarchical_label "SPI_SCK"
 		(shape output)
 		(at 190.5 54.61 0)
 		(effects

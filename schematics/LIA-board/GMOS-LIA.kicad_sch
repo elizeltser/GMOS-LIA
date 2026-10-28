@@ -565,7 +565,7 @@
 		)
 		(uuid "ff60a64c-b934-4062-8189-b6c0af88495f")
 	)
-	(label "spi_miso"
+	(label "SPI_MISO"
 		(at 210.82 63.5 180)
 		(effects
 			(font
@@ -575,7 +575,7 @@
 		)
 		(uuid "017bc632-0d22-4c7d-8075-cf481266981a")
 	)
-	(label "spi_clk"
+	(label "SPI_SCK"
 		(at 107.95 64.77 180)
 		(effects
 			(font
@@ -585,7 +585,7 @@
 		)
 		(uuid "05a975de-18c4-4a12-879f-301a0fd4bca4")
 	)
-	(label "spi_clk"
+	(label "SPI_SCK"
 		(at 151.13 172.72 0)
 		(effects
 			(font
@@ -595,7 +595,7 @@
 		)
 		(uuid "0d7ba58f-7927-4884-b8a6-0619dea95e21")
 	)
-	(label "spi_miso"
+	(label "SPI_MISO"
 		(at 151.13 165.1 0)
 		(effects
 			(font
@@ -605,7 +605,7 @@
 		)
 		(uuid "2a42206a-efc5-4d55-88f0-dc356f182bec")
 	)
-	(label "GMOS_Vadj1"
+	(label "HTR_B"
 		(at 144.78 86.36 0)
 		(effects
 			(font
@@ -615,7 +615,7 @@
 		)
 		(uuid "2bc14146-6345-4258-a093-4816ed65f1b8")
 	)
-	(label "GMOS_Vadj4"
+	(label "GATE_DC_A"
 		(at 144.78 68.58 0)
 		(effects
 			(font
@@ -625,7 +625,7 @@
 		)
 		(uuid "5120ee6e-3a02-4830-8e2c-cf3995ac47e7")
 	)
-	(label "spi_mosi"
+	(label "SPI_MOSI"
 		(at 210.82 67.31 180)
 		(effects
 			(font
@@ -635,7 +635,7 @@
 		)
 		(uuid "63d80634-3431-49fd-8058-2bd4499643fe")
 	)
-	(label "spi_miso"
+	(label "SPI_MISO"
 		(at 107.95 68.58 180)
 		(effects
 			(font
@@ -645,7 +645,7 @@
 		)
 		(uuid "7e750357-2dd9-4056-a147-1d5a82f40e26")
 	)
-	(label "spi_mosi"
+	(label "SPI_MOSI"
 		(at 151.13 168.91 0)
 		(effects
 			(font
@@ -655,7 +655,7 @@
 		)
 		(uuid "9a4fe8a7-1e79-488d-8dc6-d5b3c035e433")
 	)
-	(label "GMOS_Vadj5"
+	(label "GATE_DC_B"
 		(at 144.78 63.5 0)
 		(effects
 			(font
@@ -665,7 +665,7 @@
 		)
 		(uuid "9bdb1b44-000b-4eb3-8a85-dbc7aa267241")
 	)
-	(label "spi_mosi"
+	(label "SPI_MOSI"
 		(at 107.95 72.39 180)
 		(effects
 			(font
@@ -675,7 +675,7 @@
 		)
 		(uuid "b69300c1-c9a3-47ac-a177-d4372f59046b")
 	)
-	(label "GMOS_Vadj3"
+	(label "DRN_B"
 		(at 144.78 76.2 0)
 		(effects
 			(font
@@ -685,7 +685,7 @@
 		)
 		(uuid "bd4bf5cb-da7d-490c-8c24-4ea60466f252")
 	)
-	(label "GMOS_Vadj2"
+	(label "DRN_A"
 		(at 144.78 81.28 0)
 		(effects
 			(font
@@ -695,7 +695,7 @@
 		)
 		(uuid "c7cb04fc-2972-4e17-8ae1-15bfeeabbbfb")
 	)
-	(label "spi_clk"
+	(label "SPI_SCK"
 		(at 210.82 59.69 180)
 		(effects
 			(font
@@ -705,7 +705,7 @@
 		)
 		(uuid "f1004fd0-2a40-4f1c-af5d-e34864003f3e")
 	)
-	(label "GMOS_Vadj0"
+	(label "HTR_A"
 		(at 144.78 91.44 0)
 		(effects
 			(font
@@ -742,7 +742,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "Analog.kicad_sch"
+		(property "Sheetfile" "ANALOG.kicad_sch"
 			(at 163.83 147.9046 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -753,7 +753,7 @@
 				(justify left top)
 			)
 		)
-		(pin "X_readout" output
+		(pin "X_OUT" output
 			(at 196.342 63.5 0)
 			(uuid "7f6d8ed4-85dd-4b94-9248-6a32d3502249")
 			(effects
@@ -773,7 +773,7 @@
 				(justify right)
 			)
 		)
-		(pin "Y_readout" output
+		(pin "Y_OUT" output
 			(at 196.342 68.58 0)
 			(uuid "d36ed60c-882f-43d8-8b49-4568aadbc58c")
 			(effects
@@ -793,7 +793,7 @@
 				(justify right)
 			)
 		)
-		(pin "mcu_sin_ref" input
+		(pin "EXC_DAC" input
 			(at 163.83 129.54 180)
 			(uuid "0fe57696-36b3-409c-9880-009b56505130")
 			(effects
@@ -803,7 +803,7 @@
 				(justify left)
 			)
 		)
-		(pin "Vdrain_active" input
+		(pin "DRN_B" input
 			(at 163.83 76.2 180)
 			(uuid "a459f720-f24b-4dfd-96ce-abe80415eb5c")
 			(effects
@@ -813,7 +813,7 @@
 				(justify left)
 			)
 		)
-		(pin "Vdrain_blind" input
+		(pin "DRN_A" input
 			(at 163.83 81.28 180)
 			(uuid "93e6d6c0-34aa-4234-899b-23e6421ba8e9")
 			(effects
@@ -823,7 +823,7 @@
 				(justify left)
 			)
 		)
-		(pin "Vheater_active" input
+		(pin "HTR_B" input
 			(at 163.83 86.36 180)
 			(uuid "b5a7260f-de3f-4c63-b5e3-47d92907eeb5")
 			(effects
@@ -833,7 +833,7 @@
 				(justify left)
 			)
 		)
-		(pin "Vheater_blind" input
+		(pin "HTR_A" input
 			(at 163.83 91.44 180)
 			(uuid "140463bb-c758-412a-880d-6d5d4d0bcb1a")
 			(effects
@@ -843,7 +843,7 @@
 				(justify left)
 			)
 		)
-		(pin "X_chop" input
+		(pin "REF_X" input
 			(at 163.83 139.7 180)
 			(uuid "64ff1243-e502-4c92-a96e-ea6bd11b7b34")
 			(effects
@@ -853,7 +853,7 @@
 				(justify left)
 			)
 		)
-		(pin "Y_chop" input
+		(pin "REF_Y" input
 			(at 163.83 144.78 180)
 			(uuid "a1efec8a-747e-4dd0-9712-0e44818fd671")
 			(effects
@@ -863,7 +863,7 @@
 				(justify left)
 			)
 		)
-		(pin "ch_sel_[0..3]" input
+		(pin "{MUXA_A0 MUXA_A1 MUXB_A0 MUXB_A1}" input
 			(at 163.83 119.38 180)
 			(uuid "7afba645-203f-4d16-9c66-692afd408efe")
 			(effects
@@ -873,7 +873,7 @@
 				(justify left)
 			)
 		)
-		(pin "mux_en" input
+		(pin "MUX_EN" input
 			(at 163.83 124.46 180)
 			(uuid "80ed42e1-842e-42c0-807f-0fa1133c5969")
 			(effects
@@ -883,7 +883,7 @@
 				(justify left)
 			)
 		)
-		(pin "ext0_vadj" input
+		(pin "GATE_DC_B" input
 			(at 163.83 63.5 180)
 			(uuid "02d64dac-9425-4f98-a436-78b44c3383cc")
 			(effects
@@ -893,7 +893,7 @@
 				(justify left)
 			)
 		)
-		(pin "ext1_vadj" input
+		(pin "GATE_DC_A" input
 			(at 163.83 68.58 180)
 			(uuid "e9bc1ff1-9605-41dd-819a-92ae23111e74")
 			(effects
@@ -938,7 +938,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "mcu.kicad_sch"
+		(property "Sheetfile" "MCU.kicad_sch"
 			(at 113.03 178.3846 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -949,7 +949,7 @@
 				(justify left top)
 			)
 		)
-		(pin "V_imeas[0..1]" input
+		(pin "{IHTR_A IHTR_B}" input
 			(at 113.03 121.92 180)
 			(uuid "f0208776-5f68-4ecc-aafb-0ddca5febfde")
 			(effects
@@ -959,7 +959,7 @@
 				(justify left)
 			)
 		)
-		(pin "mcu_i2c_scl" tri_state
+		(pin "I2C_SCL" tri_state
 			(at 146.05 154.94 0)
 			(uuid "5b0fd04e-960b-45a9-8e7d-fb948b4c59ec")
 			(effects
@@ -969,7 +969,7 @@
 				(justify right)
 			)
 		)
-		(pin "mcu_i2c_sda" tri_state
+		(pin "I2C_SDA" tri_state
 			(at 146.05 160.02 0)
 			(uuid "9a9da117-ad46-4cf6-b3d0-fe485ddc7bed")
 			(effects
@@ -979,7 +979,7 @@
 				(justify right)
 			)
 		)
-		(pin "spi_miso" input
+		(pin "SPI_MISO" input
 			(at 146.05 165.1 0)
 			(uuid "e590a8e0-ffbe-4cc5-ba4a-89c4ed7a361b")
 			(effects
@@ -989,7 +989,7 @@
 				(justify right)
 			)
 		)
-		(pin "spi_mosi" output
+		(pin "SPI_MOSI" output
 			(at 146.05 168.91 0)
 			(uuid "64555179-ccf9-4d75-83c7-34b504867574")
 			(effects
@@ -999,7 +999,7 @@
 				(justify right)
 			)
 		)
-		(pin "spi_sck" output
+		(pin "SPI_SCK" output
 			(at 146.05 172.72 0)
 			(uuid "c39e79b0-9281-43ea-a98f-7603c26f83cf")
 			(effects
@@ -1079,7 +1079,7 @@
 				(justify left)
 			)
 		)
-		(pin "mcu_sin_ref" output
+		(pin "EXC_DAC" output
 			(at 146.05 129.54 0)
 			(uuid "bbdfcfe9-03d6-4b36-bce4-283b0ce4ede2")
 			(effects
@@ -1124,7 +1124,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "dac.kicad_sch"
+		(property "Sheetfile" "DAC.kicad_sch"
 			(at 113.03 107.2646 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1135,7 +1135,7 @@
 				(justify left top)
 			)
 		)
-		(pin "GMOS_Imeas[0..1]" output
+		(pin "{IHTR_A IHTR_B}" output
 			(at 138.43 101.6 0)
 			(uuid "86e24aba-83b3-473d-a7f8-6466c463f5c5")
 			(effects
@@ -1145,7 +1145,7 @@
 				(justify right)
 			)
 		)
-		(pin "GMOS_Vadj[0..5]" output
+		(pin "{HTR_A HTR_B DRN_A DRN_B GATE_DC_A GATE_DC_B}" output
 			(at 138.43 95.25 0)
 			(uuid "56785c79-1e17-416b-87bc-a7734ef39427")
 			(effects
@@ -1155,7 +1155,7 @@
 				(justify right)
 			)
 		)
-		(pin "dac_cs" input
+		(pin "DAC_CS" input
 			(at 113.03 76.2 180)
 			(uuid "f2b802bc-beaa-4874-a0da-f3157d115464")
 			(effects
@@ -1165,7 +1165,7 @@
 				(justify left)
 			)
 		)
-		(pin "spi_clk" input
+		(pin "SPI_SCK" input
 			(at 113.03 64.77 180)
 			(uuid "8b8f66ea-488e-4cfa-bc2b-f84adaa75935")
 			(effects
@@ -1175,7 +1175,7 @@
 				(justify left)
 			)
 		)
-		(pin "spi_miso" output
+		(pin "SPI_MISO" output
 			(at 113.03 68.58 180)
 			(uuid "a660bd89-2e78-4c87-94fb-91ed9581ca16")
 			(effects
@@ -1185,7 +1185,7 @@
 				(justify left)
 			)
 		)
-		(pin "spi_mosi" input
+		(pin "SPI_MOSI" input
 			(at 113.03 72.39 180)
 			(uuid "8270b55b-5d11-4d75-a0fb-67e1586ae4a0")
 			(effects
@@ -1261,7 +1261,7 @@
 				(justify left)
 			)
 		)
-		(pin "i2c_scl" bidirectional
+		(pin "I2C_SCL" bidirectional
 			(at 246.38 50.8 270)
 			(uuid "57662b8b-8c32-41dd-9958-52d092b5226c")
 			(effects
@@ -1271,7 +1271,7 @@
 				(justify left)
 			)
 		)
-		(pin "i2c_sda" bidirectional
+		(pin "I2C_SDA" bidirectional
 			(at 250.19 50.8 270)
 			(uuid "36298228-6f30-4a2e-bd85-d98fd8477e9e")
 			(effects
@@ -1291,7 +1291,7 @@
 				(justify left)
 			)
 		)
-		(pin "Vin" input
+		(pin "VIN_LAB" input
 			(at 78.74 24.13 180)
 			(uuid "503a57cd-4aae-40c9-a06e-38995e6d8271")
 			(effects
@@ -1366,7 +1366,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "connectors.kicad_sch"
+		(property "Sheetfile" "CONNECTORS.kicad_sch"
 			(at 38.1 170.7646 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1397,7 +1397,7 @@
 				(justify right)
 			)
 		)
-		(pin "Vin" output
+		(pin "VIN_LAB" output
 			(at 63.5 24.13 0)
 			(uuid "55eaff64-a7ec-4870-81d4-b56bb1b040c7")
 			(effects
@@ -1512,7 +1512,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "adc.kicad_sch"
+		(property "Sheetfile" "ADC.kicad_sch"
 			(at 215.9 102.1846 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1523,7 +1523,7 @@
 				(justify left top)
 			)
 		)
-		(pin "adc_cs" input
+		(pin "ADC_CS" input
 			(at 215.9 71.12 180)
 			(uuid "dcfe4df4-88e3-406e-bcb3-c17d4260f047")
 			(effects
@@ -1533,7 +1533,7 @@
 				(justify left)
 			)
 		)
-		(pin "spi_clk" input
+		(pin "SPI_SCK" input
 			(at 215.9 59.69 180)
 			(uuid "e4e9bfe1-67c4-441c-b6f8-908fe2133e92")
 			(effects
@@ -1543,7 +1543,7 @@
 				(justify left)
 			)
 		)
-		(pin "spi_miso" output
+		(pin "SPI_MISO" output
 			(at 215.9 63.5 180)
 			(uuid "0a9e8b96-16aa-44cb-9b6f-19eef0ded189")
 			(effects
@@ -1553,7 +1553,7 @@
 				(justify left)
 			)
 		)
-		(pin "spi_mosi" input
+		(pin "SPI_MOSI" input
 			(at 215.9 67.31 180)
 			(uuid "b5dbbc43-a97f-4153-96d8-8ae34784dca2")
 			(effects

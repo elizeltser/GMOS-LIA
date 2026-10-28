@@ -4784,7 +4784,7 @@
 		)
 		(uuid "1fa1821c-2d32-40f4-911d-a0cbd8a43547")
 	)
-	(label "ch_sel_1"
+	(label "MUXA_A1"
 		(at 81.28 55.88 0)
 		(effects
 			(font
@@ -4804,7 +4804,7 @@
 		)
 		(uuid "2bcdf4a9-2355-4513-849a-b98774c09d12")
 	)
-	(label "ch_sel_3"
+	(label "MUXB_A1"
 		(at 81.28 134.62 0)
 		(effects
 			(font
@@ -4914,7 +4914,7 @@
 		)
 		(uuid "6d7a404f-514e-4131-9404-3270729d3be4")
 	)
-	(label "ch_sel_0"
+	(label "MUXA_A0"
 		(at 81.28 52.07 0)
 		(effects
 			(font
@@ -4954,7 +4954,7 @@
 		)
 		(uuid "817a029f-c754-4762-bab9-d3b6252f56eb")
 	)
-	(label "ch_sel_2"
+	(label "MUXB_A0"
 		(at 81.28 130.81 0)
 		(effects
 			(font
@@ -5064,7 +5064,7 @@
 		)
 		(uuid "ff9d64da-80cf-4d69-a670-197d489a295c")
 	)
-	(hierarchical_label "active_gate_voltage"
+	(hierarchical_label "GATE_B"
 		(shape input)
 		(at 161.29 52.07 180)
 		(effects
@@ -5075,7 +5075,7 @@
 		)
 		(uuid "02c5d542-e4cb-4e1e-88bf-7b9a402584d9")
 	)
-	(hierarchical_label "active_drain_force"
+	(hierarchical_label "DRN_B"
 		(shape input)
 		(at 39.37 151.13 180)
 		(effects
@@ -5086,7 +5086,7 @@
 		)
 		(uuid "2469d672-49e4-4773-a242-3fea1007c5fe")
 	)
-	(hierarchical_label "mux_en"
+	(hierarchical_label "MUX_EN"
 		(shape input)
 		(at 38.1 20.32 180)
 		(effects
@@ -5097,7 +5097,7 @@
 		)
 		(uuid "48672b42-6178-4040-8a9d-938ca9673fe7")
 	)
-	(hierarchical_label "active_heater_force"
+	(hierarchical_label "HTR_B"
 		(shape input)
 		(at 39.37 168.91 180)
 		(effects
@@ -5108,7 +5108,7 @@
 		)
 		(uuid "4976df37-da87-40bd-9e9c-8c01b2af9fdb")
 	)
-	(hierarchical_label "blind_gate_voltage"
+	(hierarchical_label "GATE_A"
 		(shape input)
 		(at 161.29 58.42 180)
 		(effects
@@ -5119,7 +5119,7 @@
 		)
 		(uuid "b2aacf13-29af-48d4-81fa-ab4a83bb7147")
 	)
-	(hierarchical_label "blind_heater_force"
+	(hierarchical_label "HTR_A"
 		(shape input)
 		(at 39.37 90.17 180)
 		(effects
@@ -5130,7 +5130,7 @@
 		)
 		(uuid "bc797d23-0873-4d73-b5cc-ab5a0ed0404b")
 	)
-	(hierarchical_label "ch_sel_[0..3]"
+	(hierarchical_label "{MUXA_A0 MUXA_A1 MUXB_A0 MUXB_A1}"
 		(shape input)
 		(at 38.1 25.4 180)
 		(effects
@@ -5141,7 +5141,7 @@
 		)
 		(uuid "e8074780-3e74-4c30-8a4d-3324a165a072")
 	)
-	(hierarchical_label "blind_drain_force"
+	(hierarchical_label "DRN_A"
 		(shape input)
 		(at 39.37 72.39 180)
 		(effects

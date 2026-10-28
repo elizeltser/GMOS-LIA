@@ -5044,7 +5044,7 @@
 		)
 		(uuid "ffb66df1-7759-4372-8bbb-44fbe9a34ec8")
 	)
-	(label "readout"
+	(label "BPF_OUT"
 		(at 21.59 115.57 0)
 		(effects
 			(font
@@ -5054,7 +5054,7 @@
 		)
 		(uuid "51fffb9a-2f9e-44a4-b9c6-b53454032523")
 	)
-	(label "readout"
+	(label "BPF_OUT"
 		(at 151.13 115.57 0)
 		(effects
 			(font
@@ -5064,7 +5064,7 @@
 		)
 		(uuid "7bf31f64-9961-4434-9485-97cb19f0afba")
 	)
-	(label "Vmid"
+	(label "VMID"
 		(at 31.75 168.91 0)
 		(effects
 			(font
@@ -5074,7 +5074,7 @@
 		)
 		(uuid "83646c97-59b6-495a-8be5-88f9f51389de")
 	)
-	(label "Vmid"
+	(label "VMID"
 		(at 161.29 130.81 180)
 		(effects
 			(font
@@ -5084,7 +5084,7 @@
 		)
 		(uuid "cbc91ce4-1e77-4159-8496-bb0fbfd3e3f7")
 	)
-	(label "readout"
+	(label "BPF_OUT"
 		(at 228.6 52.07 0)
 		(effects
 			(font
@@ -5094,7 +5094,7 @@
 		)
 		(uuid "d57b14b0-9a65-43b9-ab4a-3ed310d8438a")
 	)
-	(label "Vmid"
+	(label "VMID"
 		(at 30.48 130.81 180)
 		(effects
 			(font
@@ -5104,7 +5104,7 @@
 		)
 		(uuid "dc9304ca-a6a7-4de6-8d9d-ec562691d205")
 	)
-	(hierarchical_label "X_readout"
+	(hierarchical_label "X_OUT"
 		(shape output)
 		(at 139.7 118.11 0)
 		(effects
@@ -5115,7 +5115,7 @@
 		)
 		(uuid "1791dd4f-5a1c-4f10-9dac-0c719090e7bd")
 	)
-	(hierarchical_label "blind_readout"
+	(hierarchical_label "DRN_A"
 		(shape input)
 		(at 50.8 57.15 180)
 		(effects
@@ -5126,7 +5126,7 @@
 		)
 		(uuid "33c91a69-5250-4d2a-bbee-650c525a8e5a")
 	)
-	(hierarchical_label "X_chop"
+	(hierarchical_label "REF_X"
 		(shape input)
 		(at 30.48 125.73 180)
 		(effects
@@ -5159,7 +5159,7 @@
 		)
 		(uuid "4e685d6f-d103-47a2-987c-ea3979a9bbad")
 	)
-	(hierarchical_label "active_readout"
+	(hierarchical_label "DRN_B"
 		(shape input)
 		(at 50.8 41.91 180)
 		(effects
@@ -5170,7 +5170,7 @@
 		)
 		(uuid "8fa75dfa-7b21-472f-ada4-e6e1c4be7511")
 	)
-	(hierarchical_label "Y_chop"
+	(hierarchical_label "REF_Y"
 		(shape input)
 		(at 161.29 125.73 180)
 		(effects
@@ -5181,7 +5181,7 @@
 		)
 		(uuid "c5f0c24c-bbd2-46b2-81f8-e46de05745d2")
 	)
-	(hierarchical_label "Y_readout"
+	(hierarchical_label "Y_OUT"
 		(shape output)
 		(at 271.78 118.11 0)
 		(effects

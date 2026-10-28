@@ -23,31 +23,32 @@ Designators follow the **2026-10-24 17:20** netlist export unless stated otherwi
 
 ### 1.2 Net Naming
 
-Target names (rename in T05). "As drawn" gives the current name where it differs.
+Target names. The rename pass ran on 2026-10-28 (net partition unchanged); "As drawn" gives the current name where it still differs, "same" where the schematic already uses the target name.
 
 | Net | As drawn | Meaning |
 |-----|----------|---------|
 | `VBUS_PD` | same | USB-C power connector VBUS (Q1 source) |
 | `V_USB_PD` | same | Q1 drain → D7 → `VIN` |
-| `VIN` | `/DC/Regulators/Vin` | Converter input (OR of USB-PD and lab input) |
+| `VIN` | same | Converter input (OR of USB-PD and lab input) |
+| `VIN_LAB` | same | Lab input J4 → D4 anode (sheet pin on Connectors and DC) |
 | `+7V`, `-7V` | same | Buck / IBB outputs (−7V only FE-A/B) |
 | `+5VA`, `-5VA`, `+5VP`, `+3V3_D`, `VDDA` | same | Rails (−5VA only FE-A/B) |
 | `VREF_2V5` | — | FE-C signal reference |
-| `EXC_DAC` | `mcu_sin_ref` | MCU DAC1_OUT1 (PA4) → both gate stages |
+| `EXC_DAC` | same | MCU DAC1_OUT1 (PA4) → both gate stages |
 | `CAL_DAC` | — | MCU DAC1_OUT2 (PA5), optional tone |
-| `GATE_DC_A`, `GATE_DC_B` | `GMOS_Vadj4`, `GMOS_Vadj5` | DAC80508 ch4/ch5 → gate DC (R8 / R4) |
-| `GATE_A`, `GATE_B` | `Exct1`, `Exct0` | Gate nets, pixels 1–3 / 4–6 |
-| `HTR_A`, `HTR_B` | `GMOS_Vadj0`, `GMOS_Vadj1` | Heater force (shunt output, Kelvin point, U20/U21 DB) |
-| `IHTR_A`, `IHTR_B` | `GMOS_Imeas0`, `GMOS_Imeas1` | INA190 outputs (IC3, IC1) → PC0, PC1 |
-| `DRN_A`, `DRN_B` | `GMOS_Vadj2`, `GMOS_Vadj3` | Drain node per side: R_D bottom, U20/U21 DA, in-amp input, drain sense |
-| `DSENSE_A`, `DSENSE_B` | — (`GMOS_Imeas2/3` → PC2/PC3 today) | Drain sense ×8 outputs → MCU ADC |
-| `MUXA_A0/A1`, `MUXB_A0/A1`, `MUX_EN` | `ch_sel_0…3`, `mux_en` | Pixel select |
-| `REF_X`, `REF_Y` | `X_chop`, `Y_chop` | MCU timer references |
-| `BPF_OUT` | `readout` | Band-pass output → demodulator |
-| `X_OUT`, `Y_OUT` | `X_readout`, `Y_readout` | Post-filter outputs → ADS1220 |
-| `VMID` / `VREF_2V5` | `Vmid` (R52/R53, AD630 SEL A) | Mid reference (FE-A: AD630 threshold and post-filter; FE-C: V_REF) |
-| `SPI_SCK/MISO/MOSI`, `DAC_CS`, `ADC_CS`, `ADC_DRDY` | `spi_clk/miso/mosi`, `dac_cs`, `adc_cs` | SPI bus |
-| `I2C_SCL`, `I2C_SDA`, `PD_ALERT` | `i2c_scl`, `i2c_sda`, `usb_pd_alert` | I²C1 bus |
+| `GATE_DC_A`, `GATE_DC_B` | same | DAC80508 ch4/ch5 → gate DC (R8 / R4) |
+| `GATE_A`, `GATE_B` | same (bus `{GATE_A GATE_B}`) | Gate nets, pixels 1–3 / 4–6 |
+| `HTR_A`, `HTR_B` | same | Heater force (shunt output, Kelvin point, U20/U21 DB) |
+| `IHTR_A`, `IHTR_B` | same (bus `{IHTR_A IHTR_B}`) | INA190 outputs (IC3, IC1) → PC0, PC1 |
+| `DRN_A`, `DRN_B` | same | Drain node per side: R_D bottom, U20/U21 DA, in-amp input, drain sense |
+| `DSENSE_A`, `DSENSE_B` | — | Drain sense ×8 outputs → MCU ADC |
+| `MUXA_A0/A1`, `MUXB_A0/A1`, `MUX_EN` | same (bus `{MUXA_A0 MUXA_A1 MUXB_A0 MUXB_A1}`) | Pixel select |
+| `REF_X`, `REF_Y` | same | MCU timer references |
+| `BPF_OUT` | same | Band-pass output → demodulator |
+| `X_OUT`, `Y_OUT` | same | Post-filter outputs → ADS1220 |
+| `VMID` / `VREF_2V5` | `VMID` (R52/R53, AD630 SEL A) | Mid reference (FE-A: AD630 threshold and post-filter; FE-C: V_REF) |
+| `SPI_SCK/MISO/MOSI`, `DAC_CS`, `ADC_CS`, `ADC_DRDY` | same (`ADC_DRDY` not drawn yet) | SPI bus |
+| `I2C_SCL`, `I2C_SDA`, `PD_ALERT` | same | I²C1 bus |
 
 Use global labels only for rails; hierarchical labels with **identical names on both sides** for signals.
 
@@ -199,8 +200,8 @@ AC gain −1/120, f₀ = 4.95 kHz, Q = 0.73, phase lag at 518 Hz ≈ 8° (calibr
 | 1 | `DAC1` | Heater B (blind) setpoint | gain 1, driver ×2 | U9A +IN |
 | 2 | `DAC2` | Drain supply A, coarse | gain 2 | U10A +IN |
 | 3 | `DAC3` | Drain supply B, coarse | gain 2 | U10B +IN |
-| 4 | `GMOS_Vadj4` | Gate DC A (pixels 1–3) | gain 1 | R8 |
-| 5 | `GMOS_Vadj5` | Gate DC B (pixels 4–6) | gain 1 | R4 |
+| 4 | `GATE_DC_A` | Gate DC A (pixels 1–3) | gain 1 | R8 |
+| 5 | `GATE_DC_B` | Gate DC B (pixels 4–6) | gain 1 | R4 |
 | 6 | `DAC6` | Drain supply A, fine | gain 1 | R23 |
 | 7 | `DAC7` | Drain supply B, fine | gain 1 | R29 |
 
@@ -226,11 +227,11 @@ The node below R_D (`DRN_A`/`DRN_B`) is the drain node: it connects to U20/U21 D
 
 #### 4.6.4 Drain DC Sense (new dual op-amp, OPA2196)
 
-`DRN_A`/`DRN_B` → non-inverting ×8 (R_F 7.15 kΩ, R_G 1.02 kΩ) → 10 kΩ + 1 µF → `DSENSE_A`/`DSENSE_B` → PC2/PC3 (replacing `GMOS_Imeas2/3`). Full scale 412 mV at the drain. Inputs at 0–0.5 V, outside the transition region.
+`DRN_A`/`DRN_B` → non-inverting ×8 (R_F 7.15 kΩ, R_G 1.02 kΩ) → 10 kΩ + 1 µF → `DSENSE_A`/`DSENSE_B` → PC2/PC3 (replacing the former `GMOS_Imeas2/3`). Full scale 412 mV at the drain. Inputs at 0–0.5 V, outside the transition region.
 
 ### 4.7 Pixel Selection and Calibration Loads
 
-U20 (active) and U21 (blind), TMUX1109 on +5VA, VSS = GND. Address per side (`ch_sel_0/1` → U20, `ch_sel_2/3` → U21), common `mux_en` with R38 100 kΩ pull-down.
+U20 (active) and U21 (blind), TMUX1109 on +5VA, VSS = GND. Address per side (`MUXA_A0/A1` → U20, `MUXB_A0/A1` → U21), common `MUX_EN` with R38 100 kΩ pull-down.
 
 | A1 A0 | U20 bank A / bank B | U21 bank A / bank B |
 |-------|---------------------|---------------------|
@@ -250,7 +251,7 @@ Firmware switching sequence: heater DACs → 0; EN = 0; set addresses; EN = 1; r
 
 ### 4.8 In-Amp Input
 
-The in-amp connects to `DRN_A`/`DRN_B` directly (IC5/IC6 removed, D-19). As drawn, +IN = blind (`GMOS_Vadj3`), −IN = active (`GMOS_Vadj2`): sign handled in firmware. R_G (R10) = 5.62 kΩ 0.1 % for INA828 (G = 9.90) or 11.0 kΩ for INA333 (G = 10.09).
+The in-amp connects to `DRN_A`/`DRN_B` directly (IC5/IC6 removed, D-19). As drawn, +IN = blind (`DRN_B`), −IN = active (`DRN_A`): sign handled in firmware. R_G (R10) = 5.62 kΩ 0.1 % for INA828 (G = 9.90) or 11.0 kΩ for INA333 (G = 10.09).
 
 ### 4.9 Front-End Architecture Options (Decision D-18)
 
@@ -313,7 +314,7 @@ Mandatory pin handling (T08): VDD (19, 32, 64) +3V3_D with 100 nF each + 4.7 µF
 | USART2 → ISO6721 | PA2 TX (16), PA3 RX (17) | drawn, **TX/RX swapped at U11** | PA2 → U11 pin 7 (INA), PA3 ← U11 pin 6 (OUTB) |
 | I²C1 | PB6 SCL (58), PB7 SDA (59) | drawn | STUSB4500, TMP117, SHT40 |
 | ADC inputs | PC0 IHTR_A, PC1 IHTR_B | drawn | PC2/PC3 no longer used for drain sense (2026-10-28); free |
-| Pixel select | 5 GPIO (ch_sel_0…3, mux_en) | to connect | |
+| Pixel select | 5 GPIO (MUXA_A0/A1, MUXB_A0/A1, MUX_EN) | to connect | |
 | PD_ALERT (STUSB4500) | 1 GPIO | to connect | Target name in §1.2; STUSB4500 ALERT is not yet wired to the MCU |
 | SWD | PA13 (46), PA14 (49) via 33 Ω | drawn ✓ | |
 | HSE | PH0 (5) | to connect | |

@@ -3549,7 +3549,7 @@
 		)
 		(uuid "fff9a74c-82a2-4df0-a931-22b980335619")
 	)
-	(label "GMOS_Vadj4"
+	(label "GATE_DC_A"
 		(at 160.02 38.1 0)
 		(effects
 			(font
@@ -3569,7 +3569,7 @@
 		)
 		(uuid "0ed728b3-537c-4733-bbf7-7ad0082eb145")
 	)
-	(label "GMOS_Vadj5"
+	(label "GATE_DC_B"
 		(at 160.02 40.64 0)
 		(effects
 			(font
@@ -3579,7 +3579,7 @@
 		)
 		(uuid "138281d8-3747-47f7-a196-03d4395b7192")
 	)
-	(label "GMOS_Imeas1"
+	(label "IHTR_B"
 		(at 130.81 101.6 180)
 		(effects
 			(font
@@ -3659,7 +3659,7 @@
 		)
 		(uuid "a9b617eb-8548-4adf-a2c8-0c39ea5e17f8")
 	)
-	(label "GMOS_Vadj2"
+	(label "DRN_A"
 		(at 207.01 85.09 0)
 		(effects
 			(font
@@ -3679,7 +3679,7 @@
 		)
 		(uuid "aff2a9c5-0321-4a24-ad7a-13b339b40543")
 	)
-	(label "GMOS_Imeas0"
+	(label "IHTR_A"
 		(at 130.81 140.97 180)
 		(effects
 			(font
@@ -3689,7 +3689,7 @@
 		)
 		(uuid "b72ca080-29f5-4adb-bd9e-e71cf99d6928")
 	)
-	(label "GMOS_Vadj3"
+	(label "DRN_B"
 		(at 207.01 124.46 0)
 		(effects
 			(font
@@ -3709,7 +3709,7 @@
 		)
 		(uuid "d594c61f-43a8-41a1-bc69-38f3a26c6f21")
 	)
-	(label "GMOS_Vadj1"
+	(label "HTR_B"
 		(at 95.25 85.09 0)
 		(effects
 			(font
@@ -3719,7 +3719,7 @@
 		)
 		(uuid "e7017296-a482-42ee-a2a1-58a6e9f0edea")
 	)
-	(label "GMOS_Vadj0"
+	(label "HTR_A"
 		(at 95.25 124.46 0)
 		(effects
 			(font
@@ -3749,7 +3749,7 @@
 		)
 		(uuid "fb5af396-2981-4c3a-b0e8-39416e3d594c")
 	)
-	(hierarchical_label "GMOS_Imeas[0..1]"
+	(hierarchical_label "{IHTR_A IHTR_B}"
 		(shape output)
 		(at 256.54 95.25 0)
 		(effects
@@ -3760,7 +3760,7 @@
 		)
 		(uuid "2e626f20-24ef-447d-9179-ef5cbcee429b")
 	)
-	(hierarchical_label "spi_miso"
+	(hierarchical_label "SPI_MISO"
 		(shape output)
 		(at 114.3 35.56 180)
 		(effects
@@ -3771,7 +3771,7 @@
 		)
 		(uuid "4847bd63-2fcc-4fde-b842-b01979364393")
 	)
-	(hierarchical_label "spi_clk"
+	(hierarchical_label "SPI_SCK"
 		(shape input)
 		(at 114.3 30.48 180)
 		(effects
@@ -3782,7 +3782,7 @@
 		)
 		(uuid "5768ebc8-d4fb-42be-b1a5-df5e465baa56")
 	)
-	(hierarchical_label "GMOS_Vadj[0..5]"
+	(hierarchical_label "{HTR_A HTR_B DRN_A DRN_B GATE_DC_A GATE_DC_B}"
 		(shape output)
 		(at 256.54 121.92 0)
 		(effects
@@ -3793,7 +3793,7 @@
 		)
 		(uuid "76be0d9c-1bf9-4486-b3ee-f43c971bcbbf")
 	)
-	(hierarchical_label "dac_cs"
+	(hierarchical_label "DAC_CS"
 		(shape input)
 		(at 114.3 33.02 180)
 		(effects
@@ -3804,7 +3804,7 @@
 		)
 		(uuid "a30c87b1-ec95-4b7c-9791-110d7d17a512")
 	)
-	(hierarchical_label "spi_mosi"
+	(hierarchical_label "SPI_MOSI"
 		(shape input)
 		(at 114.3 27.94 180)
 		(effects

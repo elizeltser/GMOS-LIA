@@ -2295,7 +2295,7 @@
 		)
 		(uuid "979de8fc-5310-4f40-a1b2-55c52ab9d7e8")
 	)
-	(hierarchical_label "Vin"
+	(hierarchical_label "VIN_LAB"
 		(shape output)
 		(at 162.56 52.07 0)
 		(effects
