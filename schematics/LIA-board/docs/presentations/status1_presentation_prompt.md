@@ -1,0 +1,408 @@
+# Build the GMOS LIA Board Status 1 Deck (Marp, multi-agent)
+
+How to run: in Claude Code, from the repository root, send `Execute schematics/LIA-board/docs/presentations/status1_presentation_prompt.md`. Expected runtime: 2–4 h (topics run in parallel). It writes only under `schematics/LIA-board/docs/presentations/status1/`. It never edits other repo files, KiCad files, firmware or simulations, and never runs SPICE or commits.
+
+---
+
+You are the orchestrator (Opus). Build a Marp slide deck that presents the state of the GMOS LIA readout board to the GMOS research team. The board is not built yet: schematic capture is in progress (status in `schematics/LIA-board/docs/README.md`). The deck covers requirements as the owner understands them, design guidelines, the open design decisions with their risks, and the implementation status. Work from the repository sources only. Every number, name and claim on a slide must trace to a source file. If a source is missing or contradicts another, the deck says so. Never guess.
+
+Repo paths in this prompt are relative to the repository root. Paths inside a document are relative to that document.
+
+## 0. Deck identity (confirmed by the owner 2026-10-28 unless marked)
+
+| Item | Value | Note |
+|------|-------|------|
+| Presenter name | **Eli Zeltser** | Confirmed. |
+| Date | **29 October 2026** (meeting date) | Confirmed. |
+| Title | **LIA Board: Status and Decisions** | Confirmed. |
+| Subtitle | "Presented to the GMOS research team" | Fixed text from the owner's notes. |
+| Language | English | Confirmed. |
+| Length | about 28–32 slides, about 40 min | S04, S05, S08 kept. |
+
+## 0.1 Owner decisions and positions (2026-10-28)
+
+These are the owner's own statements. Slides present them as "Owner's recommendation" or "Decided", and still show the evidence and the alternatives.
+
+| Topic | Owner's statement | How the deck uses it |
+|-------|-------------------|----------------------|
+| S06 sensor connection | **Socket, as drawn. Decided.** | One slide: the decision and its reason from the docs; soldered is mentioned only as the rejected alternative. Not an open item. |
+| S18 MCU placement | **Recommendation: place the MCU on the board in spin 1 (option A).** Reasons: it is much easier to test whether everything works on one integrated board, and AI review of the schematic/layout is relied on to catch errors before fabrication. | S18 still makes the "every error is a long debug lag" argument and grades all options honestly; it ends with the owner's recommendation and names AI review (plus the checks in `schematics/LIA-board/docs/schematic_review.md`) as the main mitigation for option A's risk. |
+| S19 front end (D-18) | **Recommendation: FE-B.** | S19 shows FE-B as the owner's recommendation, still pending formal closure in `README.md` §9.1, and presents FE-A and FE-C with their implications, especially for component selection (parts, rails, availability, cost). |
+| S24 band-pass | **Undecided, open-ended question.** The filter is tuned to the current excitation frequency (the owner states 518 Hz; the researcher verifies against the sources), but the frequency is configurable in firmware. Operating at another frequency means re-tuning the filter's capacitors and resistors. A much wider filter avoids re-tuning but lets in more noise and possibly harmonics, though it may still work. | One slide, framed as a question to the team, with the trade-off shown. No recommendation. |
+| S10–S15 | Secondary. Not worth full slides. | Merged into one slide, S10, "Other considerations": one sentence each for calibration, bring-up/debug access, firmware dependence, procurement, systems perspective, component choice. |
+| S23 VDDA, S25 heater | Not important now. | Dropped from the deck. |
+| S18 fallback | **A jumper-wired EVB (option B) is an acceptable fallback** if option A fails at bring-up. So the board needs additional connectors or headers that let an external MCU EVB take over. | S18 lists "fallback headers for an EVB" as a mitigation of option A and says it costs extra connectors and board area. S30 lists the connector choice as a team ask. |
+| Prices | **No prices on slides.** | Prices and stock figures stay out of slide bodies; at most in speaker notes. Availability is described in words (e.g. "single source", "low stock"). |
+| Doc disagreements (S29) | Default kept: names and both sources, no values picked. | — |
+| Deliverable | **PDF export wanted.** | §6.9 PDF step is mandatory. |
+
+## 1. Owner's intent (source of truth for goals)
+
+The owner's notes were rewritten into this section. Typos are fixed. Nothing is added and nothing is dropped. Every goal and point here maps to topics in §4 (see §4.1). Quote from here when a slide needs the owner's wording.
+
+**Working title (too long, shorten per §0):** "GMOS LIA Sampling Board Implementation Status and Discussions Presentation."
+
+**Purpose:** a Marp presentation for the research team, generated by Claude Code. The five goals:
+1. Present board requirements as I understand them, categorised as "hard" (a must) or fluid or TBD.
+2. Present my general guidelines for the design, with a look to the future. These are not necessarily requirements; they are a systems perspective.
+3. Present the major design decisions I face in the implementation, the ones with major impact.
+4. Present a risk management table for each major design decision and its implications. Present the suggested mitigation strategies for risk reduction.
+5. Present the current implementation status and nearby goals.
+
+**Goal 1 in depth.** The repo already has many technical requirement files. This talk is about requirements from the user perspective:
+- How the board receives its input.
+- How the sensor is connected: socket or soldered.
+- How the signal chain should be designed: broadly similar to the existing ATE tests. Here it is an analog route with switches, which involves some risk.
+- Contention points. Do I place an MCU now, or implement the analog part and test it first? Explain this as clearly and decisively as possible. The team will want everything and will not understand the implications of mistakes. Any error is a potential long debugging lag.
+- The other side of the coin. One board, once it is alive, may allow placement fixes. Working with it is much easier than connecting an MCU on an evaluation board (EVB) with many jumpers. That is also a risk. Grade it.
+- Add any other such points I have not thought of. One slide for each.
+
+**Goal 2 in depth.** Component choice. The simulation workflow: simulate what can be simulated. Not everything is possible; for example, the switch in the analog route is only a hopeful model.
+
+**Goal 4 in depth.** For each issue that has several suggested solutions, explain the risks and implications in a table. Colour green, orange, red to make it visual.
+
+**General notes.** The first slide has my name, the date, the presentation title, and "presented to GMOS team." (Name: Eli Zeltser.)
+
+**Later decisions.** The owner's answers of 2026-10-28 are in §0.1 and override the open framing above where they differ (e.g. the MCU contention point now ends with the owner's recommendation).
+
+**Look.** Text must never overrun the slide. Prefer splitting into two slides over one slide with too much text.
+
+## 2. Inputs and repository rules
+
+- Source files: root `CLAUDE.md` ("Where facts live") and `schematics/LIA-board/docs/README.md` §9. The goals come from §1 of this file.
+- Owners of facts:
+  - Requirements and target values: `schematics/LIA-board/docs/requirements.md`
+  - Circuits, values, net names, pins: `schematics/LIA-board/docs/schematic_overview.md`
+  - Decisions and open items: `schematics/LIA-board/docs/README.md` §9 (evidence in `schematics/LIA-board/docs/decisions/`)
+  - Simulation baseline and review limits: `simulations/design-context.md`
+  - Simulation plan and D-18 matrix: `simulations/simulation-plan.md`
+  - Earlier GMOS boards (reference evidence): `schematics/existing_boards/`
+- **Disagreements are reported, never resolved.** The board docs and `simulations/design-context.md` disagree on several values (supply, excitation, gain, time constant). Each disagreement the deck relies on is an open item (S29) with both sources. The deck never picks one value.
+- **D-18 status.** `README.md` §9.1 still lists D-18 as open; the owner now recommends FE-B (§0.1). The deck shows FE-B as the owner's recommendation, "formal closure in README §9.1 pending", and still presents FE-A and FE-C.
+- Agents write only under `schematics/LIA-board/docs/presentations/status1/`. They never edit other docs, KiCad files, the netlist, `firmware/`, `simulations/` or `ate_lia/`. Reading is free.
+- Allowed shell commands: `ls`, `cat`, `grep`, `sed -n`, `test -e`, `python3` (arithmetic and XML or PDF text extraction only), `mkdir -p` and `mv` (inside `status1/` only), and `source ~/.zshrc`, `timeout` and `marp` (§6.9). Nothing else.
+- No git commit, add or push. No SPICE, KiCad or bench tools.
+- This prompt contains no design values. Agents take values from the source files at run time. Never copy a value from memory.
+
+## 3. Deck specification
+
+### 3.1 File and front matter
+
+Deck file: `schematics/LIA-board/docs/presentations/status1/status1_deck.md`. Front matter:
+
+```yaml
+---
+marp: true
+html: true
+theme: default
+size: 16:9
+paginate: true
+footer: 'GMOS LIA Board · Status 1 · Eli Zeltser · 29 Oct 2026'
+style: |
+  section { font-size: 26px; padding: 40px 56px; }
+  section h1 { font-size: 40px; }
+  section table { font-size: 20px; }
+  .risk-green  { background: #d4edda; font-weight: bold; }
+  .risk-orange { background: #ffe0b2; font-weight: bold; }
+  .risk-red    { background: #f8d7da; font-weight: bold; }
+  .tag { font-size: 16px; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+  .tag-hard { background: #d4edda; }
+  .tag-fluid { background: #fff3cd; }
+  .tag-proposed { background: #e2e3f5; }
+---
+```
+
+`html: true` is needed for the `<span class="risk-…">` cells. The CSS goes in the front-matter `style:` key, Marp's built-in way to carry inline CSS. The footer is filled from §0 after confirmation.
+
+### 3.2 Slide conventions
+
+- Slides are separated by `---` on its own line.
+- Each slide has a title (at most 8 words), a body, and one visible last line `Source: <repo-relative path(s) §section>`.
+- A PROPOSED slide has `<span class="tag tag-proposed">PROPOSED: owner may drop</span>` at the top.
+- Speaker notes are an HTML comment at the end of the slide: `<!-- Facts: S07-F03, S07-F07. Say: … -->`. Notes are 2–5 sentences, at most 80 words.
+- Requirement tags: `<span class="tag tag-hard">HARD: must</span>`, `<span class="tag tag-fluid">FLUID: TBD</span>`.
+- Risk cells: `<span class="risk-green">GREEN: low risk</span>`, `risk-orange` (MEDIUM), `risk-red` (HIGH). Colour never carries meaning alone. Every risk slide has a legend line.
+
+### 3.3 Overflow limits (hard, consistent)
+
+- **Title:** at most 8 words.
+- **Text slide:** at most 6 bullets, at most 12 words per bullet, at most 2 nesting levels, at most 70 words in total.
+- **Table slide:** table at most 6 rows × 5 columns, each cell at most 6 words, plus at most 2 lines of text outside the table (about 25 words).
+- **Speaker notes:** at most 80 words.
+- If a slide exceeds a limit, split it into two slides, the second titled "(cont.)". Never shrink the font below the style block.
+
+## 4. Owner intent → deck coverage
+
+### 4.1 Coverage map
+
+Every goal and point in §1 maps to at least one topic. The deck review (§6.8) checks this map.
+
+| Owner point (§1) | Topics |
+|------------------|--------|
+| Goal 1: hard vs fluid requirements, user view | S02, S03 |
+| Input source | S04 (power), S05 (PC link) |
+| Sensor socket or soldered (decided: socket) | S06 |
+| Signal chain like the ATE tests; analog switch route and its risk | S07 |
+| "One slide for each more point" | S04, S05, S08 (PROPOSED); S10 (secondary points, one line each) |
+| Goal 2: systems perspective and future; component choice | S10 (one line each, §0.1); S19 slide 2 (component implications of D-18) |
+| Goal 2: simulation workflow; switch model is hopeful | S16, S17 |
+| Goal 3: major design decisions | S18–S22, S24 |
+| Goal 3: MCU now vs analog first, decisive, both sides, graded | S18 |
+| Goal 4: risk table per decision, green/orange/red | S18–S22, S24, S26 |
+| Goal 5: status and nearby goals | S27, S28 |
+| Doc disagreements (root `CLAUDE.md`) | S29 |
+| General notes: name, date, title, "presented to GMOS team" | S00 |
+| Look: no overflow, split instead | §3.3, §6.8 |
+
+### 4.2 Topic table
+
+Each topic writes one fragment, `slides/<ID>.md` (§6.2). "PROPOSED" topics are the extra points the owner asked for. They are tagged and may be dropped. Short file names in the Sources column resolve from `schematics/LIA-board/docs/` unless they start with `schematics/`, `simulations/` or `ate_lia/`. Root `CLAUDE.md` is written in full.
+
+| ID | Slide(s) | Sources (repo-relative) | What the slide(s) must show |
+|----|----------|-------------------------|-----------------------------|
+| S00 | 1 | none (orchestrator) | Name, date, title, "Presented to the GMOS research team." Name and date from §0. |
+| S01 | 1 | §1 of this prompt | The five goals. Legend: HARD, FLUID, PROPOSED, colours. |
+| S02 | 2–3 | `schematics/LIA-board/docs/requirements.md` §R.1–R.4 (rows that are musts); `simulations/design-context.md` §1 | HARD requirements in plain words, grouped: power and input, sensor and analog, digital and firmware. Each row tagged with its ID. |
+| S03 | 1–2 | `requirements.md` (rows not fixed, e.g. "pending D-18"); `simulations/design-context.md` §9; `schematics/LIA-board/docs/README.md` §9.2; `simulations/design-issues.md` (open issues) | TBD requirements, each with the open decision or question blocking it. |
+| S04 | 1 | `requirements.md` §R.1 and DG-*; `schematic_overview.md` §3.1, §3.4; `README.md` D-10, D-14; `decisions/DC_tps6513x_study.md` §0 | PROPOSED. Power input: USB-C PD source, voltages, what the user supplies, heater rail. |
+| S05 | 1 | `requirements.md` DG-4, DG-9; `schematic_overview.md` §5.6; `firmware.md` F.7; `README.md` D-21 | PROPOSED. How the PC commands the board and gets data (UART, isolated). Why isolated. Open cable point (D-21). |
+| S06 | 1 | `schematic_overview.md` §1.3 (socket J3, DIP-40); `requirements.md` §R.2.1–R.2.2; `ate_lia/FSD.md` "Definitions for the GMOS"; `schematics/existing_boards/` (earlier boards: `GMOS_v3-CM.pdf`, `GMOS_v3-VM.pdf`, `GMOS_CM_REV2.pdf`, `GMOS_VM.pdf` show how the sensor was connected; read them with the Read tool and cite page) | **Decided: socket, as drawn (§0.1).** The decision, its reasons from the docs, and what the earlier boards did. Soldered only as the rejected alternative, one line. |
+| S07 | 1–2 | `ate_lia/FSD.md` "Signal Chain"; `measurement_principles.md` §2.2–2.3; `schematic_overview.md` §4.2; `schematics/existing_boards/GMOS_Pace_analog_only_V2.pdf` (earlier analog-only route) | Side by side: ATE bench chain vs board analog chain with switches. Where the switch route adds risk, which simulation covers it, and what the analog-only PDF shows. |
+| S08 | 1 | `schematic_overview.md` §4.7; `requirements.md` §R.2.6; `README.md` D-12, D-16, D-19 | PROPOSED. Number of pixels (active and blind), how one pair is selected at a time, what the user chooses, the cost. |
+| S09 | 1 | `requirements.md` §R.2.1–R.2.3, R.4.1; `README.md` D-3, D-17, D-22; `schematic_overview.md` §4.5, §4.6 | What the board generates or sets from the user side: gate excitation, bias, heaters. Which part is MCU and which is analog. |
+| S10 | 1 | `measurement_principles.md` §2.13; `requirements.md` DG-5, DG-4; `schematic_overview.md` §3.2, §4.4, §5.6; `firmware.md` F.1, F.9; `README.md` §9.2 items 9 and 12, D-11, D-14; `simulations/design-context.md` §8; `preliminary_lab_test_results.md` §8.1 | **Other considerations (one slide, §0.1).** Exactly one sentence each: calibration, bring-up and debug access, firmware dependence, procurement and availability, systems perspective (what the board must allow later), component-choice rules. No sub-bullets, no tables. |
+| S11 | — | — | Merged into S10 (§0.1). No researcher, author or reviewer. |
+| S12 | — | — | Merged into S10 (§0.1). No researcher, author or reviewer. |
+| S13 | — | — | Merged into S10 (§0.1). No researcher, author or reviewer. |
+| S14 | — | — | Merged into S10 (§0.1). No researcher, author or reviewer. |
+| S15 | — | — | Merged into S10 (§0.1). No researcher, author or reviewer. |
+| S16 | 1 | `simulations/README.md`; `simulations/simulation-plan.md` (Rules, §7.2); `simulations/ti-pspice/CLAUDE.md` | Simulation workflow: what is simulated, with which models, what is only a topology check. The ideal switch is a hopeful model: say what it misses. |
+| S17 | 1–2 | `simulations/simulation-plan.md` §7.1–7.2; `simulations/simulation-index.md`; `simulations/ti-pspice/docs/sim-results/` | Coverage: which SIM-xx are done, partial, missing, or topology-only. At most 6 rows per slide. |
+| S18 | 2–3 | `requirements.md` DG-1, DG-7–DG-10; `firmware.md` F.1, F.8; `preliminary_lab_test_results.md` §8.3 (LAB-4); `README.md` §9.1 D-2, D-3, D-22; `simulations/design-issues.md`; `schematic_review.md` §0, §4 (the review and netlist checks); `schematics/existing_boards/` (the earlier boards as evidence of what an analog-only or MCU-on-board route cost) | **One decision: where the MCU goes.** Options: (A) full board with MCU in spin 1; (B) analog-only board in spin 1 with the MCU on a separate EVB connected by jumpers or cable; (C) a third option the docs support (e.g. MCU footprint or test headers left for a later spin; find the options in the docs, else NOT FOUND). Each option graded A–F with a colour and a one-line basis. Ends with the **owner's recommendation: option A** (§0.1). See §6.10 for the argument the slides must make. |
+| S19 | 2 | `schematics/LIA-board/docs/schematic_overview.md` §4.9; `simulations/simulation-plan.md` §7.2, §7.4; `schematics/LIA-board/docs/decisions/D-18_frontend.md` §1, §3; `schematics/LIA-board/docs/decisions/D-18_research.md` R1–R2; `simulations/design-issues.md` DI-01–DI-03, DI-15 | D-18 front end. Slide 1: FE-A, FE-B, FE-C as one table (limits §3.3), risk colours per criterion. Slide 2: implications for component selection per option (parts added or removed, rails, availability, single source, cost). Ends with the **owner's recommendation: FE-B** (§0.1), labelled "formal closure in README §9.1 pending". |
+| S20 | 1 | `decisions/DC_tps6513x_study.md` §1, §6; `README.md` D-14 | Supply architecture options (one converter or two) with risk colours. Open. |
+| S21 | 1 | `README.md` D-21; `requirements.md` DG-4; `schematic_review.md` §1 | UART isolation and cable power: options, risk colours, mitigation. Open. |
+| S22 | 1 | `README.md` §9.2 item 10; `simulations/simulation-plan.md` SIM-12; `simulations/design-issues.md` DI-06, DI-11 | Drain-node capacitance and common-mode leakage: why it matters for CMRR, options, risk colours. Open. |
+| S23 | — | — | Dropped (§0.1, not important now). |
+| S24 | 1 | `README.md` §9.2 item 6; `requirements.md` AN-1, AN-21; `measurement_principles.md` §2.8; `firmware.md` F.6; `simulations/design-issues.md` DI-16 | **Open question to the team, no recommendation (§0.1).** Band-pass tuned to the current excitation frequency (verify the value; the owner states 518 Hz) while the frequency is configurable. Trade-off: re-tune capacitors and resistors per operating frequency vs a wider filter that needs no re-tuning but passes more noise and possibly harmonics (it may still work). Risk colours per option. |
+| S25 | — | — | Dropped (§0.1, not important now). |
+| S26 | 1 | S18–S22 and S24 fact sheets and reviews (not the repo) | Risk heat map: decisions × grade (GREEN/ORANGE/RED). At most 6 rows × 5 columns. |
+| S27 | 1 | `README.md` §9.1 (closed decisions); `schematic_review.md` §3 (ticks), §5 (log) | Implementation status: done, in progress, open. |
+| S28 | 1 | `schematic_review.md` §3 (T00–T10); `simulations/simulation-plan.md` §7.2 | Nearby goals: next tasks and the simulations that unblock them. The owner sets the order. |
+| S29 | 1 | root `CLAUDE.md` ("Where facts live"); `simulations/design-context.md` §2–§5; `README.md` §9.2 | Documentation disagreements to reconcile: names only (supply, excitation, gain, time constant, plus any the fact sheets find). Both sources cited. Never a value pick. |
+| S30 | 1 | `README.md` §9.2 (owner next step) | What we need from the team: decisions, measurements, parts. Owner per item. |
+| S31 | 1 | none (IDs from the sources) | Appendix: ID glossary (D-, SIM-, DI-, AN-, DG-, LAB-, FE-A/B/C) and acronyms. |
+
+### 4.3 Deck size (hard rule)
+
+- Core deck = S00–S03, S06, S07, S09, S10, S16–S22, S24, S26–S30. Target **≤ 26 slides**.
+- PROPOSED topics S04, S05, S08 are kept by the owner (2026-10-28) and placed after S07; they keep their PROPOSED tag.
+- Merged or dropped topics (S11–S15, S23, S25) are not built.
+- Total deck **≤ 32 slides**.
+- If the core is over 26, the orchestrator moves overflow topics to an appendix section after S31. It never drops an owner point to save space. It records the move in `open_issues.md`.
+
+## 5. Subagents: how to launch and what each gets
+
+Launch every subagent with the **Agent tool**, `subagent_type: general-purpose`, and the `model` set per role (§6.1). Each subagent prompt has four parts, in this order:
+1. The role and the file it writes (from §5.1 and §6.2–6.5).
+2. The topic row copied from §4.2 (ID, sources, what must show).
+3. The rule set from §2 (repo rules and shell list) and the format it must write.
+4. For reviewers: the rubric in §6.6. For authors: the fact sheet path.
+
+Run the topics in parallel, in batches of at most 8. Do not give one subagent more than one topic, except the whole-deck reviewer.
+
+Topics without a researcher (step (a) skipped): S00 and S01 (the orchestrator writes them from §0 and §1; a Sonnet reviewer checks them). S26 (the author reads only the fact sheets and reviews of S18–S22 and S24). S31 (a glossary built from all fact sheets after assembly, one Haiku author).
+
+### 5.1 Role prompt templates (compact)
+
+**Researcher (Haiku):**
+> You are the researcher for topic <ID>. Read only the files in the topic row below (and any PDF or PPTX there that reads). Write `schematics/LIA-board/docs/presentations/status1/research/<ID>.md` in the fact-sheet format of §6.3 with IDs `<ID>-F01…`, `<ID>-NF01…`, `<ID>-C01…`. Every fact has a source with § or page. A value not in a source is NOT FOUND. Do not guess. Rules: §2. Topic row: <row>.
+
+**Author (Haiku):**
+> You are the slide author for topic <ID>. Read `research/<ID>.md` and the latest review `reviews/<ID>.r<N-1>.md` if it exists. Write `slides/<ID>.md` in the fragment format of §6.4. Use only facts from the fact sheet. Show every C-xx conflict as an open item. Apply the limits of §3.3. Topic row: <row>.
+
+**Reviewer (Sonnet for ordinary topics, Opus for S18–S22, S24, S26):**
+> You are the reviewer for topic <ID>, round <N>. Grade `slides/<ID>.md` against the rubric in §6.6. Check each slide against the fact sheet and the source text. Render `render/preview_<ID>.md` (§6.9) and look at every PNG with Read. Write `reviews/<ID>.r<N>.md` in the format of §6.5. Route the review per §6.7. Do not edit slides. Rules: §2.
+
+**Whole-deck reviewer (Opus):**
+> You are the whole-deck reviewer, round <N>. Read `status1_deck.md`, all `slides/*.md` headers, the fact sheets' conflict lists, and the PNGs in `render/`. Run the checks of §6.8. Write `reviews/deck.r<N>.md`. Do not edit the deck. Rules: §2.
+
+## 6. Execution pipeline (multi-agent)
+
+For each topic in §4.2, the orchestrator runs steps (a)–(c) below, except for the topics without a researcher in §5. It tracks progress in `status.md` (topic, round, grade, open issues).
+
+### 6.1 Models per role
+
+| Role | Model | Writes |
+|------|-------|--------|
+| (a) Researcher | Haiku | `research/<ID>.md` |
+| (b) Author | Haiku | `slides/<ID>.md` |
+| (c) Reviewer, ordinary topics | Sonnet | `reviews/<ID>.r<N>.md` |
+| (c) Reviewer, decision and risk topics S18–S22, S24, S26 | Opus | `reviews/<ID>.r<N>.md` |
+| Whole-deck reviewer | Opus | `reviews/deck.r<N>.md` |
+| Orchestrator | Opus | `status1_deck.md`, `status.md`, `open_issues.md` |
+
+### 6.2 File layout
+
+All under `schematics/LIA-board/docs/presentations/status1/`:
+
+```
+status1/
+  status.md                 tracker (topic, round, grade, open issues)
+  open_issues.md            escalations for the owner
+  research/<ID>.md          fact sheet (§6.3); a re-run overwrites with a new "Round" header
+  slides/<ID>.md            Marp fragment (§6.4): slides only, no front matter
+  reviews/<ID>.r<N>.md      topic review (§6.5)
+  reviews/deck.r<N>.md      whole-deck review (§6.8)
+  render/                   PNG renders; preview_<ID>.md files
+  status1_deck.md           final deck: front matter + slides in §4.2 order
+  status1_deck.001.png …   final render, moved into render/
+```
+
+### 6.3 Fact sheet format (`research/<ID>.md`)
+
+```
+# Fact sheet <ID>: <title>
+Round: <n> | Files read: <path §section or page list>
+Coverage: <k> facts, <m> NOT FOUND, <c> conflicts
+
+| ID | Fact (own words; numbers and names quoted verbatim in backticks) | Source (repo-relative path, § or page) | Type |
+|----|------------------------------------------------------------------|----------------------------------------|------|
+| <ID>-F01 | … | `schematics/…md` §4.9 | doc-stated |
+| <ID>-F02 | … | `…pdf` p. 3 | derived (show the calculation) |
+
+## Not found
+- <ID>-NF01: <question>. Searched: <files>. Result: NOT FOUND.
+
+## Conflicts (report, do not resolve)
+- <ID>-C01: `<source A>` §x says "…"; `<source B>` §y says "…". Owner per README §9.2.
+
+## Options (decision topics only)
+- Option <name>: <description>. Risk: <one line>, cites <ID>-F xx.
+```
+
+Rules: every fact has a source. A value not in a source is not a fact. A question not answered in the listed files is NF. Do not search beyond the listed files unless the topic row names more. A conflict is recorded, never silently resolved.
+
+### 6.4 Slide fragment format (`slides/<ID>.md`)
+
+- Slides only, separated by `---`. No front matter. No file header comment (it would become speaker notes of slide 1).
+- Each slide follows §3.2 and §3.3. Speaker-notes blocks name their facts (`Facts: <ID>-F03, <ID>-F07`).
+- Each relevant conflict is shown on the slide as an open item, with both sources.
+- Each NF that matters to the audience appears as "Not in docs: …", never filled in.
+- Decision topics: option table (within §3.3), a risk colour for each cell, one mitigation per option, and one owner line: "Owner's recommendation: …" where §0.1 gives one (S18, S19), else "Open question: …" or "Owner decides: …".
+
+### 6.5 Review file format (`reviews/<ID>.r<N>.md`)
+
+```
+# Review <ID> round <N> | reviewer: <model>
+Grade: <A–F> | Blocking: <n> | Major: <n> | Minor: <n>
+
+| # | Slide | Criterion (§6.6) | Finding | Evidence (fact ID or source line) | Required fix | Severity |
+|---|-------|------------------|---------|-----------------------------------|--------------|----------|
+| 1 | 2 | R1 | "…" not in <ID>-F07 | <ID>-F07 says "…" | replace with F07 wording | blocking |
+
+Route: AUTHOR | RESEARCH (missing: <ID>-NF xx or new facts) | DONE
+```
+
+### 6.6 Slide rubric (reviewers grade with this)
+
+| # | Criterion | Severity if failed |
+|---|-----------|--------------------|
+| R1 | Accuracy: every number, name, ID and claim traces to a fact ID, and the fact matches its source. No value from memory. | blocking |
+| R2 | Sources: visible `Source:` line; notes name their facts; cited paths exist (`test -e`). | blocking |
+| R3 | Conflicts: each C conflict is shown as an open item with both sides. No side is picked. | blocking |
+| R4 | Overflow: §3.3 limits met; PNG render has no clipped or overlapping text, nothing past the footer. | blocking |
+| R5 | Audience: one message per slide, stated in the title. Plain words. Acronyms and IDs defined on first use. | major |
+| R6 | Colour: green/orange/red only with the text label and a legend; colours match the review grade. | major |
+| R7 | Decision completeness (S18–S22, S24): options, consequences, graded risk per option with basis, a mitigation per option, owner line. | major |
+| R8 | Voice: direct and decisive where sources support it; unknowns stated as "Not in docs". | minor |
+| R9 | Notes: 2–5 sentences, at most 80 words, name their facts. | minor |
+
+Grades (the first band that matches is the grade):
+- **F**: fragment missing, unparseable, or not Marp.
+- **D**: 2 or more blocking.
+- **C**: exactly 1 blocking, or 3 or more major (0 blocking).
+- **B**: 0 blocking, and 1–2 major or 0 major with 3 or more minor.
+- **A**: 0 blocking, 0 major, at most 2 minor.
+
+An R7 gap counts as one major.
+
+### 6.7 Loop, render and escalation
+
+1. Author writes `slides/<ID>.md`.
+2. Reviewer grades it, then renders `render/preview_<ID>.md` (the §3.1 front matter + fragment) with the command in §6.9 and checks every PNG.
+3. Route: AUTHOR (fix slides, go to 2); RESEARCH (re-run researcher on the missing NF or new facts only, then author, go to 2); DONE (grade A).
+4. Limits: at most 4 rounds per topic.
+   - Grade B, 0 blocking, after round 3: accept. List open issues in `open_issues.md`.
+   - Grade A or B, 0 blocking, after round 4: accept, list issues.
+   - Anything else after round 4: escalate in `open_issues.md`. Keep the slide as a visible "DRAFT: escalated" slide.
+5. Never lower a rubric item to pass. Never invent a fact to pass R1.
+
+### 6.8 Assembly and whole-deck review
+
+1. Orchestrator writes `status1_deck.md` = §3.1 front matter + the slides of each topic in §4.2 order, separated by `---`.
+2. Orchestrator checks: every `Source:` path exists; every `<ID>-F xx` in notes exists in its fact sheet; each topic appears once.
+3. Whole-deck reviewer (Opus) checks:
+   - **Flow:** sections follow the goals in §1; title and agenda first.
+   - **Coverage:** every row of §4.1 is covered; PROPOSED slides are tagged.
+   - **Consistency:** same IDs and names (D-, SIM-, DI-, FE-A/B/C); name, date, title and footer match §0.
+   - **Duplicates:** no fact is the main point of two slides (a summary may repeat it).
+   - **Conflicts:** every C conflict appears on S29 or on its topic slide.
+   - **Overflow:** from the PNG renders. Clipped or overlapping text is blocking.
+   - **Size:** §4.3 limits.
+4. Orchestrator sends the affected topics through §6.7 again, re-renders, re-runs the deck review. At most 3 deck rounds. Anything still open goes to `open_issues.md`.
+
+### 6.9 Marp render and verify
+
+From `schematics/LIA-board/docs/presentations/status1/`:
+
+```bash
+mkdir -p render
+source ~/.zshrc   # puts marp (marp-cli v4.5.1, ~/.npm-global/bin) on PATH
+timeout 300 marp --html --browser firefox status1_deck.md --images png --no-stdin </dev/null   # only Firefox is installed (without --browser firefox marp hangs looking for Chrome); </dev/null because marp waits on an open stdin
+mv status1_deck.*.png render/
+```
+
+- Every shell call starts fresh, so each render command is `source ~/.zshrc && timeout 300 marp --html --browser firefox … </dev/null`. HTML output (`-o x.html`) needs no browser and is the fast syntax check. If `marp` is still not found, the reviewer does a text-only check, marks R4 "not verified", and the orchestrator lists it in `open_issues.md`.
+- Viewing (owner, by hand): `feh render/` for the PNGs, `mupdf render/status1_deck.pdf` for the PDF. Agents view PNGs with the Read tool, not with a viewer.
+- Fragment previews: `render/preview_<ID>.md` with the front matter, rendered with the same command, PNGs moved to `render/`.
+- PDF (wanted by the owner): run once, at the end, on the final deck only:
+
+```bash
+source ~/.zshrc && timeout 300 marp --html --browser firefox --pdf --no-stdin status1_deck.md </dev/null
+mv status1_deck.pdf render/
+```
+
+### 6.10 Part of the owner's argument: MCU placement (S18)
+
+The S18 slides must make this argument, plainly, in the owner's words:
+- **The stance:** every error on the board is a potential long debugging lag. The team will want everything and will not yet see what one mistake costs. The deck says this directly, decisively, and early in S18.
+- **The consequence:** an analog-only spin 1 keeps the first test simple. An MCU on board in spin 1 adds firmware, timers and pins to the same debug session.
+- **The other side:** an integrated board, once alive, can be reworked locally. Working with it is much easier than an MCU on an EVB with many jumpers. The jumpers and cable are also a risk. Grade both.
+- **Owner's recommendation (§0.1):** place the MCU on the board in spin 1 (option A). It is much easier to test whether everything works on one integrated board, and AI review of the schematic and layout (with the netlist checks of `schematics/LIA-board/docs/schematic_review.md`) is the mitigation for the "one error, long debug" risk. The last S18 slide states this as the owner's recommendation, after the honest grading of all options.
+
+## 7. Content and voice
+
+- Plain, direct, decisive. State what each choice costs and what the risk is. Where the sources do not decide, say the decision is the owner's.
+- Use the owner's categories: HARD vs FLUID, and PROPOSED for the extra slides.
+- Explain each acronym or ID on first use, or put it in S31.
+- Never copy a value that is not in a source. Quote the source's value and cite it.
+
+## 8. Done check (orchestrator)
+
+- `status1_deck.md` exists and renders (`render/status1_deck.*.png`).
+- Every topic in §4.2 has a fact sheet, a fragment and a final review in `reviews/`, with grade A, or an entry in `open_issues.md`.
+- `reviews/deck.r<N>.md` has grade A, or its open issues are in `open_issues.md`.
+- Core deck ≤ 26 slides; total ≤ 32 (§4.3).
+- No file outside `schematics/LIA-board/docs/presentations/status1/` changed (`git status --short`). No commit.
+- Final message to the owner: slide count, grade table, open issues count, the top 5 conflicts for S29.
+
+## 9. Open questions for the owner
+
+All questions were answered on 2026-10-28 (§0, §0.1). Language: English. If the run finds new questions, list them in the final message and in `open_issues.md`.
+
+---
+
+## Final report
+
+When done, the orchestrator reports: slide count (core and total), grade per topic, open issues, and the answers the owner must give (§9).

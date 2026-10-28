@@ -1,0 +1,65 @@
+---
+marp: true
+html: true
+theme: default
+size: 16:9
+paginate: true
+footer: 'GMOS LIA Board · Status 1 · Eli Zeltser · 29 Oct 2026'
+style: |
+  section { font-size: 26px; padding: 40px 56px; }
+  section h1 { font-size: 40px; }
+  section table { font-size: 20px; }
+  .risk-green  { background: #d4edda; font-weight: bold; }
+  .risk-orange { background: #ffe0b2; font-weight: bold; }
+  .risk-red    { background: #f8d7da; font-weight: bold; }
+  .tag { font-size: 16px; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+  .tag-hard { background: #d4edda; }
+  .tag-fluid { background: #fff3cd; }
+  .tag-proposed { background: #e2e3f5; }
+---
+# Every board error costs long debugging
+
+- Errors must be caught before fabrication, not on the bench.
+- The team wants everything at once; mistake costs stay hidden.
+- An MCU (microcontroller) adds firmware, timers and pins to debug.
+- An analog-only first board keeps the first test simple.
+- Some bench tests need no MCU; the excitation test does.
+- Excitation starts only after rails, VDDA and gate DC are set.
+
+Source: schematics/LIA-board/docs/firmware.md §F.2.2, §F.5 step 1; schematics/LIA-board/docs/requirements.md FW-7; schematics/LIA-board/docs/preliminary_lab_test_results.md §8.2, §8.3
+
+<!-- Facts: S18-F02, S18-F03, S18-F12, S18-F19, S18-F24, S18-F25, S18-F38. Say: Every board error is a potential long debugging lag, and the team will want everything at once. An MCU adds firmware, timers and pins to the first debug session. LAB-1 and LAB-2 need no MCU; LAB-4 needs the MCU sine and references. Excitation waits for rails, VDDA and gate DC, so firmware must run before the first analog signal exists. -->
+
+---
+
+# Where the MCU goes: three options
+
+| Option | What it means | Risk | Mitigation |
+|---|---|---|---|
+| A. MCU on board | One board, firmware from day one | <span class="risk-red">RED: MCU pins not wired yet</span> | Review and netlist checks; EVB headers |
+| B. MCU on EVB | Sine, references cross jumpers | <span class="risk-orange">ORANGE: VDDA, sine, references off-board</span> | Not in docs |
+| C. Third option | Not in docs | Not graded | — |
+
+Legend: GREEN low, ORANGE medium, RED high. EVB: evaluation board.
+Owner's view: a working board can be reworked locally; EVB wiring is a risk too.
+
+Source: schematics/LIA-board/docs/schematic_review.md §2, §3 T08; schematics/LIA-board/docs/requirements.md DC-4c, DG-10; schematics/existing_boards/GMOS_Pace_analog_only_V2.pdf pp. 1, 14–15
+
+<!-- Facts: S18-F03, S18-F13, S18-F21, S18-F28, S18-F31, S18-F36, S18-F37, S18-NF01, S18-NF04. Say: A is red today because the MCU sheet is open: PA4, PC6/PC7 and PH0 are not connected yet. B is orange: VDDA would come from the EVB, and the phase-locked sine and references must cross the wiring. The earlier analog-only Pace board used headers, but no outcome is recorded. No third option is in the docs. -->
+
+---
+
+# My recommendation: MCU on the board
+
+- Owner's recommendation: A; one integrated board is easier to test.
+- Today A is red: MCU sheet still open.
+- Mitigation 1: review and netlist checks catch unwired pins before fabrication.
+- Mitigation 2: EVB headers let an external MCU take over.
+- Worst case: fall back to option B (orange).
+- Open: some pins set after layout; no layout check exists.
+
+Not in docs yet: AI review step, EVB header design (team ask).
+
+Source: schematics/LIA-board/docs/schematic_review.md §0, §2, §4; schematics/LIA-board/tools/checks/T08.txt; schematics/LIA-board/docs/firmware.md §F.2.4
+
+<!-- Facts: S18-F26, S18-F27, S18-F28, S18-C05, S18-NF02, S18-NF03, S18-NF05. Say: I recommend the MCU on the board. It starts red because its sheet is open. Review, including AI review, and the netlist checks catch unconnected pins before fabrication; EVB headers cap the worst case at option B. Pins G-9 to G-12 are set after layout and no layout check exists yet, so the review must cover layout too. -->

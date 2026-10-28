@@ -1,0 +1,35 @@
+---
+marp: true
+html: true
+theme: default
+size: 16:9
+paginate: true
+footer: 'GMOS LIA Board · Status 1 · Eli Zeltser · 29 Oct 2026'
+style: |
+  section { font-size: 26px; padding: 40px 56px; }
+  section h1 { font-size: 40px; }
+  section table { font-size: 20px; }
+  .risk-green  { background: #d4edda; font-weight: bold; }
+  .risk-orange { background: #ffe0b2; font-weight: bold; }
+  .risk-red    { background: #f8d7da; font-weight: bold; }
+  .tag { font-size: 16px; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+  .tag-hard { background: #d4edda; }
+  .tag-fluid { background: #fff3cd; }
+  .tag-proposed { background: #e2e3f5; }
+---
+
+# Implementation status: done, in progress, open
+
+| Done (1 of 11 tasks ticked) | In progress | Open |
+|---|---|---|
+| Microcontroller pins verified (28 Oct) | Excitation sheet (T01): 26/38 logged | Front-end choice D-18: owner recommends FE-B |
+| Net naming pass done (28 Oct) | GMOS_soc sheet (T02): 39/39 logged, unticked | Schematic pixel regrouping (MUX-3) |
+| Pixel pairing closed (21 Oct) | Front-end sheet (T04): 22/47 logged | Cable 5 V supply (D-21) |
+| AD630 headroom closed (22 Oct) | DAC sheet (T06): 25/33 logged | Analog supply source (VDDA) |
+| Excitation and drain-bias decisions logged | | Tasks with no log: T03, T07–T10 |
+
+Conflicts: excitation 22 vs 26 Oct; drain bias 24 vs 26 Oct; D-8 PROPOSED vs D-23.
+
+Source: schematics/LIA-board/docs/schematic_review.md §1, §3, §5; schematics/LIA-board/docs/README.md §9.1, §9.2; schematics/LIA-board/docs/presentations/status1_presentation_prompt.md §0.1
+
+<!-- Facts: S27-F01, S27-F02, S27-F03, S27-F04, S27-F09, S27-F11, S27-F12, S27-F13, S27-F16, S27-F17, S27-NF02, S27-C02, S27-C03, S27-C04. Say: Only T05 is ticked. The owner recommends FE-B for D-18, and README has no closure record yet. The log counts such as 26/38 are unexplained, so they show as logged only. Excitation is dated 22 Oct in the review and 26 Oct in the README. Drain bias is dated 24 Oct against 26 Oct, and D-8 stays PROPOSED while D-23 changed the drain supply. -->
