@@ -25,22 +25,22 @@ Evidence tags: *simulated* (PSpice run in this repo), *datasheet*, *estimated* (
 | SIM-ID | Candidate | File(s) | Vendor models? | Measured numbers (source) | Pass vs criterion | Gaps |
 |--------|-----------|---------|----------------|---------------------------|-------------------|------|
 | SIM-10 | C (topology, B by analogy) | P-02 `lia_v2.cir`, 2 V amplitude, 25 phases | Op-amp yes, switch **no** | R = 1.272742 V, −0.039 % vs 2A/π (time-step error, 0.0005 % at 2 µs, P-05); phase error ≤ 0.23° vs p − d, 0.05° vs atan2 | Topology only. Would pass ±0.5 % and 0.2° | Not at 0.4 V pk; no TMUX1219/TMUX6136 vendor model; OPA2365 not used |
-| SIM-11 | C (topology) | P-04 (amplitude 10 mV…3 V), P-03 (offset sweep), P-13 (V_OS) | Op-amp yes, switch no | Linear to 2.5 V: VX deviation ≤ 0.004 % from 10 mV to 2 V after fit, offset < 0.01 mV; clip at 2.75 V; V_OS appears as 2·V_OS (±0.16 µV) | Topology only. Would pass 0.1 % and 1 mV | Charge injection of the real switch (TMUX1219 −10 pC, 25× model) untested (D-01 / R-04 of the PSpice register) |
+| SIM-11 | C (topology) | P-04 (amplitude 10 mV…3 V), P-03 (offset sweep), P-13 (V_OS) | Op-amp yes, switch no | Linear to 2.5 V: VX deviation ≤ 0.004 % from 10 mV to 2 V after fit, offset < 0.01 mV; clip at 2.75 V; V_OS appears as 2·V_OS (±0.16 µV) | Topology only. Would pass 0.1 % and 1 mV | Charge injection of the real switch (TMUX1219 −10 pC, 25× model) untested (DI-01 / R-04 of the PSpice register) |
 | SIM-12 | all | SIM-2/SIM-3 (Python, ngspice), 20 pF | — | Median 56 dB at 20 pF (measurement_principles §2.7) | Not run at 50 pF | **Missing**: re-run at C_node = 50 pF ± 10 % |
 | SIM-13 | (C-like) | P-09 `chain_ss.cir`, 15 mV | INA828, OPA192 yes; switch no | Front-end gain 11.073 V/V (−0.055 %), R −0.06 %, phase −0.13°; INA828 model CM range 2.00–3.00 V on 5 V | Partial; candidate values not used | **Missing**: drain-node sources at 50–250 mV, ±200 mV mismatch, K = 2 band-pass, INA333/LM7705 |
 | SIM-14 | A (unity-gain SK) | P-14 `frontend_mc.cir` (1 % R, 5 % C), SIM-4 (Python, 0.1 %/1 %) | yes | P-14: phase σ 3.44°, gain σ 3.62 % at 1 %/5 %; SIM-4: σ 0.66°, 0.06 dB at 0.1 %/1 % | A: pass at 0.1 %/1 % (SIM-4) | **Missing** for the K = 2 band-pass (B, C) |
 | SIM-15 | demodulator only | P-05 (3f, 7f), P-06 (467/567/83 Hz) | op-amp yes | VX follows 1/n within 0.01 dB; non-harmonic shifts ≤ 0.022 mV | Partial | Band-pass and τ = 0.5 s not included; 50 Hz, 500/550 Hz not run |
-| SIM-16 | (A/B in-amp) | P-15 `chain_ss_P15.cir` `.NOISE` | yes | 12.68 nV/√Hz input-referred (INA828 G = 11, R_G dominated), 14.2 nV/√Hz with datasheet noise (D-14) | Amplifier ≪ 730 nV/√Hz shot noise → pass for INA828 | INA333 not simulated (datasheet gives 50 nV/√Hz only at G = 100) |
+| SIM-16 | (A/B in-amp) | P-15 `chain_ss_P15.cir` `.NOISE` | yes | 12.68 nV/√Hz input-referred (INA828 G = 11, R_G dominated), 14.2 nV/√Hz with datasheet noise (DI-14) | Amplifier ≪ 730 nV/√Hz shot noise → pass for INA828 | INA333 not simulated (datasheet gives 50 nV/√Hz only at G = 100) |
 | SIM-17 | all | P-13 (static 2·V_OS) | — | No drift simulation | — | Estimated in §4 instead |
 | SIM-18 | all | — | — | — | — | **Missing** |
 | SIM-19, 20 | all | — | — | — | — | Missing; not decision-relevant |
-| Other | C | P-10 (reference/rail pickup), P-12 (driver impedance), P-16 (overload), P-17 (square wave) | yes | 1 mV V_REF ripple at f₀ → 0.637 mV DC if V_REF is **separate**; tracks to ≈ 0 if one shared node (D-04); 10 Ω in series with demodulator input → −0.1 % | Supports one shared, buffered V_REF node | |
+| Other | C | P-10 (reference/rail pickup), P-12 (driver impedance), P-16 (overload), P-17 (square wave) | yes | 1 mV V_REF ripple at f₀ → 0.637 mV DC if V_REF is **separate**; tracks to ≈ 0 if one shared node (DI-04); 10 Ω in series with demodulator input → −0.1 % | Supports one shared, buffered V_REF node | |
 
 ## 3. Disqualifiers Found
 
 ### 3.1 FE-B: TMUX6136 on ±5 V is at the edge of its rating (fix identified)
 
-The datasheet requires 10 V ≤ (VDD − VSS) ≤ 33 V ([SCDS397B](https://www.ti.com/lit/ds/symlink/tmux6136.pdf) §5.4, note 1; *datasheet*). ±5 V rails give exactly 10 V, so any negative tolerance violates it. The PSpice design register already lists this as D-01, Critical. **Fix:** supply VDD/VSS from the +7 V / −7 V intermediate rails (14 V), each through 10 Ω + 1 µF. The signal pins stay at ±2.4 V, and VIH = 2 V min keeps the 3.3 V references valid. On ±15 V, R_on is 120 Ω typ / 135 Ω max. At 14 V it will be higher (no table, ≤ 400 Ω by the 12 V-single table). In series with the op-amp +IN, this does not matter.
+The datasheet requires 10 V ≤ (VDD − VSS) ≤ 33 V ([SCDS397B](https://www.ti.com/lit/ds/symlink/tmux6136.pdf) §5.4, note 1; *datasheet*). ±5 V rails give exactly 10 V, so any negative tolerance violates it. The PSpice design register already lists this as DI-01, Critical. **Fix:** supply VDD/VSS from the +7 V / −7 V intermediate rails (14 V), each through 10 Ω + 1 µF. The signal pins stay at ±2.4 V, and VIH = 2 V min keeps the 3.3 V references valid. On ±15 V, R_on is 120 Ω typ / 135 Ω max. At 14 V it will be higher (no table, ≤ 400 Ω by the 12 V-single table). In series with the op-amp +IN, this does not matter.
 
 ### 3.2 FE-C: INA333 first-stage headroom fails the ±200 mV mismatch (no fix within the current spec; *estimated*)
 

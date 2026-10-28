@@ -62,8 +62,8 @@ When the user changes a value, update it here, add a line to the change log at t
 | Function | Part | Status | Notes |
 |---|---|---|---|
 | Demodulator op amp | OPAx192 | Current | Model in `vendor/sbom862f/`. |
-| Demodulator switch | TMUX6136 (behavioural model SPDT_PREC) | Current, under review | Supply rating issue D-01. |
-| Instrumentation amplifier | INA828 | Current, under review | Common-mode range issue D-02. |
+| Demodulator switch | TMUX6136 (behavioural model SPDT_PREC) | Current, under review | Supply rating issue DI-01. |
+| Instrumentation amplifier | INA828 | Current, under review | Common-mode range issue DI-02. |
 | Demodulator resistors | 10 kOhm (R1, R2) | Current | Tolerance TBD. |
 | Output filter | 10 kOhm and 10 uF | Current | |
 

@@ -92,16 +92,17 @@ The hardware components of the setup for the GMOS analysis are high-end test and
 - HP 6624 power supply
 - Keysight DSO9104A Infiniium scope
 
-All of the devices GPIB or IP addresses are stored in the `devices.json`.
+Instrument addresses (GPIB or IP) are defined only in `devices.json` (template: `devices.example.json`); no other document lists them. Each device below is referenced by its tag, which is its key in `devices.json`.
+
 Here is a table with additional information:
 
-| Device | Tag | Address | IDN string |
-| ------------- | :-------------: | :-------------: | ------------- |
-| **SR860** | LIA | `TCPIP::132.68.54.194::INSTR` | "Stanford_Research_Systems,SR860,003693,V1.51\n" |
-| **Keysight DSO9104A** | Scope | `TCPIP::132.68.54.234::INSTR` | "KEYSIGHT TECHNOLOGIES,DSO9104A,MY53130118,06.00.00901\n" |
-| **Keysight B2962A** | SCU1 | `GPIB0::22::INSTR` | "Keysight Technologies,B2962A,MY52350661,2.2.1744.8725\n" |
-| **Keysight B2962A** | SCU2 | `GPIB0::23::INSTR` | "Keysight Technologies,B2962A,MY52350537,2.0.1613.9020\n" |
-| **HP 6624a** | PSU | `GPIB0::14::INSTR` | "\n" |
+| Device | Tag | IDN string |
+| ------------- | :-------------: | ------------- |
+| **SR860** | LIA | "Stanford_Research_Systems,SR860,003693,V1.51\n" |
+| **Keysight DSO9104A** | Scope | "KEYSIGHT TECHNOLOGIES,DSO9104A,MY53130118,06.00.00901\n" |
+| **Keysight B2962A** | SCU1 | "Keysight Technologies,B2962A,MY52350661,2.2.1744.8725\n" |
+| **Keysight B2962A** | SCU2 | "Keysight Technologies,B2962A,MY52350537,2.0.1613.9020\n" |
+| **HP 6624a** | PSU | "\n" |
 
 > Not all of the equipment is used for all the setup scenarios.
 > HP devices are old and have no `IDN` string.
@@ -171,13 +172,13 @@ Example output of `--list_devices`:
 ==================================================
 
 [GPIB]
-  GPIB0::22::INSTR
-    Board   : GPIB0   Primary address: 22
+  <resource string of tag SCU1>
+    Board   : GPIB0   Primary address: <SCU1 address>
     IDN     : Keysight Technologies,B2962A,MY52350661,2.2.1744.8725
 
 [TCPIP]
-  TCPIP0::132.68.54.194::inst0::INSTR
-    Host    : 132.68.54.194
+  <resource string of tag LIA>
+    Host    : <LIA host>
     IDN     : Stanford_Research_Systems,SR860,003693,V1.51
 ```
 

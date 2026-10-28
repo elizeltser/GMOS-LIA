@@ -70,7 +70,7 @@ When a part is unsuitable, propose replacements with the `pcbpart` tools, under 
    - Open requirement questions.
    - Not verified.
 2. Write each proposed test as a complete entry in the format of `simulations/simulation-index.md`, with the identifier `R-<n>`. Include its goal, schematic, parameters and expected results with their derivation. Do not edit the index.
-3. Update `simulations/design-issues.md`. Add new issues with the next free `D-xx` identifier, and update the evidence of existing ones. Close resolved issues with the reason.
+3. Update `simulations/design-issues.md`. Add new issues with the next free `DI-xx` identifier, and update the evidence of existing ones. Close resolved issues with the reason.
 4. Reply with the review path, a table of findings (ID, severity, one line each), the proposed test IDs, the open requirement questions, and any schematic change you recommend before further simulation.
 
 If the judge returns the review with corrections, fix exactly those points, note the revision at the top of the review file, and reply again in the same form.

@@ -12,7 +12,7 @@ The virtualenv lives at the **repo root** (`GMOS-LIA/.venv/`), not inside `ate_l
 # From repo root (GMOS-LIA/)
 python -m venv .venv
 source .venv/bin/activate
-pip install -e .
+pip install -e ".[lint,typecheck]"   # extras add ruff and pyright
 ```
 
 ## IMPORTANT: Always use the virtual environment, from the repo root
@@ -25,7 +25,7 @@ All dependencies (matplotlib, pyvisa, numpy, etc.) are installed only inside `.v
 export PYVISA_LIBRARY=@py
 ```
 
-**Addresses.** `ate_lia/devices.json` maps tags (`LIA`, `SCU1`, `SCU2`, `PSU`, `Scope`) to VISA resource strings (GPIB or `TCPIP::<ip>::INSTR`). Edit it for lab-specific addresses.
+**Addresses.** Instrument addresses are defined only in `ate_lia/devices.json` (template: `ate_lia/devices.example.json`); the statement is in [`FSD.md`](FSD.md). Do not copy addresses into docs or code; edit `devices.json` for lab-specific addresses.
 
 **`run_experiment.sh`** (repo root, git-ignored, one per machine) is the usual way to run a measurement. It sets `PYTHON=.venv/bin/python`, `CLI=ate_lia/sources/main.py`, exports `PYVISA_LIBRARY=@py`, and then runs **one** experiment as
 `"$PYTHON" "$CLI" --experiment <name> --config <toml>`. All other experiment blocks are commented out. To switch experiments, comment out (prefix with `# `) the `echo` + `"$PYTHON"` lines of the active block and uncomment the one wanted. Change parameters by editing the TOML (or copy an `ate_lia/configs/*.example.toml` and point `--config` at the copy); the TOML only needs the fields to override, unknown keys raise `TypeError`. Run from the repo root: `./run_experiment.sh`.
@@ -118,7 +118,7 @@ Tests: `tests/test_mcp_server_tools.py`, `test_operating_point_session.py`, `tes
 
 ## Key Files
 
-- `ate_lia/devices.json` — VISA addresses for all instruments (edit this for lab-specific configuration)
+- `ate_lia/devices.json` — VISA addresses for all instruments (edit this for lab-specific configuration; template: `ate_lia/devices.example.json`)
 - `FSD.md` — Functional Specifications Document: hardware connectivity, signal chain, PSU-channel / transistor mapping, device IDN strings, ATE APIs, experiment descriptions
 - `../run_experiment.sh` — local, git-ignored helper that runs one experiment via the CLI with `PYVISA_LIBRARY=@py` (create it per machine; the manual commands above do the same)
 - `configs/*.example.toml` — one example config per experiment

@@ -1,4 +1,4 @@
-"""P-12 driver output impedance at the demodulator input (D-06).
+"""P-12 driver output impedance at the demodulator input (DI-06).
 
 Reads sim-runs/P12_rser/P12_rser.csd. The run used circuits/lia_v3_fast_P10a0.cir
 (lia_v3_fast.cir with vampl = 0.2 V), 0.15 s, output capacitors 1 uF (tau = 10 ms),

@@ -307,13 +307,14 @@ Mandatory pin handling (T08): VDD (19, 32, 64) +3V3_D with 100 nF each + 4.7 µF
 |----------|--------|--------|-------|
 | EXC_DAC | PA4 (pin 20) DAC1_OUT1 | **to connect** | |
 | CAL_DAC (optional) | PA5 (pin 21) DAC1_OUT2 | free | |
-| REF_X / REF_Y | PC6 / PC7 (pins 37/38), TIM8_CH1/CH2 | **to connect** | Verify AF in CubeMX ([firmware.md §F.2](firmware.md#f2-cubemx-configuration)) |
-| SPI (DAC80508, ADS1220) | PA1 / PA6 / PA7 (pins 15/22/23) | drawn | **Verify that PA1 can be SPI1_SCK on STM32U575** (see firmware.md §F.2) |
+| REF_X / REF_Y | PC6 / PC7 (pins 37/38), TIM8_CH1/CH2 | **to connect** | AF3, verified (D-20) |
+| SPI (DAC80508, ADS1220) | PA1 / PA6 / PA7 (pins 15/22/23) | drawn | SPI1, AF5, verified (D-20) |
 | DAC_CS, ADC_CS, ADC_DRDY | 3 GPIO | to connect | |
 | USART2 → ISO6721 | PA2 TX (16), PA3 RX (17) | drawn, **TX/RX swapped at U11** | PA2 → U11 pin 7 (INA), PA3 ← U11 pin 6 (OUTB) |
 | I²C1 | PB6 SCL (58), PB7 SDA (59) | drawn | STUSB4500, TMP117, SHT40 |
-| ADC inputs | PC0 IHTR_A, PC1 IHTR_B, PC2 DSENSE_A, PC3 DSENSE_B | drawn (PC2/PC3 currently on IC2/IC4) | |
+| ADC inputs | PC0 IHTR_A, PC1 IHTR_B | drawn | PC2/PC3 no longer used for drain sense (2026-10-28); free |
 | Pixel select | 5 GPIO (ch_sel_0…3, mux_en) | to connect | |
+| PD_ALERT (STUSB4500) | 1 GPIO | to connect | Target name in §1.2; STUSB4500 ALERT is not yet wired to the MCU |
 | SWD | PA13 (46), PA14 (49) via 33 Ω | drawn ✓ | |
 | HSE | PH0 (5) | to connect | |
 

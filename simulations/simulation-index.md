@@ -184,7 +184,7 @@ The user asked for nine further tests (P-09 to P-17). P-08 first validates the f
 | Circuit | Content |
 |---|---|
 | `circuits/lia_v3_fast.cir` | `lia_v2.cir` with output capacitors `{cout}` (default 1 uF) and fault-injection parameters: `rser` (series resistance at the demodulator input), `dr1` (relative change of R1), `vos` (source in series with IN+ of U2 and U4), `aref`/`pref` (ripple on Vref), `kref` (0: ideal Vref, 1: Vref = V(VDC)/2 through an ideal buffer), `arail`/`prail` (ripple on the 5 V source), `rrail` (rail source resistance) and `iexc` (square excitation current drawn from the rail during the first half period, in phase with the X reference). Defaults reproduce `lia_v2.cir` apart from `cout`. |
-| `circuits/chain_ss.cir` | Full chain on one 0 V to 5 V rail: sensor stand-in, INA828 (G = 11 V/V, REF = 2.5 V), Sallen-Key high-pass and low-pass with their ground returns moved to the 2.5 V reference, and the X/Y demodulator. Each INA828 input is biased to 2.5 V through 100 kOhm (D-02). The sensor model is TBD (`simulations/design-context.md` section 1), so the stand-in is a floating differential source: sine `asin`, square `asq`, gated burst `aburst`, common mode `vcm`, DC differential `vdiff`, series resistance `rsens` per leg. |
+| `circuits/chain_ss.cir` | Full chain on one 0 V to 5 V rail: sensor stand-in, INA828 (G = 11 V/V, REF = 2.5 V), Sallen-Key high-pass and low-pass with their ground returns moved to the 2.5 V reference, and the X/Y demodulator. Each INA828 input is biased to 2.5 V through 100 kOhm (DI-02). The sensor model is TBD (`simulations/design-context.md` section 1), so the stand-in is a floating differential source: sine `asin`, square `asq`, gated burst `aburst`, common mode `vcm`, DC differential `vdiff`, series resistance `rsens` per leg. |
 | `circuits/frontend_mc.cir` | The front end of `chain_ss.cir` alone, with toleranced R and C models for a Monte Carlo AC run. |
 
 Fast settings (used where an entry says "fast"):
@@ -195,7 +195,7 @@ Fast settings (used where an entry says "fast"):
 | Analysis | `.TRAN 0 0.15 0 5u SKIPBP` (`lia_v3_fast.cir`). `chain_ss.cir` runs without `SKIPBP`, so that the high-pass capacitors start from the bias point. | 15 tau. 5 us leaves a 0.003 % gain error at the fundamental (P-05 time-step check). |
 | Initial conditions | `.IC V(VX)=2.5 V(VY)=2.5` | As the defaults. |
 | Measurement window | Mean of the last 20 whole periods (38.68 ms at 517 Hz), from 111.3 ms | The settling bias of this mean is about abs(V - 2.5 V) x (tau / 38.68 ms) x exp(-11.13) = 3.8e-6 x abs(V - 2.5 V), so 4.8 uV at 2 V amplitude and below 0.5 uV at 0.2 V. Every fault test below is a difference against a baseline step of the same run, so this bias cancels further. |
-| Signal level | Vampl = 0.2 V unless stated | Close to the Draft demodulator input of `simulations/design-context.md` section 4 (about 166 mV), as D-09 recommends. Then 2A/pi = 127.324 mV. |
+| Signal level | Vampl = 0.2 V unless stated | Close to the Draft demodulator input of `simulations/design-context.md` section 4 (about 166 mV), as DI-09 recommends. Then 2A/pi = 127.324 mV. |
 | Precision | `.OPTIONS NUMDGT=8` | Most expected effects are 0.05 mV to 2 mV. |
 
 Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-default parameters are set by an edited copy of the circuit in the run folder or by `--extra ".PARAM ..."`. The dispatcher checks which works and records the result in `docs/simulation-quirks.md`.
@@ -217,16 +217,16 @@ Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-de
 - **Parameters:** run P09a: fast, `.TRAN 0 0.15 0 5u` (bias point on), `.STEP PARAM p LIST 0 90`. Probes V(INP), V(INN), V(VDIFF), V(HPF), V(VSAMPLE), V(VX), V(VY). Run P09b: `.DC LIN PARAM vcm 0 5 0.02` with vdiff = 10 mV and asin = 0, probes V(VDIFF), V(HPF), V(INP). P09b finds the common-mode range of the INA828 model on this supply.
 - **Expected:** the ideal front-end transfer function of `ti-pspice-PSpiceFiles/differential-amplifier/README.md` section 3 gives |H(517 Hz)| = 11.079 V/V and a phase of +1.63 deg. Its phase slope is -0.442 deg/Hz. P09a:
   - DC level of INP and INN: 2.5 V within 1 mV (the INA828 bias current times 100 kOhm). VDIFF, HPF and VSAMPLE DC levels: 2.5 V within 5 mV (op amp and INA828 offsets). VSAMPLE amplitude 15 mV x 11.079 = 166.19 mV within 0.5 %.
-  - The INA828 output swing is +/-166 mV around 2.5 V, far inside the rails. The INA828 input common mode is 2.5 V, which leaves about 0.5 V to the limits quoted in D-02 (about 2 V from each rail, to be confirmed by P09b and the reviewer).
+  - The INA828 output swing is +/-166 mV around 2.5 V, far inside the rails. The INA828 input common mode is 2.5 V, which leaves about 0.5 V to the limits quoted in DI-02 (about 2 V from each rail, to be confirmed by P09b and the reviewer).
   - At p = 0: VX - 2.5 V = -(2/pi) x 166.19 mV x cos(1.63 deg) = -105.76 mV, and VY - 2.5 V = +3.01 mV minus the Y timing term (0.18 deg x 105.8 mV = 0.33 mV). At p = 90 deg: VX - 2.5 V close to +3.0 mV and VY - 2.5 V close to +105.76 mV. R = 105.80 mV at both phases. Pass limits: R within 0.5 % of 105.80 mV, and the measured front-end phase within 0.5 deg of +1.63 deg after the Y timing correction. The INA828 and op amp bandwidths are not in the ideal model. The analyst reports their extra phase.
-  - P09b: VDIFF stays at 2.5 V + 110 mV (11 x 10 mV) within 1 mV over a common-mode window. The analyst reports the vcm range where it holds within 1 mV and compares it with D-02. If the model does not limit the common mode at all, the analyst says so, because then the simulation cannot show the D-02 risk.
+  - P09b: VDIFF stays at 2.5 V + 110 mV (11 x 10 mV) within 1 mV over a common-mode window. The analyst reports the vcm range where it holds within 1 mV and compares it with DI-02. If the model does not limit the common mode at all, the analyst says so, because then the simulation cannot show the DI-02 risk.
 - **Status:** done, 27 October 2026.
-- **Result:** front-end gain 11.073 V/V (-0.055 % against 11.079 V/V) and phase +1.50 deg (-0.13 deg against +1.63 deg). R = 105.73 mV at p = 0 deg and 105.74 mV at p = 90 deg, -0.06 % against 105.80 mV, pass. The last-window settling bias is 0.45 uV, so the run is settled. The dispatcher's 2.402 V is a whole-run mean. The VDIFF value stays within 1 mV of 2.61 V for vcm from 2.02 V to 2.98 V, with clamp edges at 2.00 V and 3.00 V (consistent with D-02, datasheet not verified). See [sim-results/P-09.md](ti-pspice/docs/sim-results/P-09.md).
-- **Grade:** A (judge, 27 October 2026). Every stated criterion passes: input bias 2.5 V, stage offsets below 0.25 mV, amplitude -0.055 %, R -0.06 % and phase -0.13 deg (limit 0.5 deg). The judge re-ran the script and confirmed that the dispatcher's 2.402 V was a whole-run mean, not a settling problem. The INA828 model clamps the input common mode at 2 V from each rail. On 5 V this leaves 2.0 V to 3.0 V, so the 2.5 V bias has 0.5 V of margin on each side, and the D-02 risk is visible in simulation. The 0.055 % gain and 0.13 deg phase deficit against the ideal filters are localised by stage, but their cause is not identified (not verified against the amplifier bandwidths). This stays an open point.
+- **Result:** front-end gain 11.073 V/V (-0.055 % against 11.079 V/V) and phase +1.50 deg (-0.13 deg against +1.63 deg). R = 105.73 mV at p = 0 deg and 105.74 mV at p = 90 deg, -0.06 % against 105.80 mV, pass. The last-window settling bias is 0.45 uV, so the run is settled. The dispatcher's 2.402 V is a whole-run mean. The VDIFF value stays within 1 mV of 2.61 V for vcm from 2.02 V to 2.98 V, with clamp edges at 2.00 V and 3.00 V (consistent with DI-02, datasheet not verified). See [sim-results/P-09.md](ti-pspice/docs/sim-results/P-09.md).
+- **Grade:** A (judge, 27 October 2026). Every stated criterion passes: input bias 2.5 V, stage offsets below 0.25 mV, amplitude -0.055 %, R -0.06 % and phase -0.13 deg (limit 0.5 deg). The judge re-ran the script and confirmed that the dispatcher's 2.402 V was a whole-run mean, not a settling problem. The INA828 model clamps the input common mode at 2 V from each rail. On 5 V this leaves 2.0 V to 3.0 V, so the 2.5 V bias has 0.5 V of margin on each side, and the DI-02 risk is visible in simulation. The 0.055 % gain and 0.13 deg phase deficit against the ideal filters are localised by stage, but their cause is not identified (not verified against the amplifier bandwidths). This stays an open point.
 
 ### P-10 Coherent pickup on the reference and the rail
 
-- **Goal:** measure the DC error from a ripple at f_osc on Vref, on the 5 V rail, and from an excitation current that loads the rail (D-04).
+- **Goal:** measure the DC error from a ripple at f_osc on Vref, on the 5 V rail, and from an excitation current that loads the rail (DI-04).
 - **Schematic:** `circuits/lia_v3_fast.cir`, Vampl = 0.2 V, ost = 0, p = 0.
 - **Parameters:** fast. Each run steps its own baseline. Probes V(VX), V(VY), V(REF), V(VDC).
 
@@ -259,7 +259,7 @@ Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-de
 
 ### P-11 Resistor mismatch with input offset
 
-- **Goal:** measure the DC and scale error from a mismatch of R1 against R2 in the X channel (D-05).
+- **Goal:** measure the DC and scale error from a mismatch of R1 against R2 in the X channel (DI-05).
 - **Schematic:** `circuits/lia_v3_fast.cir`, Vampl = 0.2 V, p = 0.
 - **Parameters:** fast. Run P11p with ost = +0.3 V and run P11m with ost = -0.3 V, each with `.STEP PARAM dr1 LIST -10m -1m 0 1m 10m` (sorted, see the quirk on `.STEP LIST`). Probes V(VX), V(VY).
 - **Expected:** with R1 = R2 (1 + delta), the -1 state output is Vref - (1 + delta)(Vin - Vref). Averaging over a period gives delta VX = -(delta / 2) x ost - (delta / 2) x (2A/pi), with 2A/pi = 127.324 mV. VY does not change.
@@ -278,7 +278,7 @@ Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-de
 
 ### P-12 Driver output impedance at the demodulator input
 
-- **Goal:** measure the gain and phase error when the demodulator input node is driven through a series resistance (D-06).
+- **Goal:** measure the gain and phase error when the demodulator input node is driven through a series resistance (DI-06).
 - **Schematic:** `circuits/lia_v3_fast.cir`, Vampl = 0.2 V, ost = 0, p = 0.
 - **Parameters:** fast, `.STEP PARAM rser LIST 1m 10 100 1k`. Probes V(VX), V(VY), V(N00890).
 - **Expected:** a channel draws current only in its -1 state, (Vnode - Vref) / 10 kOhm through R2 or R4. With eps = rser / 10 kOhm, the node gain is g1 = 1 / (1 + eps) when one channel is in the -1 state and g2 = 1 / (1 + 2 eps) when both are. Over the four quarter periods this gives VX - 2.5 V = -(A / 2pi)(1 + 2 g1 + g2) and VY - 2.5 V = (A / 2pi)(2 g1 - g2 - 1). Relative to the rser = 1 mOhm step:
@@ -306,7 +306,7 @@ Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-de
 
 ### P-14 Filter tolerance Monte Carlo
 
-- **Goal:** find the spread of the front-end phase and gain at f_osc for given component tolerances, and compare the error of reading X alone with the error of reading R (D-08).
+- **Goal:** find the spread of the front-end phase and gain at f_osc for given component tolerances, and compare the error of reading X alone with the error of reading R (DI-08).
 - **Schematic:** `circuits/frontend_mc.cir`. Resistors 1 % and capacitors 5 %, uniform. These are test values. The tolerances are TBD in `simulations/design-context.md` section 6.
 - **Parameters:** `.AC LIN 1 517 517`, `.MC 500 AC VP([VSAMPLE]) YMAX OUTPUT ALL SEED=17`, `.OPTIONS NUMDGT=8`, run P14_mc2 (1638 s). The run gives 499 random samples (Pass 2 to Pass 500) plus the nominal section. Both CSDF columns hold the complex V(VSAMPLE), so VP and VM are derived from it (deg and V/V).
 - **Expected:** a numpy Monte Carlo of the ideal transfer function (200 000 samples, same tolerances, RG included) gives:
@@ -357,11 +357,11 @@ Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-de
 
 ### Batch 3: tests proposed by the batch-2 design review
 
-Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_batch2.md](design-review/2026-10-27_batch2.md), taken over by the judge on 27 October 2026 with the reviewer's expected values. Circuit names were renamed from R-0n to the P numbers. P-21 also depends on the switch decision of D-01 and uses assumed TMUX1136 parameters (CS = 10 pF is not from the datasheet).
+Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_batch2.md](design-review/2026-10-27_batch2.md), taken over by the judge on 27 October 2026 with the reviewer's expected values. Circuit names were renamed from R-0n to the P numbers. P-21 also depends on the switch decision of DI-01 and uses assumed TMUX1136 parameters (CS = 10 pF is not from the datasheet).
 
 ### P-18 Sensor source impedance, gain loading and noise
 
-- **Goal:** measure the gain and the input-referred noise of the chain when the sensor has a series resistance, with the 100 kOhm bias resistors in place (D-11).
+- **Goal:** measure the gain and the input-referred noise of the chain when the sensor has a series resistance, with the 100 kOhm bias resistors in place (DI-11).
 - **Schematic:** `circuits/chain_ss_P15.cir` (acmag = 1 V, asin = 0). Source resistance is the existing parameter `rsens` (resistors `R_SP` and `R_SN`).
 - **Parameters:** `.AC LIN 1 517 517`, `.NOISE V([VSAMPLE]) V_SIN 1`, `.STEP PARAM rsens LIST 1m 100 1k 10k 100k`, `.OPTIONS NUMDGT=8`, probe `V([VSAMPLE])`. The noise tables are in the `.out` file. One run, five steps.
 - **Expected:** with 100 kOhm from each input to VREF, the gain from the source EMF to VSAMPLE is 11.0732 V/V (P-14 nominal) times 200 kOhm / (200 kOhm + 2 rsens). The input-referred density relative to V_SIN is sqrt(12.68^2 + 2 x 4kT (Rs || 100 kOhm) + 2 x (0.17 pA x (Rs || 100 kOhm))^2) divided by the loading factor. The current-noise term is below 2.2 nV/sqrt(Hz) up to 10 kOhm.
@@ -379,7 +379,7 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
 
 ### P-19 Reference tracking with a shared reference node
 
-- **Goal:** show that a ripple at f_osc on one shared reference node (INA828 REF, filter returns, demodulator reference) produces no DC error, and measure the tracking error that is left (D-04).
+- **Goal:** show that a ripple at f_osc on one shared reference node (INA828 REF, filter returns, demodulator reference) produces no DC error, and measure the tracking error that is left (DI-04).
 - **Schematic:** `circuits/chain_ss_P19.cir`, a copy of `chain_ss.cir` in which `V_VREF VREF 0 {vref}` is replaced by `V_VREF0 VREF0 0 {vref}` and `V_RIP VREF VREF0 SIN(0 {aref} {f_osc} 0 0 {pref}) AC 1`, and the parameters `aref=0 pref=0` are added to the `.PARAM` line. acmag = 0, asin = 15 mV (Draft level).
 - **Parameters:**
   - Run P19a (linear): `.AC LIN 1 517 517`, probes `V([VSAMPLE])`, `V([VREF])`, `V([VDIFF])`, `V([HPF])`. `V_SIN` AC magnitude 0 (`acmag` = 0).
@@ -406,7 +406,7 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
 
 ### P-21 Switch with 5 V part parameters and reference impedance
 
-- **Goal:** rerun the demodulator with the TMUX1136 data of D-01 and measure the effect of charge injection into a reference with finite resistance (D-01, D-09, finding F-A).
+- **Goal:** rerun the demodulator with the TMUX1136 data of DI-01 and measure the effect of charge injection into a reference with finite resistance (DI-01, DI-09, finding F-A).
 - **Schematic:** `circuits/lia_v3_fast_P21.cir`, a copy of `lia_v3_fast.cir` with Vampl = 0.2 V, ost = 0, p = 0, kref = 0, and these edits. The instance lines of `X_U1` and `X_U3` use `RON=2 CS=10P CD=20P QINJ=6P TAU=5N ILK=3P`. `E_REF REF 0 VALUE ...` becomes `E_REF REFB 0 VALUE ...` with a new `R_RREFS REFB REF {rrefs}` and the parameter `rrefs=1m`. CS = 10 pF is an assumption, because the datasheet source-off capacitance was not read. A second copy `lia_v3_fast_P21b.cir` keeps the original switch parameters (QINJ = 0.4P) as the baseline.
 - **Parameters:** fast, `.TRAN 0 0.15 0 5u SKIPBP`, `.STEP PARAM rrefs LIST 1m 10 1k 5k`, `.OPTIONS NUMDGT=8`, `.IC V(VX)=2.5 V(VY)=2.5`, probes `V(VX)`, `V(VY)`, `V(REF)`.
 - **Expected:** the baseline step (rrefs = 1 mOhm) gives VX - 2.5 V = -127.325 mV and VY - 2.5 V = -0.344 mV (P-08), within 0.01 mV. The DC shift with rrefs is at most Q x 2 f_osc x rrefs (a bound, the sign and exact size depend on the edge order in the model):

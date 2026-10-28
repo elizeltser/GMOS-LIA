@@ -41,7 +41,7 @@ Read this section before every session.
 | D-F | Drain bias | **Closed** 2026-10-24 | U10 coarse/fine difference amplifier, k = 0.1, R_D on the board side (R25/R31) |
 | D-18 | Front-end architecture | **Open — gates T03, T04** | FE-A (AD630, ±5 V, as drawn) / FE-B (switch demodulator, ±5 V) / FE-C (switch demodulator, single 5 V). Decide with the procedure in [simulation-plan.md §7.4](../../../simulations/simulation-plan.md#74-decision-matrix-for-d-18-fill-in-from-73-and-research) (Claude Code prompt: [prompts/frontend_decision.md](prompts/frontend_decision.md)) |
 | D-19 | Readout muxes IC5/IC6 | **Closed** 2026-10-24 (user) | Removed; in-amp taps the R_D/switch node |
-| D-20 | SPI clock pin | Open — **verify** | Schematic uses PA1; a third-party pinout lists SPI1_SCK only on PA5 (taken by DAC1_OUT2). Confirm in CubeMX ([firmware.md §F.2.1](firmware.md#f21-pin-and-trigger-verification-gate-do-first)); if PA1 is invalid, move SCK (e.g. PB3) |
+| D-20 | MCU pins and triggers | **Closed** 2026-10-28 | PA1 is SPI1_SCK; TIM8 on PC6/PC7 (AF3); TIM2 ← TIM8 via ITR5 ([firmware.md §F.2.1](firmware.md#f21-pin-and-trigger-verification-d-20-closed), [decisions/D-20_pins.md](decisions/D-20_pins.md)). CubeMX settings: [firmware.md §F.2.4](firmware.md#f24-cubemx-checklist) |
 | D-21 | UART cable power | Open | FTDI TTL-232R-3V3 supplies 5 V on VCC: confirm its RXD tolerates 5 V logic, or add a 3.3 V LDO on the isolated side, or specify the TTL-232R-5V |
 
 ---
@@ -74,7 +74,7 @@ Fixed since 2026-10-22 ✓: U1B inputs; both gate stages on one sine net; heater
 
 Order: **T00 first** (decision), then T01 → T02 → T03 → T04 → T05, then T06–T10 in any order.
 
-- [ ] T00 Decide D-18 (front-end architecture) and D-20 (SPI pin)
+- [ ] T00 Decide D-18 (front-end architecture); D-20 (MCU pins) closed 2026-10-28
 - [ ] T01 Excitation sheet
 - [ ] T02 GMOS_soc (selection, calibration loads)
 - [ ] T03 Power (USB_PD + Regulators), per D-18
@@ -88,7 +88,7 @@ Order: **T00 first** (decision), then T01 → T02 → T03 → T04 → T05, then 
 
 ### T00 Decide D-18 and D-20
 
-Run the prompt in [prompts/frontend_decision.md](prompts/frontend_decision.md). Output: [decisions/D-18_frontend.md](decisions/D-18_frontend.md) with the filled decision matrix and a recommendation; the user decides and records it in README §9.1. In the same session confirm the pin/trigger gate of [firmware.md §F.2.1](firmware.md#f21-pin-and-trigger-verification-gate-do-first) in CubeMX (D-20, TIM8 pins, TIM2←TIM8 trigger).
+Run the prompt in [prompts/frontend_decision.md](prompts/frontend_decision.md). Output: [decisions/D-18_frontend.md](decisions/D-18_frontend.md) with the filled decision matrix and a recommendation; the user decides and records it in README §9.1. D-20 is closed ([firmware.md §F.2.1](firmware.md#f21-pin-and-trigger-verification-d-20-closed)); the CubeMX settings to check before code generation are in [firmware.md §F.2.4](firmware.md#f24-cubemx-checklist).
 
 ### T01 Excitation Sheet (`/Analog/Excitation/`)
 
@@ -159,7 +159,7 @@ Rename per [schematic_overview §1.2](schematic_overview.md#12-net-naming); `net
 **[GUI]**
 1. U11 (ISO6721): PA2 → pin 7 (INA), PA3 ← pin 6 (OUTB); pins 1–4 on the cable side (VCC1 = `ISO_VCC`, GND1 = `ISO_GND`), pins 5/8 on GND/+3V3_D; 100 nF on each side.
 2. J6: 6-pin header in FTDI order: 1 `ISO_GND`, 2 CTS (→ `ISO_GND` or NC), 3 `ISO_VCC`, 4 cable TXD → U11 pin 3 (INB), 5 cable RXD ← U11 pin 2 (OUTA), 6 RTS NC. **No board GND on J6.** Per D-21: 3.3 V LDO on `ISO_VCC` if needed.
-3. MCU power pins and decoupling per [schematic_overview §5.1](schematic_overview.md#51-mcu-stm32u575rgt6-u12); XO on PH0; PA4 ← `EXC_DAC`; PA5 ← `CAL_DAC` (if used); PC6/PC7 → `REF_X/REF_Y` via 100 Ω; DAC_CS, ADC_CS, ADC_DRDY, MUX lines to free GPIO; SPI SCK per D-20.
+3. MCU power pins and decoupling per [schematic_overview §5.1](schematic_overview.md#51-mcu-stm32u575rgt6-u12); XO on PH0; PA4 ← `EXC_DAC`; PA5 ← `CAL_DAC` (if used); PC6/PC7 → `REF_X/REF_Y` via 100 Ω; DAC_CS, ADC_CS, ADC_DRDY, MUX lines to free GPIO; SPI1 SCK on PA1 (D-20).
 4. TMP117, SHT40 on I²C1.
 
 Check `T08.txt`.

@@ -16,20 +16,20 @@ Implementation specification for the STM32U575 firmware, written so that Claude 
 
 ## F.2 CubeMX Configuration
 
-### F.2.1 Pin and Trigger Verification Gate (do first)
+### F.2.1 Pin and Trigger Verification (D-20, closed)
 
-Before generating code, open the `.ioc` in CubeMX and confirm, recording the result in this section and in the commit message. Without the GUI, the same data is in the local CubeMX install: the MCU file `db/mcu/STM32U575R(G-I)Tx.xml` (pin list, signals) and the GPIO IP file `db/mcu/IP/GPIO-STM32U5*_Modes.xml` (alternate-function numbers) — Claude Code can `grep` these. The timer internal-trigger names (ITRx ↔ source timer) are shown in CubeMX's TIM2 "Slave Mode Controller → Trigger Source" list and in RM0456 (TIMx internal trigger connection tables).
+Verified on 2026-10-28 from the STM32CubeMX 6.16.1 database (evidence and reproduce commands: [decisions/D-20_pins.md](decisions/D-20_pins.md)). The schematic pins stand as drawn.
 
-| Item | Expected | Fallback if not available |
-|------|----------|---------------------------|
+| Item | Result | Fallback (kept for reference) |
+|------|--------|-------------------------------|
 | DAC1_OUT1 / DAC1_OUT2 | PA4 / PA5 | — (fixed by silicon) |
-| Reference timer outputs | TIM8_CH1 on PC6, TIM8_CH2 on PC7 (`VERIFY-CUBEMX`; expected AF3 as on STM32L4/L5; a third-party U5 summary claims AF1 for TIM8 channels — CubeMX decides) | Another timer with two output-compare channels on free pins (e.g. TIM3_CH1/CH2), same method; or DMA-to-GPIO (F.9) |
-| Sample timer slave input from the reference timer | TIM2 slave mode **Trigger**, trigger source = the ITRx entry CubeMX labels with **TIM8** (`VERIFY-CUBEMX`) | Make the sample timer the master (TIM8 slave of TIM2, ITRx labelled TIM2), or use TIM15/TIM1 as sample timer if it offers a TIM8 trigger input; last resort F.9 |
-| DAC trigger | `DAC_TRIGGER_T2_TRGO` exists for DAC1 (confirmed in the U5 HAL header) | `DAC_TRIGGER_T8_TRGO`, `T15`, `T1`, `T4`–`T7` also exist |
-| SPI clock pin | **PA1 as SPI1_SCK is unconfirmed.** Sibling families (STM32L4+/L5) have SPI1_SCK on PA1 (AF5); the only STM32U5 pinout reachable during research (third-party, incomplete: it also omits PC6/PC7) lists SPI1_SCK on PA5/PB3 only. Three research attempts could not reach DS13737 | If PA1 is not SPI1_SCK: PA5 is taken (DAC1_OUT2) → use PB3 (SPI1_SCK) with PA6/PA7 (SPI1 pins can be mixed), `VERIFY-CUBEMX`; **this changes the schematic** |
-| USART2 | PA2 TX, PA3 RX | — |
+| Reference timer outputs | TIM8_CH1 on PC6, TIM8_CH2 on PC7, **AF3** | TIM3_CH1/CH2 on the same pins (AF2), same method; or DMA-to-GPIO (F.9) |
+| Sample timer slave input from TIM8 | TIM2 slave mode **Trigger**, trigger source **ITR5** (= TIM8 TRGO; from the DB pattern, the GUI shows no source name; proven on the bench, F.8) | TIM8 slave of TIM2 (ITRx labelled TIM2); last resort F.9 |
+| DAC trigger | `DAC_TRIGGER_T2_TRGO` (TSEL = 2) | `DAC_TRIGGER_T8_TRGO`, `T15`, `T1`, `T4`–`T7` |
+| SPI clock pin | PA1 = SPI1_SCK (AF5), with PA6 MISO / PA7 MOSI (AF5) | PB3 (SPI1_SCK, AF5) |
+| USART2 | PA2 TX, PA3 RX (AF7) | — |
 | I²C1 | PB6 SCL, PB7 SDA | — |
-| ADC1 inputs | PC0–PC3 = ADC1_IN1…IN4 | — |
+| ADC1 inputs | PC0, PC1 = ADC1_IN1, IN2 | — |
 
 ### F.2.2 Peripheral Settings (excitation module)
 
@@ -93,8 +93,85 @@ Before generating code, open the `.ioc` in CubeMX and confirm, recording the res
 | SPI (instance per F.2.1) | DAC80508 (mode 1), ADS1220 (mode 1) | 8-bit, ≤ 4 MHz, software NSS (3 GPIO CS) |
 | USART2 | PC link via ISO6721 | 921 600 baud 8N1, DMA RX circular + idle line, DMA TX |
 | I²C1 | STUSB4500, TMP117, SHT40 | 100/400 kHz |
-| ADC1 | PC0 IHTR_A, PC1 IHTR_B, PC2 DSENSE_A, PC3 DSENSE_B | 14-bit, scan, oversampling ×16, triggered at ≈ 1 kHz, DMA |
+| ADC1 | PC0 IHTR_A, PC1 IHTR_B | 14-bit, scan, oversampling ×16, triggered at ≈ 1 kHz, DMA |
 | GPIO | ch_sel_0…3, mux_en (out, low at reset), DAC_CS/ADC_CS (out, high), ADC_DRDY (EXTI falling) | |
+
+### F.2.4 CubeMX Checklist
+
+Everything the `.ioc` (`firmware/firmware.ioc` in the repository root) must contain before code is generated, collected from F.1–F.2.3 and [schematic_overview.md §5.3](schematic_overview.md#53-pin-allocation). Go through it in CubeMX and set what is missing. The values are defined in the sections named in the last column; if this list and those sections disagree, the sections win and this list is corrected.
+
+**Status (2026-10-28):** `firmware.ioc` contains every item except the GPIOs G-9…G-12 (set after the board layout), the optional G-3/D-2 (calibration tone), and the GPDMA1 CH1 priority (D-3).
+
+**Project and clock**
+
+| # | Item | Required | Source |
+|---|------|----------|--------|
+| P-1 | MCU | STM32U575RGTx, LQFP64 (the temperature-grade suffix does not affect the configuration) | §5.1 |
+| P-2 | TrustZone | Disabled | F.1 |
+| P-3 | Firmware package / drivers | STM32CubeU5, **HAL** for all peripherals | F.1 |
+| P-4 | Toolchain | STM32CubeIDE or CMake (arm-none-eabi-gcc) | F.1 |
+| P-5 | Code generation | Keep user code when regenerating; application code in `Core/Src/app/`, `Core/Inc/app/` | F.1 |
+| C-1 | HSE | 16 MHz, **bypass, digital mode** (external CMOS oscillator on PH0; HSEEXT = digital) | F.1, §5.2 |
+| C-2 | PLL1 | Source HSE; **M = 1, N = 20, R = 2** → VCO 320 MHz, PLL1_R = 160 MHz; SYSCLK source = **PLLCLK**. Limits (CubeMX DB): VCO input 4–16 MHz, VCO output 128–544 MHz (range 1/2), PLL1_R ≤ 160 MHz, R ∈ {1, 2, 4, 6, 8, …}. N = 160 with R = 1 gives a 2.56 GHz VCO and is invalid | F.1 |
+| C-3 | Bus prescalers | AHB, APB1, APB2 (and APB3) = 1 → timer kernel clocks 160 MHz | F.1 |
+| C-4 | Power | Voltage scaling **range 1**. CubeMX selects the range from SYSCLK and does not store it in the `.ioc` (the default range 4 allows only 24 MHz); EPOD booster as CubeMX requires for 160 MHz | F.1 |
+| C-5 | Debug | Serial Wire on PA13 (SWDIO) / PA14 (SWCLK) | §5.3 |
+
+**Pins** (signal and AF as in F.2.1)
+
+| # | Pin | Signal / mode | Source |
+|---|-----|---------------|--------|
+| G-1 | PH0 | RCC_OSC_IN (HSE bypass) | C-1 |
+| G-2 | PA4 | DAC1_OUT1 (EXC_DAC) | F.2.2 |
+| G-3 | PA5 | DAC1_OUT2 (CAL_DAC) — only if the calibration tone is fitted (FW-9) | F.2.2 |
+| G-4 | PC6 / PC7 | TIM8_CH1 / TIM8_CH2 (REF_X / REF_Y), push-pull, speed low, initial state low | F.2.2 |
+| G-5 | PA1 / PA6 / PA7 | SPI1_SCK / SPI1_MISO / SPI1_MOSI | F.2.3 |
+| G-6 | PA2 / PA3 | USART2_TX / USART2_RX | F.2.3 |
+| G-7 | PB6 / PB7 | I2C1_SCL / I2C1_SDA | F.2.3 |
+| G-8 | PC0, PC1 | ADC1_IN1, IN2 (IHTR_A, IHTR_B), single-ended | F.2.3 |
+| G-9 | 2 free GPIO | `DAC_CS`, `ADC_CS`: output push-pull, initial **high** | F.2.3 |
+| G-10 | 1 free GPIO | `ADC_DRDY`: EXTI, falling edge, NVIC line enabled | F.2.3 |
+| G-11 | 5 free GPIO | `ch_sel_0…3`, `mux_en`: output push-pull, initial **low** | F.2.3, schematic_overview §4.7 (R38 pull-down on `mux_en`) |
+| G-12 | 1 free GPIO | `PD_ALERT` (STUSB4500 alert, open drain): input with EXTI or polled. | schematic_overview §1.2, §5.3 |
+
+The pins of G-9…G-12 are not yet assigned in the schematic (§5.3 "to connect"). They are chosen after the board layout, to suit the routing; then set them in CubeMX with the user labels above and copy the result into §5.3.
+
+**Excitation module** (F.2.2)
+
+| # | Item | Required |
+|---|------|----------|
+| D-1 | DAC1 CH1 | Normal mode, external pin only; output buffer on; sample-and-hold off; trigger `DAC_TRIGGER_T2_TRGO`; high-frequency interface mode **Automatic** or **Above 80 MHz** (HCLK = 160 MHz is not above 160 MHz); factory trimming; 12-bit right |
+| D-2 | DAC1 CH2 (optional) | Same as D-1, own GPDMA channel; disabled if the tone is not fitted |
+| D-3 | DAC DMA | GPDMA1 **CH1**, queue `DACQueue` (see the DMA table below); channel priority **High** (CubeMX default Low; still to set) |
+| T-1 | TIM2 | Internal clock; PSC 0; ARR 2412; auto-reload preload on; TRGO = **Update event**; no channels |
+| T-2 | TIM2 slave mode | **Trigger mode** |
+| T-3 | TIM2 trigger source | **ITR5** (= TIM8 TRGO, from the DB pattern of D-20; the GUI lists it only as "ITR5"). Final proof: TIM2 starts with TIM8 on the bench (F.8 item 2) |
+| T-4 | TIM8 | Internal clock; PSC 3; ARR 38607; auto-reload preload on |
+| T-5 | TIM8 CH1 / CH2 | Output compare, **toggle on match**, polarity high; CCR1 = 0, CCR2 = 19304 |
+| T-6 | TIM8 master | TRGO = **Enable**; master/slave mode (MSM) enabled; break and dead time off |
+| T-7 | NVIC | GPDMA1 CH0–CH3 interrupts and the USART2 global interrupt enabled. CH1 transfer complete is needed for glitch-free amplitude swaps (F.6); USART2 is needed for idle-line reception |
+
+**Other peripherals** (F.2.3)
+
+| # | Item | Required |
+|---|------|----------|
+| S-1 | SPI1 | Full-duplex master; **8-bit**; **mode 1** (CPOL 0, CPHA 2nd edge); baud rate ≤ 4 MHz, i.e. prescaler 64 (2.5 MHz) at a 160 MHz SPI1 kernel clock; NSS software (CS by G-9) |
+| U-1 | USART2 | Asynchronous, **921 600 baud**, 8N1; DMA RX circular on CH2 (idle-line detection in code, `HAL_UARTEx_ReceiveToIdle_DMA`); DMA TX on CH3 (DMA table below); USART2 interrupt enabled. Set after C-2: the baud error is ≈ 0.2 % at a 160 MHz kernel clock but ≈ 2 % at 16 MHz (CubeMX limit 10.5 Mbaud) |
+| I-1 | I²C1 | 100 kHz or 400 kHz; timing value regenerated by CubeMX **after** the 160 MHz clock is set |
+| A-1 | ADC1 | 14-bit; scan of 2 channels (IN1, IN2); oversampling enabled, ratio 16; hardware trigger at ≈ 1 kHz from a timer TRGO, e.g. **TIM6** (PSC 159, ARR 999, TRGO = Update → 1.000 kHz; `ADC_EXTERNALTRIG_T6_TRGO`), not an EXTI pin; Conversion Data Management = **DMA Circular**, on CH0 (DMA table below) |
+
+**DMA** (GPDMA1)
+
+On the U5 the DMA is set only in two places, not in the peripheral tabs. **GPDMA1 → CHx** selects the channel mode: Standard Request (one-shot; request, direction and widths set there) or Linked-List (execution mode and priority only). **Utilities → LINKEDLIST** holds the queues; each queue has one node with the request, direction, widths and increments. CubeMX does not attach a queue to a channel: the firmware does it at start-up (`HAL_DMAEx_List_LinkQ`, `__HAL_LINKDMA`) and also sets the addresses and transfer sizes (F.5).
+
+| Channel | Channel mode | Queue settings (Utilities → LINKEDLIST) | Node: request, direction | Source → destination | Runtime (in code) |
+|---------|--------------|------------------------------------------|--------------------------|----------------------|-------------------|
+| CH0 | Linked-List, circular | `ADCQueue`: circular; run on **GPDMA**; first loop node `ADC1` | `GPDMA1_REQUEST_ADC1`, peripheral → memory | word, fixed → word, increment (oversampling ×16 without shift gives 18-bit results) | `&ADC1->DR` → buffer of 2·k words |
+| CH1 | Linked-List, circular, priority High | `DACQueue`: circular; run on **GPDMA**; first loop node `DAC1_CH1` | `GPDMA1_REQUEST_DAC1_CH1`, memory → peripheral | half-word, increment → word, fixed; block-transfer event | `exc_table` → `&DAC1->DHR12R1`, 256 bytes (128 half-words) |
+| CH2 | Linked-List, circular | `UARTRxQueue`: circular; run on **GPDMA**; first loop node `UARTRx` | `GPDMA1_REQUEST_USART2_RX`, peripheral → memory | byte, fixed → byte, increment | `&USART2->RDR` → RX ring buffer |
+| CH3 | Standard Request, normal | — | `GPDMA1_REQUEST_USART2_TX`, memory → peripheral | byte, increment → byte, fixed | per transmission (`HAL_UART_Transmit_DMA`) |
+
+Rules: "run on" must be **GPDMA**, not "GPDMA 2D capability" (only CH12–CH15 are 2D); the first loop node must be spelled exactly as the node name, otherwise the queue is not circular.
 
 ## F.3 Timing Math
 
@@ -223,6 +300,6 @@ If no usable ITR connection exists between the sample timer and a timer with two
 | Bias control | `bias.c` | Gate DC A/B (ch4/ch5), heaters (ch0/ch1), drain coarse/fine (ch2/3, ch6/7) with V_SUP = 1.1·V_c − 0.1·V_f |
 | Pixel selection | `mux.c` | Sequence FW-12, settling flags |
 | ADS1220 driver | `ads1220.c` | Config (AIN0−AIN1 / AIN2−AIN3, gain 1, PGA bypass, 20–1000 SPS, internal ref), DRDY ISR |
-| Housekeeping ADC | `hk_adc.c` | PC0–PC3, oversampling, scaling to I_heater and V_drain |
+| Housekeeping ADC | `hk_adc.c` | PC0/PC1, oversampling, scaling to I_heater |
 | Protocol | `proto.c` | ASCII commands, binary frames, CRC-16 |
 | Calibration | `cal.c` | Zero offset, dummy-load check, tone gain/phase, X/Y rotation and sign |

@@ -9,7 +9,7 @@ Entry point for all simulation work on the GMOS LIA readout. General documents a
 | [simulation-plan.md](simulation-plan.md) | Board-level plan: what must be simulated (`SIM-xx`), setups, pass criteria, results table and the D-18 decision matrix |
 | [simulation-index.md](simulation-index.md) | Every run, done or planned (`C-xx`, `P-xx`): goal, circuit, parameters, expected results, status, grade |
 | [design-context.md](design-context.md) | Design values and review limits used by the simulation workflow (status Fixed / Current / Draft / TBD) |
-| [design-issues.md](design-issues.md) | Register of design issues found by simulation and review (`D-xx` of the simulation workflow) |
+| [design-issues.md](design-issues.md) | Register of design issues found by simulation and review (`DI-xx` of the simulation workflow) |
 | [design-review/](design-review/) | One hardware review per batch of runs, with its calculation scripts |
 
 The board's requirements, theory and schematic are in [`schematics/LIA-board/docs/`](../schematics/LIA-board/docs/README.md). When a value in [design-context.md](design-context.md) disagrees with the board docs, report it instead of choosing.

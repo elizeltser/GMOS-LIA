@@ -10,7 +10,7 @@ authors = [
   { name = "Eli Zeltser", email = "elizeltser97@gmail.com" }
 ]
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 
 dependencies = [
   "pyvisa",
@@ -21,8 +21,6 @@ dependencies = [
   "scipy",
   "matplotlib",
   "pytest",
-  "ruff",
-  "pyright",
   "mcp<2"
 ]
 
@@ -41,6 +39,7 @@ testpaths = ["ate_lia/tests"]
 
 [tool.ruff]
 line-length = 88
+target-version = "py311" # Minimum supported Python (see requires-python)
 
 [tool.ruff.lint]
 select = ["E", "F"] # Basic errors and formatting; import sorting (I) is disabled —
@@ -51,7 +50,7 @@ include = ["ate_lia"]
 venvPath = "."
 venv = ".venv"
 typeCheckingMode = "basic" # Avoids "strict" mode which is way too loud for beginners
-pythonVersion = "3.12" # Matches the interpreter actually installed in .venv
+pythonVersion = "3.13" # Latest CPython all runtime deps support (pyvisa-py classifiers stop at 3.13)
 
 # Tests use duck-typed fakes (_FakeLIA/_FakeSCU) in place of the real instrument
 # wrappers, which pyright reports as type errors; relax only these rules there.

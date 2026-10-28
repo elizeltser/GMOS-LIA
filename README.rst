@@ -11,6 +11,6 @@ Create the virtual environment in the repository root, then install the package
 and its dependencies from ``pyproject.toml``::
 
     python -m venv .venv
-    .venv/bin/pip install -e .
+    .venv/bin/pip install -e ".[lint,typecheck]"   # extras add ruff and pyright
 
 See ``ate_lia/CLAUDE.md`` and ``ate_lia/FSD.md`` for usage.
