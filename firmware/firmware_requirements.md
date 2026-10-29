@@ -1,6 +1,6 @@
-# GMOS LIA Board — Firmware
+# LIA-Readout — Firmware
 
-Implementation specification for the STM32U575 firmware, written so that Claude Code (or a person) can generate and extend the code from an STM32CubeMX project. Requirements: [requirements.md R.4](requirements.md#r4-firmware) (FW-x). Principles: [measurement_principles.md §2.12](measurement_principles.md#212-excitation-and-reference-generation). Hardware: [schematic_overview.md §5](schematic_overview.md#5-digital-section).
+Implementation specification for the STM32U575 firmware, written so that Claude Code (or a person) can generate and extend the code from an STM32CubeMX project. Requirements: [requirements.md R.4](../schematics/LIA-Readout/docs/requirements.md#r4-firmware) (FW-x). Principles: [measurement_principles.md §2.12](../schematics/documents/measurement_principles.md#212-excitation-and-reference-generation). Hardware: [schematic_overview.md §5](../schematics/LIA-Readout/docs/schematic_overview.md#5-digital-section).
 
 **Status:** F.1–F.9 specify the excitation and reference module (FW-1…FW-10) in detail. Other modules (FW-11…FW-16) are outlined in F.10 and will be detailed later.
 
@@ -18,7 +18,7 @@ Implementation specification for the STM32U575 firmware, written so that Claude 
 
 ### F.2.1 Pin and Trigger Verification (D-20, closed)
 
-Verified on 2026-10-28 from the STM32CubeMX 6.16.1 database (evidence and reproduce commands: [decisions/D-20_pins.md](decisions/D-20_pins.md)). The schematic pins stand as drawn.
+Verified on 2026-10-28 from the STM32CubeMX 6.16.1 database. The schematic pins stand as drawn.
 
 | Item | Result | Fallback (kept for reference) |
 |------|--------|-------------------------------|
@@ -98,7 +98,7 @@ Verified on 2026-10-28 from the STM32CubeMX 6.16.1 database (evidence and reprod
 
 ### F.2.4 CubeMX Checklist
 
-Everything the `.ioc` (`firmware/firmware.ioc` in the repository root) must contain before code is generated, collected from F.1–F.2.3 and [schematic_overview.md §5.3](schematic_overview.md#53-pin-allocation). Go through it in CubeMX and set what is missing. The values are defined in the sections named in the last column; if this list and those sections disagree, the sections win and this list is corrected.
+Everything the `.ioc` (`firmware/firmware.ioc` in the repository root) must contain before code is generated, collected from F.1–F.2.3 and [schematic_overview.md §5.3](../schematics/LIA-Readout/docs/schematic_overview.md#53-pin-allocation). Go through it in CubeMX and set what is missing. The values are defined in the sections named in the last column; if this list and those sections disagree, the sections win and this list is corrected.
 
 **Status (2026-10-28):** `firmware.ioc` contains every item except the GPIOs G-9…G-12 (set after the board layout), the optional G-3/D-2 (calibration tone), and the GPDMA1 CH1 priority (D-3).
 
@@ -207,7 +207,7 @@ $$
 
 with C₀ = 2048 (mid-scale ≈ 1.65 V), n_φ the phase index (FW-6). Clamp so that every code lies within the DAC buffer's linear output range (`VERIFY-RM`, DS13737 DAC characteristics; until verified, keep codes within 250…3845, i.e. ≈ 0.2–3.1 V). Default gate 5 mVpp → DAC 0.6 Vpp → A ≈ 372 codes. Maximum 20 mVpp → 2.4 Vpp → A ≈ 1489 codes (within the clamp).
 
-The gate DC level depends on C₀ through the MFB stage (V_G = 1.0083·V_DC − V_EXC,DC/120); the gate-DC firmware ([§4.5](schematic_overview.md#45-excitation-sheet-analogexcitation)) uses the actual C₀·V_DDA/4095.
+The gate DC level depends on C₀ through the MFB stage (V_G = 1.0083·V_DC − V_EXC,DC/120); the gate-DC firmware ([§4.5](../schematics/LIA-Readout/docs/schematic_overview.md#45-excitation-sheet-analogexcitation)) uses the actual C₀·V_DDA/4095.
 
 ## F.4 Module Design
 

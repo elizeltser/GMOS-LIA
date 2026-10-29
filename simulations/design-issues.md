@@ -4,7 +4,7 @@
 
 This register lists the design issues found by the design reviewer and by the judge. Each issue has a severity, its evidence, the recommended change and a status. The design reviewer updates it after every batch (see the repository root `.claude/agents/design-reviewer.md`). Closed issues stay in the register with the reason for closing.
 
-Issues are numbered `DI-xx`. Board decisions (`D-n`, e.g. D-18) are a separate register in `schematics/LIA-board/docs/README.md` §9.
+Issues are numbered `DI-xx`. Board decisions (`D-n`, e.g. D-18) are a separate register in `schematics/LIA-Readout/docs/README.md` §9.
 
 Severity levels (Critical, Major, Minor, Note) are defined in `simulations/design-context.md`, section 7. The numbers quoted below are evidence from the time each issue was written. The current design values are in `simulations/design-context.md`.
 

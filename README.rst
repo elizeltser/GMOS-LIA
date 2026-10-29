@@ -1,7 +1,7 @@
 GMOS-LIA
 ========
 
-Lab automation (``ate_lia/``), LIA readout board (``schematics/LIA-board/``),
+Lab automation (``ate_lia/``), LIA readout board (``schematics/LIA-Readout/``),
 simulations (``simulations/``) and thesis (``thesis/``) for the GMOS gas sensor.
 
 Installation (Python lab automation)

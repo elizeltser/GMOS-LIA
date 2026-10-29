@@ -1,0 +1,398 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "871a649e-bf1f-4d79-9e39-83e1c860c62d")
+	(paper "A4")
+	(title_block
+		(title "LIA-AFE-Eval: analog front-end evaluation board")
+		(rev "0.1")
+		(comment 1 "LIA-AFE-Eval")
+	)
+	(lib_symbols)
+	(text "Root sheet: sheet symbols and inter-sheet wiring only. Pages follow the sheets left to right, top to bottom."
+		(exclude_from_sim no)
+		(at 25.4 22.86 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left bottom)
+		)
+		(uuid "d2dde9c4-5044-44a8-b86a-0863d4a0a78c")
+	)
+	(sheet
+		(at 25.4 38.1)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "05d6826f-3646-4dc5-9fc6-d63813af7e35")
+		(property "Sheetname" "Power"
+			(at 25.4 37.3888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "POWER.kicad_sch"
+			(at 25.4 59.1312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 38.1)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "07bda73c-62ca-4762-9cba-aa1a4b43b0eb")
+		(property "Sheetname" "Connectors"
+			(at 101.6 37.3888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CONNECTORS.kicad_sch"
+			(at 101.6 59.1312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 38.1)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "85566943-641e-4697-81b9-a465cd87a7b0")
+		(property "Sheetname" "DAC"
+			(at 177.8 37.3888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "DAC.kicad_sch"
+			(at 177.8 59.1312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 88.9)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "380d5e56-8e85-4180-89a3-cc901dfbdafb")
+		(property "Sheetname" "Excitation"
+			(at 25.4 88.1888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "EXCITATION.kicad_sch"
+			(at 25.4 109.9312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 88.9)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "9f9e8021-978d-4370-bb9b-7b7961c71e85")
+		(property "Sheetname" "Sensor"
+			(at 101.6 88.1888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "SENSOR.kicad_sch"
+			(at 101.6 109.9312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 88.9)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "daf1665e-52e2-49eb-b668-ae97987554ec")
+		(property "Sheetname" "Front_End"
+			(at 177.8 88.1888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "FRONT_END.kicad_sch"
+			(at 177.8 109.9312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 139.7)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "162c899a-9f66-46c4-a07d-1bac9a43c045")
+		(property "Sheetname" "Demod_X"
+			(at 25.4 138.9888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "DEMODULATOR.kicad_sch"
+			(at 25.4 160.7312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 139.7)
+		(size 35.56 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "95f6699e-6763-4489-86f2-f12999176991")
+		(property "Sheetname" "Demod_Y"
+			(at 101.6 138.9888 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "DEMODULATOR.kicad_sch"
+			(at 101.6 160.7312 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

@@ -1,0 +1,24 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "fe2b9acc-5053-492e-ad92-34c7794d2854")
+	(paper "A4")
+	(title_block
+		(title "DAC")
+		(rev "0.1")
+		(comment 1 "LIA-AFE-Eval")
+	)
+	(lib_symbols)
+	(text "Bias voltages for the sensor (optional on this board)."
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left bottom)
+		)
+		(uuid "8c9c49fe-5972-4342-9a5c-1719c0987bff")
+	)
+)

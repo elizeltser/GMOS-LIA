@@ -1,0 +1,24 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "b7027ec3-26e9-4eb1-9f46-474d7214e4e6")
+	(paper "A4")
+	(title_block
+		(title "Connectors")
+		(rev "0.1")
+		(comment 1 "LIA-AFE-Eval")
+	)
+	(lib_symbols)
+	(text "Lab I/O: sensor connection, excitation and reference inputs, X/Y outputs, test points."
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left bottom)
+		)
+		(uuid "b856ddc3-39a9-4db0-825d-4b3fc474249d")
+	)
+)

@@ -132,7 +132,7 @@ The automation work included in this repository should be written in **Python**.
 │   │   ├── plotting/     # Measurement post-processing and plots
 │   │   └── setups/       # Experiment implementations
 │   └── tests/            # pytest unit tests with hardware fakes
-├── firmware/             # LIA-board MCU (STM32CubeMX project)
+├── firmware/             # LIA-Readout MCU (STM32CubeMX project)
 └── Results/              # Experiment output (git-ignored)
 ```
 

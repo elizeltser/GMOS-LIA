@@ -81,7 +81,7 @@
     (OPAx192
       (FullPartName "OPAx192.Normal")
       (LibraryName
-         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\VENDOR\SBOM862F\OPAX192.OLB")
+         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\VENDOR\SBOM862F\OPAX192.OLB")
       (DeviceIndex "0"))
     (VPULSE
       (FullPartName "VPULSE.Normal")
@@ -96,7 +96,7 @@
     (SPDT_PREC
       (FullPartName "SPDT_PREC.Normal")
       (LibraryName
-         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\VENDOR\TMUX6136\TMUX6136_BEH.OLB")
+         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\VENDOR\TMUX6136\TMUX6136_BEH.OLB")
       (DeviceIndex "0"))
     (VAC
       (FullPartName "VAC.Normal")
@@ -126,19 +126,11 @@
       (LibraryName "C:\CADENCE\PSPICETI\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
       (DeviceIndex "0")))
   (LastUsedLibraryBrowseDirectory
-     "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\tmux6136")
+     "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\vendor\tmux6136")
   (MPSSessionName "LW")
   (GlobalState
     (FileView
       (Path "Design Resources")
-      (Path "Design Resources"
-         "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice.dsn")
-      (Path "Design Resources"
-         "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice.dsn"
-         "LIA")
-      (Path "Design Resources"
-         "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice.dsn"
-         "differential-amplifier")
       (Path "Design Resources" "Library")
       (Path "Outputs")
       (Path "PSpice Resources")
@@ -146,7 +138,7 @@
       (Path "PSpice Resources" "Model Libraries")
       (Path "PSpice Resources" "Simulation Profiles")
       (Select "PSpice Resources" "Simulation Profiles"
-         "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\ti-pspice-pspicefiles\lia\lia_sanity.sim"))
+         "c:\users\lw\documents\gmos-lia\simulations\ti-pspice\ti-pspice-pspicefiles\lia\lia_sanity.sim"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -161,6 +153,6 @@
         (Zoom "150")
         (Occurrence "/"))
       (Path
-         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE\TI-PSPICE.DSN")
+         "C:\USERS\LW\DOCUMENTS\GMOS-LIA\SIMULATIONS\TI-PSPICE\TI-PSPICE.DSN")
       (Schematic "LIA")
       (Page "lia"))))
