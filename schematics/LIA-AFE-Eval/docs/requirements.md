@@ -38,7 +38,7 @@ This file is the single source for the requirement IDs and target values of the 
 | ID | Requirement | Status |
 |----|-------------|--------|
 | IF-1 | NUCLEO connection carries: excitation sine (MCU DAC output), X and Y references (timer outputs), SPI to the on-board DAC, mux address/enable lines, 3.3 V and GND | Agreed (signal list) |
-| IF-2 | The board does not depend on one NUCLEO model. It has one control header with a fixed pinout (signal list IF-1), connected to the NUCLEO by a cable. The first NUCLEO is an STM32F303 board (owner answer, exact board to be named); its pin mapping is an adapter-cable or firmware matter, not a board change. The excitation firmware on the F303 differs from the STM32U575 production firmware (no GPDMA) | Agreed (cable and header: Proposed) |
+| IF-2 | The board does not depend on one NUCLEO model. It has one control header with a fixed pinout (IF-5), connected to the NUCLEO by a cable. The first NUCLEO is the **NUCLEO-F303RE** (STM32F303RET6; ST product page https://www.st.com/en/evaluation-tools/nucleo-f303re.html). Its pin mapping is a cable/firmware matter, not a board change. The excitation firmware on the F303 differs from the STM32U575 production firmware (no GPDMA) | Agreed |
 | IF-3 | X and Y demodulator outputs on SMA connectors for the scope, and on a header | Agreed |
 | IF-4 | Analog readbacks to NUCLEO ADC pins: drain sense of both sides (buffers as LIA-Readout AN-11) and heater current of both sides (INA190 as LIA-Readout AN-18) | Agreed |
 | IF-5 | Control header: keyed 2 × 13 IDC box header, 2.54 mm, pinout in the table below. Ground wires sit next to the excitation and reference lines in the ribbon | Agreed |
@@ -119,7 +119,7 @@ Answered questions stay in this table with their answer and the requirement they
 | Q-1 | 2 Power and I/O | Coaxial output connector: SMA or BNC? (both were named in session 1) | BNC (scope inputs are BNC, no adapters) | SMA (IF-3) |
 | Q-2 | 2 Power and I/O | Power input: which bench supply, voltages, connector? | Dual lab supply ±9 V + LDOs | As proposed (DC-2) |
 | Q-3 | 2 Power and I/O | TMUX6136 on ±5 V or ±7 V? | From the filtered ±9 V input | As proposed (DC-3) |
-| Q-4 | 2 Power and I/O | NUCLEO model and connection | NUCLEO-U575ZI-Q by cable | STM32F303 NUCLEO for now, may change later; board-side header + cable proposed (IF-2). Exact board name still to be given |
+| Q-4 | 2 Power and I/O | NUCLEO model and connection | NUCLEO-U575ZI-Q by cable | NUCLEO-F303RE, by cable to the IF-5 header (IF-2) |
 | Q-5 | 2 Power and I/O | Drain-sense and heater-current readbacks to the NUCLEO ADC? | Yes | Yes (IF-4) |
 | Q-6 | 2 Power and I/O | Heaters on this board? | Yes, with readbacks | Yes (AN-5, DC-5) |
 | Q-7 | 3 Signal chain | Excitation waveform: sine (LIA-Readout AN-2) or square (`simulations/design-context.md` §1)? The documents disagree | Sine | Sine (AN-2) |
@@ -129,3 +129,5 @@ Answered questions stay in this table with their answer and the requirement they
 | Q-11 | 4 Usability | Which test points, and of which type? | Loops at every stage + SMA on key nodes | Loops only (LU-1) |
 | Q-12 | 4 Usability | Board size, mounting, shielding | 100 × 100 mm, standoffs, shield-can footprint | 100 × 100 mm, no shield (LU-2) |
 | Q-13 | 4 Usability | Assembly and sourcing | JLCPCB PCBA, 4-layer | As proposed (LU-3) |
+| Q-14 | 5 Drift | "Double modulation" to remove multiplicative drift: which drift (excitation amplitude, chain gain, sensor g_m) and which scheme? Candidates: two-tone excitation on the split gate (GATE_A at f₁, GATE_B at f₂, ratio active/blind), pilot tone through the chain, or heater modulation | Two-tone on the split gate, keeping same-frequency operation possible (see session notes 2026-10-29) | — |
+| Q-15 | 5 Drift | In-amp: INA828 (as LIA-Readout), INA333 or AD8237? | Decide after Q-14: a ratiometric scheme cancels in-amp gain drift, so the in-amp choice then rests on noise and rails | — |

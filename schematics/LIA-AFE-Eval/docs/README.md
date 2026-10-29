@@ -2,7 +2,7 @@
 
 KiCad project of the analog front-end evaluation board for the GMOS lock-in readout. The board carries the analog chain of [LIA-Readout](../../LIA-Readout/docs/README.md) (sensor socket and selection, excitation drive, bias DAC, front end, two demodulators) and is driven by an external NUCLEO board. It is used on the lab bench to debug the analog chain and the excitation firmware before the production board is built.
 
-> **Status (2026-10-29):** requirements rev A written ([requirements.md](requirements.md)): all questions answered, carry-over requirements confirmed, parts selected ([component_selection.md](component_selection.md)); exact NUCLEO F303 board still to be named. Schematic sheets created empty. Front end fixed to FE-B (decision E-1).
+> **Status (2026-10-29):** requirements rev A written ([requirements.md](requirements.md)): all questions answered, carry-over requirements confirmed, parts selected ([component_selection.md](component_selection.md)); NUCLEO-F303RE; drift scheme (Q-14) and in-amp (Q-15) open. Schematic sheets created empty. Front end fixed to FE-B (decision E-1).
 
 ---
 
