@@ -30,7 +30,7 @@ This file is the single source for the requirement IDs and target values of the 
 | DC-1 | Analog rails positive and negative (±5 V analog for FE-B, E-4) | Agreed |
 | DC-2 | Input: dual lab supply ±9 V nominal, operating range ±8…±12 V, on a 3-pin terminal block (+V, GND, −V). Reverse-polarity protection on both inputs. No switching converters on the board | Agreed |
 | DC-3 | Analog rails ±5VA from low-noise LDOs fed by the input. TMUX6136 supplied from the input through 10 Ω + 1 µF per supply pin, so VDD − VSS ≥ 10 V (TMUX6136 datasheet SCDS397B §5.4; DI-01 in `simulations/design-issues.md`) | Agreed |
-| DC-4 | Digital parts (DAC80508 interface, mux address logic) are supplied from the NUCLEO 3.3 V (E-4). Digital and analog grounds join at one point on the eval board | Agreed (ground joint: Proposed) |
+| DC-4 | Digital parts (DAC80508 VDDIO, mux address logic) are supplied from the NUCLEO 3.3 V (E-4). Digital and analog grounds join at one point on the eval board | Agreed |
 | DC-5 | Heater rail +5VP from its own LDO, separate from +5VA, as LIA-Readout DC-4b | Agreed |
 
 ## R.2 Interfaces
@@ -105,7 +105,7 @@ This file is the single source for the requirement IDs and target values of the 
 | ID | Requirement | Status |
 |----|-------------|--------|
 | LU-1 | Test loops (through-hole loop for a scope probe hook) at every stage output: gate nets, drain nodes, in-amp output, HPF and band-pass outputs, demodulator inputs and outputs, X/Y references, excitation input, all rails. A GND loop next to each group. Coaxial connectors only on X and Y (IF-3) | Agreed |
-| LU-2 | Board about 100 mm × 100 mm, M3 mounting holes for standoffs. No shield can; shielding, if needed, by a metal box around the board | Agreed |
+| LU-2 | Board about 100 mm × 100 mm, M3 mounting holes for standoffs. | Agreed |
 | LU-3 | 4-layer PCB with JLCPCB assembly (PCBA) of the SMD parts from LCSC stock. Parts that LCSC does not stock are sourced globally or consigned. Connectors, socket and test loops may be hand-soldered | Agreed |
 
 ---
@@ -129,5 +129,3 @@ Answered questions stay in this table with their answer and the requirement they
 | Q-11 | 4 Usability | Which test points, and of which type? | Loops at every stage + SMA on key nodes | Loops only (LU-1) |
 | Q-12 | 4 Usability | Board size, mounting, shielding | 100 × 100 mm, standoffs, shield-can footprint | 100 × 100 mm, no shield (LU-2) |
 | Q-13 | 4 Usability | Assembly and sourcing | JLCPCB PCBA, 4-layer | As proposed (LU-3) |
-| Q-14 | 5 Drift | "Double modulation" to remove multiplicative drift: which drift (excitation amplitude, chain gain, sensor g_m) and which scheme? Candidates: two-tone excitation on the split gate (GATE_A at f₁, GATE_B at f₂, ratio active/blind), pilot tone through the chain, or heater modulation | Two-tone on the split gate, keeping same-frequency operation possible (see session notes 2026-10-29) | — |
-| Q-15 | 5 Drift | In-amp: INA828 (as LIA-Readout), INA333 or AD8237? | Decide after Q-14: a ratiometric scheme cancels in-amp gain drift, so the in-amp choice then rests on noise and rails | — |
