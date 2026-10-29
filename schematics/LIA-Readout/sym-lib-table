@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "device_libraries") (type "KiCad") (uri "${KIPRJMOD}/device_libraries") (options "") (descr ""))
+)

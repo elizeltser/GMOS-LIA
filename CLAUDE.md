@@ -13,10 +13,12 @@ Each area has its own CLAUDE.md with its rules, commands and key files. Read the
 | Folder | Contents | Read first |
 |--------|----------|------------|
 | `ate_lia/` | Python instrument drivers, experiments, MCP server for the bench setup; instrument manuals in `ate_lia/manuals/` | [ate_lia/CLAUDE.md](ate_lia/CLAUDE.md) |
-| `schematics/LIA-board/` | KiCad project of the LIA readout board; design docs in `docs/`, netlist tools in `tools/` | [schematics/LIA-board/CLAUDE.md](schematics/LIA-board/CLAUDE.md), then the doc map [docs/README.md](schematics/LIA-board/docs/README.md) |
-| `schematics/existing_boards/` | Earlier GMOS boards (schematic PDFs, Visio drawings, operating procedure) kept as references | — |
+| `schematics/` | KiCad projects with shared rules, conventions and netlist tools (`tools/`, expected results per project in `tools/checks/<project>/`) | [schematics/CLAUDE.md](schematics/CLAUDE.md) |
+| `schematics/LIA-Readout/` | KiCad project of the LIA readout board; design docs in `docs/`, background docs in `schematics/documents/` | the doc map [docs/README.md](schematics/LIA-Readout/docs/README.md) |
+| `schematics/LIA-AFE-Eval/` | KiCad project of the analog-only test board, later merged into LIA-Readout | [README.md](schematics/LIA-AFE-Eval/README.md) |
+| `schematics/documents/existing_boards/` | Earlier GMOS boards (schematic PDFs, Visio drawings, operating procedure) kept as references | — |
 | `simulations/` | General simulation documents (plan, index, design context, issues, reviews) and the simulation projects | [simulations/CLAUDE.md](simulations/CLAUDE.md), [simulations/README.md](simulations/README.md) |
-| `firmware/` | STM32CubeMX project of the board MCU; specification in `schematics/LIA-board/docs/firmware.md` | — |
+| `firmware/` | STM32CubeMX project of the board MCU; specification in `firmware/firmware_requirements.md` | — |
 | `thesis/` | LaTeX thesis | [thesis/CLAUDE.md](thesis/CLAUDE.md) |
 | `Results/` | Experiment output written by `ate_lia` (git-ignored) | — |
 
@@ -26,9 +28,9 @@ Subagents for the simulation workflow are in `.claude/agents/` and are described
 
 | Facts | Owner document |
 |-------|----------------|
-| Board requirements and target values | `schematics/LIA-board/docs/requirements.md` |
-| Board circuits, values, net names, pins | `schematics/LIA-board/docs/schematic_overview.md` |
-| Board decisions and open items | `schematics/LIA-board/docs/README.md` §9 (evidence in `docs/decisions/`) |
+| Board requirements and target values | `schematics/LIA-Readout/docs/requirements.md` |
+| Board circuits, values, net names, pins | `schematics/LIA-Readout/docs/schematic_overview.md` |
+| Board decisions and open items | `schematics/LIA-Readout/docs/README.md` §9 (evidence in `docs/decisions/`) |
 | Simulation baseline values and review limits | `simulations/design-context.md` |
 | Bench hardware connectivity, PSU mapping | `ate_lia/FSD.md` |
 | MCP safety bounds | `ate_lia/sources/mcp_server/bounds.py` |

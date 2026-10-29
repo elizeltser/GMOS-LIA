@@ -1,0 +1,46 @@
+* TMUX6136_BEH_v2.lib
+* Behavioral model of one TMUX6136-style precision SPDT channel
+* (not a TI model - built from datasheet parameters; verify values
+*  against TMUX6136 datasheet tables 5.5/5.6 at +/-15 V)
+*
+* v2: convergence fixes
+*   - logic threshold widened and smoothed
+*   - charge injection driven from the slowed internal edge (X)
+*     instead of the ideal step (X0): same total charge, spread
+*     over ~TAU, so the op-amp input sees no ns-wide current spike
+*   - ROFF/RON ratio reduced to 1e11
+*
+* Pin order: S1 S2 D SEL VDD VSS
+* SEL low  -> S1 connected to D
+* SEL high -> S2 connected to D
+* Use two instances for the dual TMUX6136.
+*
+.SUBCKT SPDT_PREC S1 S2 D SEL VDD VSS
++ PARAMS: RON=120 CS=4p CD=6p QINJ=0.4p TAU=30n ILK=0.5p
+
+* Logic threshold ~1.4 V (TTL-compatible), internal control 0..1 V
+E_LOG  X0 0 TABLE {V(SEL)} = (1.0,0) (1.8,1)
+R_T    X0 X  1k
+C_T    X  0  {TAU/1k}
+
+* Different switch thresholds -> automatic break-before-make
+S_A  S1 NA  X 0 SW_A
+S_B  S2 NB  X 0 SW_B
+R_A  NA D  {RON}
+R_B  NB D  {RON}
+.MODEL SW_A VSWITCH (RON=0.1 ROFF=1e10 VON=0.3 VOFF=0.4)
+.MODEL SW_B VSWITCH (RON=0.1 ROFF=1e10 VON=0.7 VOFF=0.6)
+
+* Charge injection: smoothed 1 V internal edge through C = Q/1V
+C_INJ  X  D  {QINJ/1}
+
+* Parasitic capacitances and leakage
+C_S1 S1 0 {CS}
+C_S2 S2 0 {CS}
+C_D  D  0 {CD}
+I_LK D  0 DC {ILK}
+
+* Supply pins not modeled; tie off so nodes are not floating
+R_VDD VDD 0 1G
+R_VSS VSS 0 1G
+.ENDS SPDT_PREC

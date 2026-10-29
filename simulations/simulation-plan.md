@@ -1,6 +1,6 @@
 # GMOS LIA Board — Simulations
 
-Single place for every simulation: what it must show, how it is set up, pass criteria, and the recorded result. Lab measurements are in [preliminary_lab_test_results.md](../schematics/LIA-board/docs/preliminary_lab_test_results.md); theory in [measurement_principles.md](../schematics/LIA-board/docs/measurement_principles.md); requirement IDs in [requirements.md](../schematics/LIA-board/docs/requirements.md).
+Single place for every simulation: what it must show, how it is set up, pass criteria, and the recorded result. Lab measurements are in [preliminary_lab_test_results.md](../schematics/LIA-Readout/docs/preliminary_lab_test_results.md); theory in [measurement_principles.md](../schematics/documents/measurement_principles.md); requirement IDs in [requirements.md](../schematics/LIA-Readout/docs/requirements.md).
 
 **Rules**
 - Each board-level simulation has an ID `SIM-xx` (what must be shown and the pass criteria). The runs that answer it are entries `C-xx`/`P-xx` of [simulation-index.md](simulation-index.md), and their files live in the simulation project that ran them (currently [`ti-pspice/`](ti-pspice/CLAUDE.md): netlists in `circuits/`, results in `docs/sim-results/<ID>.md`).
@@ -18,18 +18,18 @@ Single place for every simulation: what it must show, how it is set up, pass cri
 | ID | Simulation | Tool / file | Verifies | Status / result |
 |----|------------|-------------|----------|-----------------|
 | SIM-1 | Analog quadrature oscillator transient | ngspice | Rev A oscillator | Obsolete (D-3) |
-| SIM-2 | System CMRR Monte-Carlo (50 000 trials, C_node = 20 pF) | Python | [§2.7](../schematics/LIA-board/docs/measurement_principles.md#27-common-mode-rejection) | Done; **re-run needed with C_node = 50–60 pF** (SIM-12) |
+| SIM-2 | System CMRR Monte-Carlo (50 000 trials, C_node = 20 pF) | Python | [§2.7](../schematics/documents/measurement_principles.md#27-common-mode-rejection) | Done; **re-run needed with C_node = 50–60 pF** (SIM-12) |
 | SIM-3 | CMRR SPICE cross-check (60 runs) | ngspice | §2.7 | Done |
-| SIM-4 | Band-pass tolerance Monte-Carlo (unity-gain SK, 4:1 ratios) | Python | [§2.8](../schematics/LIA-board/docs/measurement_principles.md#28-band-pass-filter-design) | Done; superseded by SIM-14 if the K = 2 band-pass is chosen |
+| SIM-4 | Band-pass tolerance Monte-Carlo (unity-gain SK, 4:1 ratios) | Python | [§2.8](../schematics/documents/measurement_principles.md#28-band-pass-filter-design) | Done; superseded by SIM-14 if the K = 2 band-pass is chosen |
 | SIM-8 | Heater driver with Kelvin feedback driving 600 Ω (and 300 Ω): stability, headroom from +5VP | ngspice | AN-13, AN-14 | TODO (not decision-relevant for D-18) |
-| SIM-D1 | Discrete switch demodulator, topology check: ideal SPDT + OPA192, single 5 V, V_REF = 2.5 V, input 2 V pk at 517 Hz, phase swept 0–180° | PSpice (user, 2026-10-26) | Switch-demodulator principle ([§2.16](../schematics/LIA-board/docs/measurement_principles.md#216-switch-based-synchronous-demodulator)) | **Pass (topology).** X = 2.5 − 1.273·cos θ V, Y = 2.5 + 1.273·sin θ V, matching (2/π)·2 V = 1.273 V. Generic switch model, max() plotting; must be repeated with vendor models (SIM-10…SIM-13) |
+| SIM-D1 | Discrete switch demodulator, topology check: ideal SPDT + OPA192, single 5 V, V_REF = 2.5 V, input 2 V pk at 517 Hz, phase swept 0–180° | PSpice (user, 2026-10-26) | Switch-demodulator principle ([§2.16](../schematics/documents/measurement_principles.md#216-switch-based-synchronous-demodulator)) | **Pass (topology).** X = 2.5 − 1.273·cos θ V, Y = 2.5 + 1.273·sin θ V, matching (2/π)·2 V = 1.273 V. Generic switch model, max() plotting; must be repeated with vendor models (SIM-10…SIM-13) |
 
 ### 7.2 Front-End Architecture Decision (D-18): Required Simulations
 
-The three candidate architectures are defined in [schematic_overview.md §4.9](../schematics/LIA-board/docs/schematic_overview.md#49-front-end-architecture-options-decision-d-18):
+The three candidate architectures are defined in [schematic_overview.md §4.9](../schematics/LIA-Readout/docs/schematic_overview.md#49-front-end-architecture-options-decision-d-18):
 - **FE-A** — ±5 V, INA828, unity-gain SK band-pass, 2× AD630 (gain ±2), post-filter −3 (as drawn 2026-10-24).
 - **FE-B** — ±5 V, INA828, K = 2 SK band-pass, discrete demodulator (TMUX6136 + OPA2196, gain ±1), post-filter −1.5.
-- **FE-C** — single 5 V + V_REF 2.5 V (REF3325), INA333 with LM7705 (−0.23 V) on V−, K = 2 SK band-pass, discrete demodulator (2× TMUX1219), signal-path op-amps **OPA2365** (zero-crossover; the OPA2196 input transition region is 2.0–3.5 V on a 5 V rail, see [§2.15](../schematics/LIA-board/docs/measurement_principles.md#215-single-supply-referencing-v_ref)), post-filter −1.5. Removes the −7 V / −5 V rails.
+- **FE-C** — single 5 V + V_REF 2.5 V (REF3325), INA333 with LM7705 (−0.23 V) on V−, K = 2 SK band-pass, discrete demodulator (2× TMUX1219), signal-path op-amps **OPA2365** (zero-crossover; the OPA2196 input transition region is 2.0–3.5 V on a 5 V rail, see [§2.15](../schematics/documents/measurement_principles.md#215-single-supply-referencing-v_ref)), post-filter −1.5. Removes the −7 V / −5 V rails.
 
 For FE-C, SIM-11 must also be run with the OPA2196 model in place of the OPA2365 to quantify the transition-region error (distortion and offset step around 2–3.5 V); for FE-B, check at full scale (2.14 V pk) that the OPA2196 inputs stay below +2 V.
 

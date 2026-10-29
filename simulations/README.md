@@ -12,7 +12,7 @@ Entry point for all simulation work on the GMOS LIA readout. General documents a
 | [design-issues.md](design-issues.md) | Register of design issues found by simulation and review (`DI-xx` of the simulation workflow) |
 | [design-review/](design-review/) | One hardware review per batch of runs, with its calculation scripts |
 
-The board's requirements, theory and schematic are in [`schematics/LIA-board/docs/`](../schematics/LIA-board/docs/README.md). When a value in [design-context.md](design-context.md) disagrees with the board docs, report it instead of choosing.
+The board's requirements, theory and schematic are in [`schematics/LIA-Readout/docs/`](../schematics/LIA-Readout/docs/README.md). When a value in [design-context.md](design-context.md) disagrees with the board docs, report it instead of choosing.
 
 ## Simulation projects
 
