@@ -1,0 +1,31 @@
+# T04 FE-C: single supply. INA333 (V- from LM7705, REF = VREF_2V5), K=2 band-pass, 2x TMUX1219 + OPA2365, post-filter -1.5
+value U2 INA333
+name U2.5 VREF_2V5
+value R10 11k
+name U2.2 DRN_A
+name U2.3 DRN_B
+absent U5
+absent U6
+absent U18
+absent U19
+valuein U3 OPA2365
+valuein U4 OPA2365
+value R9 9.31k
+value R13 9.31k
+value C10 33n
+value C11 33n
+value R11 9.31k
+value R12 9.31k
+value C9 33n
+value C12 33n
+name U3.7 BPF_OUT
+value R14 200k
+value R16 200k
+value R15 301k
+value R17 301k
+name U4.3 VREF_2V5
+name U4.5 VREF_2V5
+name U4.1 X_OUT
+name U4.7 Y_OUT
+name U7:AIN1 VREF_2V5
+name U7:AIN3 VREF_2V5

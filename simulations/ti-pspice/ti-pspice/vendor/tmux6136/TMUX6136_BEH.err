@@ -1,0 +1,8 @@
+STATUS: PSpice Schematics to Capture translator (23.1.0.d001)
+STATUS:  
+STATUS: Translator started at Monday, October 26, 2026 08:59:43
+STATUS: C:\Cadence\PSpiceTI\tools\bin\sch2cap -f "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\tmux6136\TMUX6136_BEH.LIB" -o "C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\tmux6136\TMUX6136_BEH.OLB" -i C:\cds_spb_home\cdssetup\OrCAD_PSpiceTIPSpice_Install/23.1.0/PSpice.ini -d 0000000000060878 -s SPDT_PREC
+INFO(ORSCH-1029): Using existing library 'C:\Cadence\PSpiceTI\tools\Capture\Library\PSpice\modeled.etc'.
+INFO(ORSCH-1031): Created new library 'C:\Users\LW\Documents\GMOS-LIA\simulations\ti-pspice\ti-pspice\vendor\tmux6136\TMUX6136_BEH.olb'.
+STATUS: Translator stopped at Monday, October 26, 2026 08:59:43
+STATUS: 0 Error messages, 0 Warning messages

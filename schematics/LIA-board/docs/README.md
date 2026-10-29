@@ -18,7 +18,7 @@ Each topic lives in exactly **one** file. Other files link to it instead of repe
 | [schematic_overview.md](schematic_overview.md) | 1, 3, 4, 5, 6 | Sheet map, power design, analog design, digital design, power budget | Implemented values (what the schematic does) |
 | [simulation-plan.md](../../../simulations/simulation-plan.md) | 7 | Simulation index, required simulations SIM-10…SIM-20 with pass criteria, results, D-18 decision matrix | Simulated values |
 | [preliminary_lab_test_results.md](preliminary_lab_test_results.md) | 8 | Lab test procedures and result tables | Measured values |
-| [firmware.md](firmware.md) | F | STM32 firmware specification: CubeMX settings, DAC + GPDMA + TIM2/TIM8 excitation and references, module API, verification | Firmware behaviour |
+| [firmware_requirements.md](../../../firmware/firmware_requirements.md) | F | STM32 firmware specification: CubeMX settings, DAC + GPDMA + TIM2/TIM8 excitation and references, module API, verification | Firmware behaviour |
 | [schematic_review.md](schematic_review.md) | — | Step-by-step schematic task list (T00–T10) for Claude Code, decisions to confirm, check files in `tools/checks/` | What still has to change in KiCad |
 | [tools/README.md](../tools/README.md) | — | Netlist tools `netquery.py` / `netcheck.py` and the check-file syntax | — |
 | `prompts/` | — | Ready-to-run Claude Code prompts (e.g. [frontend_decision.md](prompts/frontend_decision.md)) | — |
