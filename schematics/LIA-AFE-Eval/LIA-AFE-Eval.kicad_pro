@@ -517,8 +517,8 @@
     "meta": {
       "version": 5
     },
-    "net_colors": {},
-    "netclass_assignments": {},
+    "net_colors": null,
+    "netclass_assignments": null,
     "netclass_patterns": []
   },
   "pcbnew": {
@@ -684,11 +684,7 @@
     ],
     [
       "162c899a-9f66-46c4-a07d-1bac9a43c045",
-      "Demod_X"
-    ],
-    [
-      "95f6699e-6763-4489-86f2-f12999176991",
-      "Demod_Y"
+      "Demod"
     ]
   ],
   "text_variables": {},

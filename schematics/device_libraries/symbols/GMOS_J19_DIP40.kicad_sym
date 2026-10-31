@@ -1,10 +1,10 @@
 (kicad_symbol_lib (version 20220914) (generator kicad_symbol_editor)
-  (symbol "DIP40_J19" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+  (symbol "GMOS_J19_DIP40" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
     (property "Reference" "J" (at -15.24 26.67 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
-    (property "Value" "DIP40_J19" (at 15.24 26.67 0) (effects (font (size 1.27 1.27)) (justify right bottom)))
+    (property "Value" "GMOS_J19_DIP40" (at 15.24 26.67 0) (effects (font (size 1.27 1.27)) (justify right bottom)))
     (property "Footprint" "Package_DIP:DIP-40_W15.24mm" (at 0 -33.94 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-    (symbol "DIP40_J19_0_1"
+    (symbol "GMOS_J19_DIP40_0_1"
       (rectangle (start -15.24 25.4) (end 15.24 -27.94) (stroke (width 0.254) (type default)) (fill (type background)))
       (rectangle (start -10.668 21.59) (end -9.652 19.05) (stroke (width 0.254) (type default)) (fill (type none)))
       (rectangle (start -10.668 3.81) (end -9.652 1.27) (stroke (width 0.254) (type default)) (fill (type none)))
@@ -125,7 +125,7 @@
       (text "VDD" (at 0 23.8 0) (effects (font (size 1.0 1.0))))
       (text "GND" (at 0 -26.94 0) (effects (font (size 1.0 1.0))))
     )
-    (symbol "DIP40_J19_1_1"
+    (symbol "GMOS_J19_DIP40_1_1"
       (pin passive line (at -17.78 22.86 0) (length 2.54) (name "HP1" (effects (font (size 1.27 1.27)))) (number "11" (effects (font (size 1.27 1.27)))))
       (pin passive line (at -17.78 17.78 0) (length 2.54) (name "HN1" (effects (font (size 1.27 1.27)))) (number "16" (effects (font (size 1.27 1.27)))))
       (pin passive line (at -17.78 15.24 0) (length 2.54) (name "D1" (effects (font (size 1.27 1.27)))) (number "17" (effects (font (size 1.27 1.27)))))

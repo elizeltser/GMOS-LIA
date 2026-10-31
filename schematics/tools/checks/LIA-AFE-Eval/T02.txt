@@ -1,0 +1,25 @@
+# analog T02 Sallen-Key post-filter with gain placeholders, VMID and VMID_PF removed (E-9).
+# Demod_X only; add the Demod_Y lines when that sheet returns.
+
+between R14 U26.1 R15.1
+between R15 R14.2 U26.5
+between C13 R14.2 U26.7
+between C15 U26.5 @GND
+between R88 U26.6 U26.7
+between R89 U26.6 @GND
+value R14 200k
+value R15 200k
+value C13 1.5u
+absent C94
+value C15 1.5u
+value R88 0
+name U26.7 X_OUT
+between R80 U26.7 @X_SMA
+absent R74
+absent R75
+absent R76
+absent R77
+absent C92
+absent C93
+absent TP25
+nc J10.5

@@ -2,7 +2,7 @@
   (version 20231120)
   (generator "kicad_symbol_editor")
   (generator_version "8.0")
-  (symbol "INA190AxDDF"
+  (symbol "INA190Ax_SOT23"
     (pin_names (offset 0.254))
     (exclude_from_sim no)
     (in_bom yes)
@@ -10,7 +10,7 @@
     (property "Reference" "U" (at 8.89 5.08 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "INA190AxDDF" (at 8.89 2.54 0)
+    (property "Value" "INA190Ax_SOT23" (at 8.89 2.54 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Package_TO_SOT_SMD:TSOT-23-8" (at 0 0 0)
@@ -31,10 +31,10 @@
     (property "ki_fp_filters" "TSOT*23*8*" (at 0 0 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
-    (symbol "INA190AxDDF_0_1"
+    (symbol "INA190Ax_SOT23_0_1"
       (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))
     )
-    (symbol "INA190AxDDF_1_1"
+    (symbol "INA190Ax_SOT23_1_1"
       (pin power_in line (at 0 10.16 270) (length 2.54)
         (name "VS" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))

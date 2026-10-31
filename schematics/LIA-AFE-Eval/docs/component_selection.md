@@ -43,16 +43,16 @@ Rules applied: thin-film 0.1 % resistors wherever a ratio or a DC level matters;
 
 ## C.5 Excitation (sheet Excitation)
 
-Values as LIA-Readout §4.5 (two MFB stages, `GATE_A`, `GATE_B`).
+Values as LIA-Readout §4.5, one MFB stage driving `GATE` (E-11).
 
 | Function | Part | LCSC | Stock | Qty | Notes |
 |----------|------|------|-------|-----|-------|
-| Op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | Both stages |
-| R_in 120 kΩ 0.1 % | Yageo RT0603BRD07120KL | C705720 | 136 384 | 2 | |
-| R_fb, R_3 1.00 kΩ 0.1 % | RESI PTFR0603B1K00N9 (±10 ppm) | C394536 | 187 487 | 4 | Same family as R_in is not available at 120 kΩ; gain −1/120 is calibrated |
-| C_X 47 nF C0G ±5 % | Murata GRM31M5C1H473JA01L (1206) | C21812 | 66 867 | 2 | Rework to ±1 % later (E-5): TORCH CC1206CG50V473FN (C54916732) |
-| C_fb 22 nF C0G ±5 % | Murata GRM21B5C1H223JA01L (0805) | C77069 | 62 750 | 2 | Rework to ±1 %: Murata GCM21B5C1H223FA16L (C1864305) |
-| DC filter, output series | 10 kΩ / 1 µF, 100 Ω | — | — | 2 each | General purpose |
+| Op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | U1B drives the gate; U1A is unused, follower with +IN at GND |
+| R_in 120 kΩ 0.1 % | Yageo RT0603BRD07120KL | C705720 | 136 384 | 1 | |
+| R_fb, R_3 1.00 kΩ 0.1 % | RESI PTFR0603B1K00N9 (±10 ppm) | C394536 | 187 487 | 2 | Same family as R_in is not available at 120 kΩ; gain −1/120 is calibrated |
+| C_X 47 nF C0G ±5 % | Murata GRM31M5C1H473JA01L (1206) | C21812 | 66 867 | 1 | Rework to ±1 % later (E-5): TORCH CC1206CG50V473FN (C54916732) |
+| C_fb 22 nF C0G ±5 % | Murata GRM21B5C1H223JA01L (0805) | C77069 | 62 750 | 1 | Rework to ±1 %: Murata GCM21B5C1H223FA16L (C1864305) |
+| DC filter, output series | 10 kΩ / 1 µF, 100 Ω | — | — | 1 each | General purpose |
 
 ## C.6 Sensor, Drain Bias, Heaters (sheet Sensor)
 
@@ -67,10 +67,7 @@ All resistors in the drain path are thin film, 0.1 %, ±10 ppm/°C (AN-4a).
 | R_G 100 kΩ | RESI PTFR0603B100KN9 (±10 ppm) | C394537 | 91 075 | 2 | |
 | Output filter 1 kΩ | RESI PTFR0603B1K00N9 (±10 ppm) | C394536 | 187 487 | 2 | In series with R_D; + 10 µF X7R to GND |
 | R_CAL 18.0 kΩ | RESI PTFR0603B18K0N9 (±10 ppm) | C2692864 | 2749 | 2 | Calibration position |
-| Drain-sense op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | Gain 8, both sides |
-| Drain-sense R_F 7.15 kΩ | RESI PTFR0402B7K15N9 (±10 ppm, 0402) | C2829140 | 2198 | 2 | Only ±10 ppm option is 0402 |
-| Drain-sense R_G 1.02 kΩ | RESI PTFR0402B1K02N9 (±10 ppm, 0402) | C2693048 | 5392 | 2 | Same family as R_F |
-| Drain-sense output RC | 10 kΩ + 1 µF | — | — | 2 | Also limits current into the NUCLEO ADC pin |
+| Drain test resistors R90, R91 100 kΩ | RESI PTFR0603B100KN9 (±10 ppm) | C394537 | 91 075 | 2 | In series with TP15, TP16 (E-10). `ASSUMPTION`: value to be confirmed |
 | Heater driver op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | On +5VP |
 | Heater gain resistors 49.9 kΩ 0.1 % | Yageo RT0603BRD0749K9L | C705780 | 209 908 | 4 | Replaces the non-standard 50 kΩ of LIA-Readout; gain stays exactly 2 |
 | Heater shunt 15 Ω 0.1 % | Yageo RT0603BRD0715RL | C705727 | 11 292 | 2 | |
@@ -97,11 +94,20 @@ Parts per instance. One TMUX6136 per channel, the second switch of the chip is u
 | Switch | TMUX6136PWR | C2673380 | 145 | 1 | Supply per DC-3 |
 | Op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | Section A: ±1 demodulator; section B: post-filter |
 | R_i, R_f 10.0 kΩ 0.1 % | RESI PTFR0603B10K0N9 | C394535 | 231 492 | 2 | Gain ±1 |
-| Post-filter R_IN 200 kΩ 0.1 % | Yageo RT0603BRD07200KL | C728585 | 229 605 | 1 | |
-| Post-filter R_F 301 kΩ 0.1 % | Yageo RT0603BRD07301KL | C861309 | 12 527 | 1 | Same family as R_IN |
-| Post-filter C_F 1.5 µF film ±20 % | Rubycon 16MU155MA23216 (1206, acrylic) | C3776792 | 1813 | 1 | τ = 0.45 s instead of 0.50 s; a parallel footprint (DNP) for 150 nF restores 1.65 µF at rework |
-| +IN divider (VMID/2.5) | As LIA-Readout §4.9 FE-B | — | — | — | VMID divider from +5VA on the Front_End sheet |
+| Post-filter R14, R15 200 kΩ 0.1 % | Yageo RT0603BRD07200KL | C728585 | 229 605 | 2 | Sallen-Key series resistors (E-9) |
+| Post-filter C13, C15 1.5 µF film ±20 % | Rubycon 16MU155MA23216 (1206, acrylic) | C3776792 | 1813 | 2 | C13 feedback, C15 to GND |
+| Gain placeholder R88 0 Ω | General purpose | — | — | 1 | Output to −IN. `ASSUMPTION` to be replaced when a gain is chosen |
+| Gain placeholder R89 10 kΩ (DNP) | General purpose | — | — | 0 | −IN to GND. `ASSUMPTION` to be replaced when a gain is chosen |
 | Output series | 100 Ω | — | — | 1 | To SMA and header |
+
+Post-filter response, K = 1 + R88/R89:
+
+| Build | R88 / R89 | K | Cut-off | Q | Overall scale at `X_OUT` |
+|-------|-----------|---|---------|---|--------------------------|
+| As entered | 0 Ω / DNP | 1 | 0.53 Hz | 0.50 | 25.5 |
+| Scale as LIA-Readout | 5 kΩ / 10 kΩ | 1.5 | 0.53 Hz | 0.67 | 38.2 |
+
+With equal R and equal C, Q = 1 / (3 − K), so the stage is unstable at K = 3. The DC gain does not depend on the film capacitors; their ±20 % moves the cut-off only.
 
 ## C.9 General Parts
 

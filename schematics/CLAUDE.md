@@ -31,7 +31,9 @@ Simulations are in `../simulations/` (start with its `README.md`); the MCU firmw
 
 | Path | Contents |
 |------|----------|
-| `<project>/` | One KiCad project: `.kicad_pro`, `*.kicad_sch`, `.kicad_pcb`, `device_libraries/` |
+| `<project>/` | One KiCad project: `.kicad_pro`, `*.kicad_sch`, `.kicad_pcb` |
+| `device_libraries/symbols/` | Symbol libraries shared by all projects (`*.kicad_sym`), library nickname `device_libraries` |
+| `device_libraries/footprints/` | Footprint libraries shared by all projects (`*.pretty`) |
 | `<project>/docs/` | Documents of that board only: document map, requirements, schematic overview, reviews and task lists, lab tests, decision records (`decisions/`) |
 | `documents/` | General documents for all boards: theory, application notes (`app_notes/`), earlier boards (`existing_boards/`) |
 | `tools/` | Shared netlist tools `netquery.py`, `netcheck.py` ([README](tools/README.md)) |
@@ -77,6 +79,7 @@ Claude may edit `.kicad_sch` files directly, including wires, labels, junctions,
 - **Page numbers** follow the hierarchy depth-first, without gaps: root = 1, then each sheet in the order it appears on its parent (left to right, top to bottom), with its own sub-sheets directly after it. Renumber after adding or removing a sheet (Schematic Editor → Edit page number, or the `page` field of the sheet instance).
 - **Values** exactly as in the docs and check files (string compare, e.g. `4.7u`, `100n`, `10k`). Precision parts carry the tolerance in a field, not in the value.
 - **Footprints and dielectrics**: as the docs specify. When they do not, ask.
+- **Symbol names** in `device_libraries/symbols/` end in the package of their footprint (`TMUX1109_TSSOP`, `INA190Ax_SOT23`). The file has the same name as the symbol.
 - **Net names**: use the target names in the project's schematic overview (LIA-Readout: `docs/schematic_overview.md` §1.2). Hierarchical labels must be spelled identically on both sides (`netcheck` reports `SINGLE-NODE` otherwise). Shared circuits use the same net names in both projects.
 - **Parts**: common and cheap, preferably JLCPCB/LCSC stocked. When a task leaves the choice open, propose 1–2 options with LCSC numbers and stock instead of choosing silently.
 - **Designators** must match the docs. If parts are added, use the next free number and record it in the task.

@@ -5,7 +5,7 @@ Analog front-end evaluation board for the GMOS lock-in readout. It carries only 
 | Path | Contents |
 |------|----------|
 | `LIA-AFE-Eval.kicad_pro`, `*.kicad_sch` | KiCad project and schematic sheets (schematic rev 0.1 entered, layout not started) |
-| `device_libraries/` | Project symbol libraries |
+| `../device_libraries/` | Symbol and footprint libraries shared by all boards |
 | `docs/` | Design documentation: start with [docs/README.md](docs/README.md) (document map), then `requirements.md` |
 | [../tools/](../tools/README.md) | Shared netlist query and check tools; this board's expected results are in [../tools/checks/LIA-AFE-Eval/](../tools/checks/LIA-AFE-Eval/README.md) |
 | [../CLAUDE.md](../CLAUDE.md) | Working rules for Claude Code, shared by all schematic projects |
@@ -19,7 +19,7 @@ Analog front-end evaluation board for the GMOS lock-in readout. It carries only 
 | 3 | Connectors | `CONNECTORS.kicad_sch` | NUCLEO control header (IF-5), X/Y SMA and header (IF-3), test loops, mounting holes |
 | 4 | DAC | `DAC.kicad_sch` | DAC80508 bias DAC (AN-6) |
 | 5 | Excitation | `EXCITATION.kicad_sch` | Gate excitation drive |
-| 6 | Sensor | `SENSOR.kicad_sch` | GMOS socket, pixel selection, drain bias, drain sense, heaters |
+| 6 | Sensor | `SENSOR.kicad_sch` | GMOS socket, pixel selection, drain bias, drain test loops, heaters |
 | 7 | Front_End | `FRONT_END.kicad_sch` | In-amp and band-pass filter |
 | 8 | Demod_X | `DEMODULATOR.kicad_sch` | Synchronous demodulator and post-filter, X channel |
 | 9 | Demod_Y | `DEMODULATOR.kicad_sch` | Same file as Demod_X, Y channel |

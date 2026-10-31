@@ -5,5 +5,7 @@ Check files for the LIA-AFE-Eval KiCad project (`../../../LIA-AFE-Eval/`). One f
 | File | Task |
 |------|------|
 | `T01.txt` | Schematic entry from requirements rev B: power, excitation, socket and selection, DAC, heaters, drain bias and sense, front end FE-B, demodulators, control header (lines adapted from LIA-Readout T01, T02, T04_FEB, T06; TMUX1109 pins by name because the UQFN numbering differs) |
+| `T02.txt` | Sallen-Key post-filter with gain placeholders, VMID and VMID_PF removed (E-9). Replaces the post-filter lines of `T01.txt` |
+| `T03.txt` | U23 removed, drain test resistors, one gate chain, U1A follower (E-10, E-11). Replaces the matching lines of `T01.txt` |
 
 Where a LIA-AFE-Eval circuit is identical to its LIA-Readout counterpart, copy the relevant lines from [../LIA-Readout/](../LIA-Readout/) and adapt the designators to the LIA-AFE-Eval netlist.

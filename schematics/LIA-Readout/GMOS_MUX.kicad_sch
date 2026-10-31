@@ -205,7 +205,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "device_libraries:DIP40_J19"
+		(symbol "device_libraries:GMOS_J19_DIP40"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -226,7 +226,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "DIP40_J19"
+			(property "Value" "GMOS_J19_DIP40"
 				(at 4.1911 27.94 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -270,7 +270,7 @@
 					)
 				)
 			)
-			(symbol "DIP40_J19_0_1"
+			(symbol "GMOS_J19_DIP40_0_1"
 				(rectangle
 					(start -15.24 25.4)
 					(end 15.24 -27.94)
@@ -1559,7 +1559,7 @@
 					)
 				)
 			)
-			(symbol "DIP40_J19_1_1"
+			(symbol "GMOS_J19_DIP40_1_1"
 				(pin passive line
 					(at -17.78 -25.4 0)
 					(length 2.54)
@@ -5559,7 +5559,7 @@
 		)
 	)
 	(symbol
-		(lib_id "device_libraries:DIP40_J19")
+		(lib_id "device_libraries:GMOS_J19_DIP40")
 		(at 185.42 100.33 0)
 		(unit 1)
 		(body_style 1)
@@ -5581,7 +5581,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "DIP40_J19"
+		(property "Value" "GMOS_socket"
 			(at 189.6111 72.39 0)
 			(show_name no)
 			(do_not_autoplace no)

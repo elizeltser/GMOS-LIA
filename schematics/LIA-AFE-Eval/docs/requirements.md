@@ -10,6 +10,8 @@ This file is the single source for the requirement IDs and target values of the 
 |-----|------|---------|
 | A | 2026-10-29 | Initial set from the first requirements session (block 1: bench use and scope; block 2: power and I/O; block 3: signal chain; block 4: usability) |
 | B | 2026-10-29 | Carry-over requirements confirmed; low-drift drain path (AN-4a); control header pinout (IF-5); parts in [component_selection.md](component_selection.md) |
+| C | 2026-10-31 | `CHANGED`: post-filter is a Sallen-Key low-pass with optional gain, output centred on 0 V, VMID and VMID_PF removed (AN-7, AN-12, E-9) |
+| D | 2026-10-31 | `CHANGED`: drain-sense amplifiers removed, drain test loops through series resistors (IF-4, IF-5, AN-4a, E-10); one gate net and one gate drive (AN-3, AN-6, E-11) |
 
 ---
 
@@ -40,7 +42,7 @@ This file is the single source for the requirement IDs and target values of the 
 | IF-1 | NUCLEO connection carries: excitation sine (MCU DAC output), X and Y references (timer outputs), SPI to the on-board DAC, mux address/enable lines, 3.3 V and GND | Agreed (signal list) |
 | IF-2 | The board does not depend on one NUCLEO model. It has one control header with a fixed pinout (IF-5), connected to the NUCLEO by a cable. The first NUCLEO is the **NUCLEO-F303RE** (STM32F303RET6; ST product page https://www.st.com/en/evaluation-tools/nucleo-f303re.html). Its pin mapping is a cable/firmware matter, not a board change. The excitation firmware on the F303 differs from the STM32U575 production firmware (no GPDMA) | Agreed |
 | IF-3 | X and Y demodulator outputs on SMA connectors for the scope, and on a header | Agreed |
-| IF-4 | Analog readbacks to NUCLEO ADC pins: drain sense of both sides (buffers as LIA-Readout AN-11) and heater current of both sides (INA190 as LIA-Readout AN-18) | Agreed |
+| IF-4 | Analog readback to NUCLEO ADC pins: heater current of both sides (INA190 as LIA-Readout AN-18). The drains have no continuous readback. They are checked once, at DC, at test loops TP15 and TP16 (E-10) | Agreed |
 | IF-5 | Control header: keyed 2 × 13 IDC box header, 2.54 mm, pinout in the table below. Ground wires sit next to the excitation and reference lines in the ribbon | Agreed |
 
 **IF-5 control header pinout** (ribbon wire n = pin n)
@@ -56,7 +58,7 @@ This file is the single source for the requirement IDs and target values of the 
 | 13 | `MUXA_A0` | in | 14 | `MUXA_A1` | in |
 | 15 | `MUXB_A0` | in | 16 | `MUXB_A1` | in |
 | 17 | `MUX_EN` | in | 18 | GND | — |
-| 19 | `DSENSE_A` | out | 20 | `DSENSE_B` | out |
+| 19 | Not connected | — | 20 | Not connected | — |
 | 21 | `HSENSE_A` | out | 22 | `HSENSE_B` | out |
 | 23 | GND | — | 24 | GND | — |
 | 25 | +3V3 (from NUCLEO) | in | 26 | +3V3 (from NUCLEO) | in |
@@ -67,22 +69,22 @@ This file is the single source for the requirement IDs and target values of the 
 |----|-------------|--------|
 | AN-1 | Excitation sine from the NUCLEO DAC, references from NUCLEO timers, generated as in LIA-Readout AN-2 (sine table, square-wave references 90° apart, phase-locked). Firmware behaviour as LIA-Readout FW-1…FW-10, adapted to the NUCLEO in use | Agreed |
 | AN-2 | Sine excitation (LIA-Readout AN-2…AN-7b) at the LIA-Readout frequency and band (AN-1, AN-21). Other frequencies need different filter parts (BU-4) | Agreed |
-| AN-3 | Gate drive: split gate `GATE_A` / `GATE_B` with MFB summing stages and DC from the DAC, as LIA-Readout AN-3…AN-5 | Agreed |
+| AN-3 | Gate drive: one gate net `GATE` for all pixels, one MFB summing stage with DC from the DAC (E-11). Stage values as LIA-Readout AN-3…AN-5. Differs from LIA-Readout D-17: there is no separate gate DC per side | Agreed |
 
 ## R.4 Drain Bias and Heaters
 
 | ID | Requirement | Status |
 |----|-------------|--------|
 | AN-4 | Drain bias with R_D and coarse/fine DAC trim, as LIA-Readout AN-8…AN-12b | Agreed |
-| AN-4a | Every resistor in the drain path is thin film, 0.1 %, ≤ ±10 ppm/°C: R_D, the drain-supply difference amplifier (R_F, R_G), its output filter resistor, R_CAL and the drain-sense gain resistors. Stricter than LIA-Readout AN-8 (≤ 25 ppm/°C) | Agreed |
+| AN-4a | Every resistor in the drain path is thin film, 0.1 %, ≤ ±10 ppm/°C: R_D, the drain-supply difference amplifier (R_F, R_G), its output filter resistor, R_CAL and the drain test resistors. Stricter than LIA-Readout AN-8 (≤ 25 ppm/°C) | Agreed |
 | AN-5 | Heaters on the board: drivers and current sense as LIA-Readout AN-13…AN-18 | Agreed |
-| AN-6 | Bias DAC: DAC80508 controlled by the NUCLEO over SPI (E-2), channel use as LIA-Readout | Agreed |
+| AN-6 | Bias DAC: DAC80508 controlled by the NUCLEO over SPI (E-2), channel use as LIA-Readout, except that channel 5 is not connected (E-11) | Agreed |
 
 ## R.5 Amplification and Filtering
 
 | ID | Requirement | Status |
 |----|-------------|--------|
-| AN-7 | Topology and filter as LIA-Readout AN-19, AN-21, AN-22 for FE-B | Agreed |
+| AN-7 | Topology and filter as LIA-Readout AN-19, AN-21, AN-22 for FE-B, except the post-filter (AN-12) | Agreed |
 | AN-8 | In-amp gain G = 10, as LIA-Readout AN-20 | Agreed |
 | AN-9 | Noise, CMRR, linear range and drift as LIA-Readout AN-23…AN-23b | Agreed |
 
@@ -92,7 +94,7 @@ This file is the single source for the requirement IDs and target values of the 
 |----|-------------|--------|
 | AN-10 | Two identical channels X and Y, one schematic sheet used twice (`DEMODULATOR.kicad_sch`) | Agreed |
 | AN-11 | Demodulator gain and accuracy as LIA-Readout AN-24, AN-25 for FE-B | Agreed |
-| AN-12 | Post-demodulation filter as LIA-Readout AN-26 (τ = 0.5 s). For fast bench tests a smaller capacitor may be fitted by assembly; this is a rework, not an option on the board | Agreed |
+| AN-12 | Post-demodulation filter: second-order Sallen-Key low-pass, non-inverting, output centred on 0 V, no reference divider (E-9). Differs from LIA-Readout AN-26. Values and gain options in [component_selection.md §C.8](component_selection.md#c8-demodulator-sheet-demodulator-used-twice). For fast bench tests smaller capacitors may be fitted by assembly; this is a rework, not an option on the board | Agreed |
 
 ## R.7 Channel Selection
 

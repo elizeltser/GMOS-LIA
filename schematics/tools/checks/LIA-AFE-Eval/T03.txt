@@ -1,0 +1,48 @@
+# analog T03 U23 removed, drain test resistors, one gate chain, U1A follower (E-10, E-11).
+
+# --- Drain test loops (E-10) ---
+absent U23
+absent R62
+absent R63
+absent R64
+absent R65
+absent R66
+absent R67
+absent C78
+absent C79
+absent C80
+absent C81
+nc J7.19
+nc J7.20
+between R90 TP15.1 @DRN_A
+between R91 TP16.1 @DRN_B
+value R90 100k
+value R91 100k
+field R90 TCR 10ppm
+field R91 TCR 10ppm
+diff TP15.1 U20:DA
+diff TP16.1 U21:DA
+
+# --- One gate chain (E-11) ---
+absent R1
+absent R2
+absent R3
+absent R4
+absent C1
+absent C3
+absent C5
+absent R58
+absent TP13
+same J3.12 J3.5 J3.40 J3.32 J3.24 J3.19
+name J3.12 GATE
+between R59 U1.7 J3.12
+between R8 U8:OUT4 U1.5
+name R8.1 GATE_DC
+name R6.1 EXC_DAC
+nc U8:OUT5
+
+# --- Spare section U1A: follower, +IN at mid-supply GND ---
+same U1.1 U1.2
+name U1.3 GND
+name U1.8 +5VA
+name U1.4 -5VA
