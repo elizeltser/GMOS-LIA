@@ -83,6 +83,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 185.42) (xy 93.98 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18104f94-2ab2-4e14-b262-d8c4c66fb258")
+	)
+	(wire
+		(pts
 			(xy 160.02 76.2) (xy 157.48 76.2)
 		)
 		(stroke
@@ -120,6 +130,16 @@
 			(type default)
 		)
 		(uuid "1d06a3b3-e8d2-5641-a026-6a097a5282ab")
+	)
+	(wire
+		(pts
+			(xy 38.1 182.88) (xy 40.64 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1dbec18b-352b-4072-b9cb-61fae6841dd4")
 	)
 	(wire
 		(pts
@@ -310,6 +330,16 @@
 			(type default)
 		)
 		(uuid "7416b427-0c3b-5e3a-a543-37c078618e56")
+	)
+	(wire
+		(pts
+			(xy 91.44 182.88) (xy 93.98 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75438591-61a6-4b75-a552-0dd5a04391de")
 	)
 	(wire
 		(pts
@@ -681,6 +711,16 @@
 		)
 		(uuid "1d2ae246-cb9c-5db8-99fb-bcd792bed12a")
 	)
+	(label "Y_OUT"
+		(at 93.98 182.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2102e245-fdb2-422a-b09c-cf43d163153d")
+	)
 	(label "MUXB_A0"
 		(at 157.48 124.46 180)
 		(effects
@@ -730,6 +770,16 @@
 			(justify left bottom)
 		)
 		(uuid "32967f54-e50a-5b43-90e0-502e2d8ea62d")
+	)
+	(label "Y_SMA"
+		(at 93.98 185.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "32d93df0-cf56-49b4-9750-803443c8235e")
 	)
 	(label "SPI_MOSI"
 		(at 213.36 66.04 0)
@@ -920,6 +970,16 @@
 			(justify right bottom)
 		)
 		(uuid "9d5f911e-cccc-566a-8cc9-b969c469b4db")
+	)
+	(label "REF_Y"
+		(at 38.1 182.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9f6cd234-b8dc-4e93-83ec-53609285f8a7")
 	)
 	(label "X_OUT"
 		(at 93.98 177.8 0)
@@ -1395,7 +1455,7 @@
 	)
 	(sheet
 		(at 40.64 172.72)
-		(size 50.8 12.7)
+		(size 50.8 17.78)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1410,7 +1470,7 @@
 		)
 		(uuid "162c899a-9f66-46c4-a07d-1bac9a43c045")
 		(property "Sheetname" "Demod"
-			(at 40.64 172.0088 0)
+			(at 40.64 172.0084 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1421,7 +1481,7 @@
 			)
 		)
 		(property "Sheetfile" "DEMODULATOR.kicad_sch"
-			(at 40.64 186.1312 0)
+			(at 40.64 191.0846 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1441,9 +1501,9 @@
 				(justify left)
 			)
 		)
-		(pin "REF" input
+		(pin "REF_X" input
 			(at 40.64 180.34 180)
-			(uuid "09708818-76f8-524c-8fdc-2c157816ce5d")
+			(uuid "16644f43-b316-4613-a24c-fed1680e4733")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1451,9 +1511,19 @@
 				(justify left)
 			)
 		)
-		(pin "OUT" output
+		(pin "REF_Y" input
+			(at 40.64 182.88 180)
+			(uuid "b1709863-6532-4baa-8b36-68bb999f380e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "X_OUT" output
 			(at 91.44 177.8 0)
-			(uuid "821d8e79-71d6-540b-8680-3f15147af190")
+			(uuid "1a397857-b6af-4307-8797-733c98fca45d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1461,9 +1531,29 @@
 				(justify right)
 			)
 		)
-		(pin "OUT_SMA" output
+		(pin "X_OUT_SMA" output
 			(at 91.44 180.34 0)
-			(uuid "182755ed-6f27-5f64-83ec-541c24c27fb3")
+			(uuid "90bb5fcb-8455-4ab2-8068-e28697aade0f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Y_OUT" output
+			(at 91.44 182.88 0)
+			(uuid "b99f1389-75df-48be-bc5d-411ecf23ebc0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Y_OUT_SMA" output
+			(at 91.44 185.42 0)
+			(uuid "9b6ebdfd-0543-458f-aa35-fc40a2ae1b02")
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -2042,9 +2042,9 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "Mounting holes M3, four corners (LU-2)"
+	(text "Mounting holes M3, four corners"
 		(exclude_from_sim no)
-		(at 25.4 167.75 0)
+		(at 25.4 130.92 0)
 		(effects
 			(font
 				(size 2 2)
@@ -2054,7 +2054,7 @@
 		)
 		(uuid "42c6ac9b-6d4f-5233-acd4-8821d4d65441")
 	)
-	(text "X / Y outputs (IF-3): SMA for the scope and a 1 × 5 header (X, GND, Y, GND, pin 5 not connected)"
+	(text "X / Y outputs: SMA for the scope and a 1 × 5 header (X, GND, Y, GND, pin 5 not connected)"
 		(exclude_from_sim no)
 		(at 25.4 92.33 0)
 		(effects
@@ -2066,32 +2066,9 @@
 		)
 		(uuid "6f55fd8a-a89a-585f-90f5-18612d5fc34c")
 	)
-	(text "+3V3 comes from the NUCLEO (DC-4) and supplies DAC80508 VIO and the INA190s."
+	(text "NUCLEO control header: keyed 2 × 13 IDC box header"
 		(exclude_from_sim no)
-		(at 25.4 34.29 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c3f9c917-d740-545d-a763-5f3db70606c0")
-	)
-	(text "Test loops: excitation input, references, post-filter outputs, NUCLEO supply (LU-1)"
-		(exclude_from_sim no)
-		(at 25.4 129.77 0)
-		(effects
-			(font
-				(size 2 2)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "c6a2d315-61e7-5f5d-a913-0b952b1e2278")
-	)
-	(text "NUCLEO control header (IF-5): keyed 2 × 13 IDC box header, ribbon wire n = pin n"
-		(exclude_from_sim no)
-		(at 25.4 30.48 0)
+		(at 25.146 33.274 0)
 		(effects
 			(font
 				(size 2 2)
@@ -2162,6 +2139,12 @@
 		(uuid "62070954-04e2-4ea8-8083-ad06857311e2")
 	)
 	(junction
+		(at 46.99 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6a4bf932-3556-425e-b469-e22630b84062")
+	)
+	(junction
 		(at 62.23 73.66)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2184,6 +2167,14 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a353c53c-33ef-4e70-87b1-cdc5f21eea2f")
+	)
+	(no_connect
+		(at 60.96 68.58)
+		(uuid "36f3942d-5105-48ec-adaf-78f1504b074e")
+	)
+	(no_connect
+		(at 48.26 68.58)
+		(uuid "4f1ff8e2-1162-4a32-9bec-6628973f5330")
 	)
 	(no_connect
 		(at 92.71 114.3)
@@ -2241,7 +2232,7 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 45.72) (xy 46.99 50.8)
+			(xy 46.99 45.72) (xy 46.99 48.26)
 		)
 		(stroke
 			(width 0)
@@ -2291,7 +2282,7 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 144.78) (xy 114.3 147.32)
+			(xy 135.89 105.41) (xy 138.43 105.41)
 		)
 		(stroke
 			(width 0)
@@ -2448,6 +2439,16 @@
 			(type default)
 		)
 		(uuid "6aeb95d7-cd5f-5483-86b3-4e6032441e90")
+	)
+	(wire
+		(pts
+			(xy 46.99 48.26) (xy 46.99 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "748431ea-566e-4a4f-9607-db1caa413396")
 	)
 	(wire
 		(pts
@@ -2628,6 +2629,16 @@
 			(type default)
 		)
 		(uuid "b9ae9c91-8702-502f-93da-5cfadd44d40f")
+	)
+	(wire
+		(pts
+			(xy 46.99 48.26) (xy 48.26 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bbbd580c-f68b-4dd3-b1c3-9c5a3717dcd2")
 	)
 	(wire
 		(pts
@@ -2821,21 +2832,13 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 144.78) (xy 101.6 147.32)
+			(xy 135.89 118.11) (xy 138.43 118.11)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "fe656c3f-8dd4-5fee-bc89-7a89b224b928")
-	)
-	(no_connect
-		(at 48.26 68.58)
-		(uuid "4f1ff8e2-1162-4a32-9bec-6628973f5330")
-	)
-	(no_connect
-		(at 60.96 68.58)
-		(uuid "36f3942d-5105-48ec-adaf-78f1504b074e")
 	)
 	(wire
 		(pts
@@ -2948,12 +2951,12 @@
 	)
 	(hierarchical_label "Y_OUT"
 		(shape input)
-		(at 114.3 147.32 270)
+		(at 138.43 105.41 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "98e6aa34-49ae-5302-b613-149f960141be")
 	)
@@ -2981,12 +2984,12 @@
 	)
 	(hierarchical_label "X_OUT"
 		(shape input)
-		(at 101.6 147.32 270)
+		(at 138.43 118.11 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "ad209af7-434d-5099-8cb0-f2a14a22a18c")
 	)
@@ -3069,7 +3072,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 81.28 182.88 0)
+		(at 81.28 146.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3079,7 +3082,7 @@
 		(dnp no)
 		(uuid "03d3d619-9fce-54e6-a8a8-05c8736ea415")
 		(property "Reference" "H3"
-			(at 81.28 177.8 0)
+			(at 81.28 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3089,7 +3092,7 @@
 			)
 		)
 		(property "Value" "MountingHole_M3"
-			(at 81.28 179.705 0)
+			(at 81.28 142.875 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3099,7 +3102,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
-			(at 81.28 182.88 0)
+			(at 81.28 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3110,7 +3113,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 182.88 0)
+			(at 81.28 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3121,7 +3124,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 81.28 182.88 0)
+			(at 81.28 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3219,7 +3222,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 101.6 144.78 0)
+		(at 135.89 118.11 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3229,7 +3232,7 @@
 		(dnp no)
 		(uuid "10d5637f-499b-560c-924d-b67558c9989c")
 		(property "Reference" "TP31"
-			(at 101.6 137.922 0)
+			(at 128.524 119.126 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3239,7 +3242,7 @@
 			)
 		)
 		(property "Value" "X_OUT"
-			(at 101.6 139.7 0)
+			(at 128.524 117.348 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3249,7 +3252,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
-			(at 101.6 144.78 0)
+			(at 135.89 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3260,7 +3263,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 101.6 144.78 0)
+			(at 135.89 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3271,7 +3274,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 101.6 144.78 0)
+			(at 135.89 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3282,7 +3285,7 @@
 			)
 		)
 		(property "MPN" "Keystone 5000"
-			(at 101.6 144.78 0)
+			(at 135.89 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3293,7 +3296,7 @@
 			)
 		)
 		(property "LCSC" "C5199900"
-			(at 101.6 144.78 0)
+			(at 135.89 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3406,7 +3409,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 58.42 182.88 0)
+		(at 58.42 146.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3416,7 +3419,7 @@
 		(dnp no)
 		(uuid "25519c92-25e3-54e5-9b5c-1a148462d944")
 		(property "Reference" "H2"
-			(at 58.42 177.8 0)
+			(at 58.42 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3426,7 +3429,7 @@
 			)
 		)
 		(property "Value" "MountingHole_M3"
-			(at 58.42 179.705 0)
+			(at 58.42 142.875 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3436,7 +3439,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
-			(at 58.42 182.88 0)
+			(at 58.42 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3447,7 +3450,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 58.42 182.88 0)
+			(at 58.42 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3458,7 +3461,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 58.42 182.88 0)
+			(at 58.42 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3479,7 +3482,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 114.3 144.78 0)
+		(at 135.89 105.41 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3489,7 +3492,7 @@
 		(dnp no)
 		(uuid "32eeb630-ef83-5e88-8356-c26bddfb32d7")
 		(property "Reference" "TP32"
-			(at 114.3 137.922 0)
+			(at 128.524 106.426 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3499,7 +3502,7 @@
 			)
 		)
 		(property "Value" "Y_OUT"
-			(at 114.3 139.7 0)
+			(at 128.524 104.648 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3509,7 +3512,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
-			(at 114.3 144.78 0)
+			(at 135.89 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3520,7 +3523,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 114.3 144.78 0)
+			(at 135.89 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3531,7 +3534,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 114.3 144.78 0)
+			(at 135.89 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3542,7 +3545,7 @@
 			)
 		)
 		(property "MPN" "Keystone 5000"
-			(at 114.3 144.78 0)
+			(at 135.89 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3553,7 +3556,7 @@
 			)
 		)
 		(property "LCSC" "C5199900"
-			(at 114.3 144.78 0)
+			(at 135.89 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4459,7 +4462,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 35.56 182.88 0)
+		(at 35.56 146.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4469,7 +4472,7 @@
 		(dnp no)
 		(uuid "a3c19aed-00e3-5e6c-85fa-14989786006a")
 		(property "Reference" "H1"
-			(at 35.56 177.8 0)
+			(at 35.56 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4479,7 +4482,7 @@
 			)
 		)
 		(property "Value" "MountingHole_M3"
-			(at 35.56 179.705 0)
+			(at 35.56 142.875 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4489,7 +4492,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
-			(at 35.56 182.88 0)
+			(at 35.56 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4500,7 +4503,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 182.88 0)
+			(at 35.56 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4511,7 +4514,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 35.56 182.88 0)
+			(at 35.56 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4609,7 +4612,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 104.14 182.88 0)
+		(at 104.14 146.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4619,7 +4622,7 @@
 		(dnp no)
 		(uuid "b23a0f95-6ebe-5b3d-b298-19b3e0f814af")
 		(property "Reference" "H4"
-			(at 104.14 177.8 0)
+			(at 104.14 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4629,7 +4632,7 @@
 			)
 		)
 		(property "Value" "MountingHole_M3"
-			(at 104.14 179.705 0)
+			(at 104.14 142.875 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4639,7 +4642,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
-			(at 104.14 182.88 0)
+			(at 104.14 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4650,7 +4653,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 104.14 182.88 0)
+			(at 104.14 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4661,7 +4664,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 104.14 182.88 0)
+			(at 104.14 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

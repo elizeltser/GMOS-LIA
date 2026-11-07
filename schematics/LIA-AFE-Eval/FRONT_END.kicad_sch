@@ -2287,9 +2287,45 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "In-amp U2: INA828, R_G 5.62 kΩ → G = 9.90 (AN-8). -IN = DRN_A (active), +IN = DRN_B (blind), REF = GND"
+	(rectangle
+		(start 110.236 38.608)
+		(end 283.464 149.86)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "7982bb18-4bdb-4db7-b4c8-c36b8afc278c")
+	)
+	(rectangle
+		(start 29.464 38.608)
+		(end 106.426 149.86)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "c65369e8-7c6d-42b2-a913-a79b49f97513")
+	)
+	(text "377 Hz to 710 Hz BPF"
 		(exclude_from_sim no)
-		(at 25.4 30.48 0)
+		(at 171.45 138.43 0)
+		(effects
+			(font
+				(size 2 2)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "222eb216-dc1d-4c46-bb37-e4c9033d391c")
+	)
+	(text "Instrumentation-amp U2"
+		(exclude_from_sim no)
+		(at 49.276 138.43 0)
 		(effects
 			(font
 				(size 2 2)
@@ -2457,7 +2493,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 110.49) (xy 200.66 107.95)
+			(xy 196.85 107.95) (xy 196.85 105.41)
 		)
 		(stroke
 			(width 0)
@@ -2507,7 +2543,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 110.49) (xy 218.44 107.95)
+			(xy 214.63 107.95) (xy 214.63 105.41)
 		)
 		(stroke
 			(width 0)
@@ -2567,7 +2603,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 107.95) (xy 179.07 105.41)
+			(xy 175.26 105.41) (xy 175.26 102.87)
 		)
 		(stroke
 			(width 0)
@@ -2577,7 +2613,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 118.11) (xy 200.66 120.65)
+			(xy 196.85 115.57) (xy 196.85 118.11)
 		)
 		(stroke
 			(width 0)
@@ -2657,7 +2693,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 123.19) (xy 179.07 125.73)
+			(xy 175.26 120.65) (xy 175.26 123.19)
 		)
 		(stroke
 			(width 0)
@@ -2797,7 +2833,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 118.11) (xy 218.44 120.65)
+			(xy 214.63 115.57) (xy 214.63 118.11)
 		)
 		(stroke
 			(width 0)
@@ -3464,7 +3500,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 218.44 114.3 0)
+		(at 214.63 111.76 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3474,7 +3510,7 @@
 		(dnp no)
 		(uuid "1be5d902-71ec-5c59-81da-61d658ed6cea")
 		(property "Reference" "C91"
-			(at 219.075 111.76 0)
+			(at 215.265 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3485,7 +3521,7 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 219.075 116.84 0)
+			(at 215.265 114.3 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3496,7 +3532,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 218.44 114.3 0)
+			(at 214.63 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3507,7 +3543,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 218.44 114.3 0)
+			(at 214.63 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3518,7 +3554,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 218.44 114.3 0)
+			(at 214.63 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3529,7 +3565,7 @@
 			)
 		)
 		(property "Dielectric" "X7R"
-			(at 218.44 114.3 0)
+			(at 214.63 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5256,7 +5292,7 @@
 	)
 	(symbol
 		(lib_id "power:-5VA")
-		(at 179.07 125.73 180)
+		(at 175.26 123.19 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5266,7 +5302,7 @@
 		(dnp no)
 		(uuid "925fadd0-5412-57d8-881f-abbad17b66b7")
 		(property "Reference" "#PWRFRO0100"
-			(at 179.07 121.92 0)
+			(at 175.26 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5277,7 +5313,7 @@
 			)
 		)
 		(property "Value" "-5VA"
-			(at 179.07 129.286 0)
+			(at 175.26 126.746 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5287,7 +5323,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 179.07 125.73 0)
+			(at 175.26 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5298,7 +5334,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 179.07 125.73 0)
+			(at 175.26 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5309,7 +5345,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"-5VA\""
-			(at 179.07 125.73 0)
+			(at 175.26 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5333,7 +5369,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 200.66 114.3 0)
+		(at 196.85 111.76 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5343,7 +5379,7 @@
 		(dnp no)
 		(uuid "92e98843-26d8-5ad9-8f1c-4170684063a2")
 		(property "Reference" "C90"
-			(at 201.295 111.76 0)
+			(at 197.485 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5354,7 +5390,7 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 201.295 116.84 0)
+			(at 197.485 114.3 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5365,7 +5401,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 200.66 114.3 0)
+			(at 196.85 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5376,7 +5412,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 114.3 0)
+			(at 196.85 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5387,7 +5423,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 200.66 114.3 0)
+			(at 196.85 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5398,7 +5434,7 @@
 			)
 		)
 		(property "Dielectric" "X7R"
-			(at 200.66 114.3 0)
+			(at 196.85 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6139,7 +6175,7 @@
 	)
 	(symbol
 		(lib_id "power:+5VA")
-		(at 179.07 105.41 0)
+		(at 175.26 102.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6149,7 +6185,7 @@
 		(dnp no)
 		(uuid "ccd8694e-c447-5585-95ae-add0558ec8b5")
 		(property "Reference" "#PWRFRO0110"
-			(at 179.07 109.22 0)
+			(at 175.26 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6160,7 +6196,7 @@
 			)
 		)
 		(property "Value" "+5VA"
-			(at 179.07 101.854 0)
+			(at 175.26 99.314 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6170,7 +6206,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 179.07 105.41 0)
+			(at 175.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6181,7 +6217,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 179.07 105.41 0)
+			(at 175.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6192,7 +6228,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5VA\""
-			(at 179.07 105.41 0)
+			(at 175.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6216,7 +6252,7 @@
 	)
 	(symbol
 		(lib_id "power:+5VA")
-		(at 200.66 107.95 0)
+		(at 196.85 105.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6226,7 +6262,7 @@
 		(dnp no)
 		(uuid "ce86d509-420b-5eaf-b734-08f0e5256a8e")
 		(property "Reference" "#PWRFRO0140"
-			(at 200.66 111.76 0)
+			(at 196.85 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6237,7 +6273,7 @@
 			)
 		)
 		(property "Value" "+5VA"
-			(at 200.66 104.394 0)
+			(at 196.85 101.854 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6247,7 +6283,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 107.95 0)
+			(at 196.85 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6258,7 +6294,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 107.95 0)
+			(at 196.85 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6269,7 +6305,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5VA\""
-			(at 200.66 107.95 0)
+			(at 196.85 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6370,7 +6406,7 @@
 	)
 	(symbol
 		(lib_id "Amplifier_Operational:OPA2196xDGK")
-		(at 181.61 115.57 0)
+		(at 177.8 113.03 0)
 		(unit 3)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6380,7 +6416,7 @@
 		(dnp no)
 		(uuid "e67abfcc-9463-595a-8ae4-02c26f7e4d90")
 		(property "Reference" "U3"
-			(at 181.61 110.49 0)
+			(at 177.8 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6391,7 +6427,7 @@
 			)
 		)
 		(property "Value" "OPA2196IDGKR"
-			(at 181.61 120.65 0)
+			(at 177.8 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6402,7 +6438,7 @@
 			)
 		)
 		(property "Footprint" "Package_SO:VSSOP-8_3x3mm_P0.65mm"
-			(at 181.61 115.57 0)
+			(at 177.8 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6413,7 +6449,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4196.pdf"
-			(at 181.61 115.57 0)
+			(at 177.8 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6424,7 +6460,7 @@
 			)
 		)
 		(property "Description" "Dual, Low-Power, Low Offset Voltage, Rail-to-Rail Operational Amplifier, VSSOP-8"
-			(at 181.61 115.57 0)
+			(at 177.8 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6435,7 +6471,7 @@
 			)
 		)
 		(property "MPN" "OPA2196IDGKR"
-			(at 181.61 115.57 0)
+			(at 177.8 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6446,7 +6482,7 @@
 			)
 		)
 		(property "LCSC" "C2057920"
-			(at 181.61 115.57 0)
+			(at 177.8 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6491,7 +6527,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 218.44 107.95 180)
+		(at 214.63 105.41 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6501,7 +6537,7 @@
 		(dnp no)
 		(uuid "e6e3c2bd-730f-54f6-a83e-73a6cc354c49")
 		(property "Reference" "#PWRFRO0160"
-			(at 218.44 101.6 0)
+			(at 214.63 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6512,7 +6548,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 218.44 104.14 0)
+			(at 214.63 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6522,7 +6558,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 218.44 107.95 0)
+			(at 214.63 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6533,7 +6569,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 218.44 107.95 0)
+			(at 214.63 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6544,7 +6580,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 218.44 107.95 0)
+			(at 214.63 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6876,7 +6912,7 @@
 	)
 	(symbol
 		(lib_id "power:-5VA")
-		(at 218.44 120.65 180)
+		(at 214.63 118.11 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6886,7 +6922,7 @@
 		(dnp no)
 		(uuid "f356c661-9754-5aa6-bcc0-d65e2b31990d")
 		(property "Reference" "#PWRFRO0170"
-			(at 218.44 116.84 0)
+			(at 214.63 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6897,7 +6933,7 @@
 			)
 		)
 		(property "Value" "-5VA"
-			(at 218.44 124.206 0)
+			(at 214.63 121.666 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6907,7 +6943,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 218.44 120.65 0)
+			(at 214.63 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6918,7 +6954,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 218.44 120.65 0)
+			(at 214.63 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6929,7 +6965,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"-5VA\""
-			(at 218.44 120.65 0)
+			(at 214.63 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7030,7 +7066,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 200.66 120.65 0)
+		(at 196.85 118.11 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7040,7 +7076,7 @@
 		(dnp no)
 		(uuid "fa53b034-207f-5bc9-b9b0-6ff88a9e4848")
 		(property "Reference" "#PWRFRO0150"
-			(at 200.66 127 0)
+			(at 196.85 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7051,7 +7087,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.66 124.46 0)
+			(at 196.85 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7061,7 +7097,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 120.65 0)
+			(at 196.85 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7072,7 +7108,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 120.65 0)
+			(at 196.85 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7083,7 +7119,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 200.66 120.65 0)
+			(at 196.85 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

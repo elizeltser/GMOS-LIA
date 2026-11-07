@@ -955,7 +955,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "DAC80508 (U8): AVDD = +5VA, VIO = NUCLEO +3V3, internal 2.5 V reference. Channels as LIA-Readout §4.6.1"
+	(text "DAC80508 (U8): AVDD = +5VA, VIO = NUCLEO +3V3, internal 2.5 V reference. Channels as LIA-Readout"
 		(exclude_from_sim no)
 		(at 25.4 30.48 0)
 		(effects
@@ -966,17 +966,6 @@
 			(justify left bottom)
 		)
 		(uuid "1159f168-01fc-52f0-ab22-96ce5050e12f")
-	)
-	(text "C70 on REF: 150 nF is an ASSUMPTION, check against the DAC80508 datasheet (REF pin decoupling).\nOUT0/1 heater A/B, OUT2/3 drain coarse A/B, OUT4/5 gate DC A/B, OUT6/7 drain fine A/B."
-		(exclude_from_sim no)
-		(at 25.4 34.29 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "bd4769a0-d101-5eb2-bef9-6e0e404852eb")
 	)
 	(junction
 		(at 67.31 76.2)
@@ -1001,6 +990,10 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bd653791-586e-4494-ac50-3cdd3497f37c")
+	)
+	(no_connect
+		(at 129.54 63.5)
+		(uuid "de87f32c-169b-40a0-8330-14c7bbce0942")
 	)
 	(wire
 		(pts
@@ -1281,10 +1274,6 @@
 			(type default)
 		)
 		(uuid "fb9f5d49-ef93-52cb-a083-9cea687009d6")
-	)
-	(no_connect
-		(at 129.54 63.5)
-		(uuid "de87f32c-169b-40a0-8330-14c7bbce0942")
 	)
 	(wire
 		(pts
