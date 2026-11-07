@@ -12,6 +12,7 @@ This file is the single source for the requirement IDs and target values of the 
 | B | 2026-10-29 | Carry-over requirements confirmed; low-drift drain path (AN-4a); control header pinout (IF-5); parts in [component_selection.md](component_selection.md) |
 | C | 2026-10-31 | `CHANGED`: post-filter is a Sallen-Key low-pass with optional gain, output centred on 0 V, VMID and VMID_PF removed (AN-7, AN-12, E-9) |
 | D | 2026-10-31 | `CHANGED`: drain-sense amplifiers removed, drain test loops through series resistors (IF-4, IF-5, AN-4a, E-10); one gate net and one gate drive (AN-3, AN-6, E-11) |
+| E | 2026-11-07 | `CHANGED`: two bench inputs (±15 V for the TMUX6136, ±5 V for the analog rails), no LDOs, bench voltage and power-up order (DC-1…DC-3, DC-5, E-12); one demodulator sheet with both channels on one TMUX6136 (AN-10, E-13) |
 
 ---
 
@@ -29,11 +30,11 @@ This file is the single source for the requirement IDs and target values of the 
 
 | ID | Requirement | Status |
 |----|-------------|--------|
-| DC-1 | Analog rails positive and negative (±5 V analog for FE-B, E-4) | Agreed |
-| DC-2 | Input: dual lab supply ±9 V nominal, operating range ±8…±12 V, on a 3-pin terminal block (+V, GND, −V). Reverse-polarity protection on both inputs. No switching converters on the board | Agreed |
-| DC-3 | Analog rails ±5VA from low-noise LDOs fed by the input. TMUX6136 supplied from the input through 10 Ω + 1 µF per supply pin, so VDD − VSS ≥ 10 V (TMUX6136 datasheet SCDS397B §5.4; DI-01 in `simulations/design-issues.md`) | Agreed |
+| DC-1 | Analog rails positive and negative (±5 V analog for FE-B, E-4). TMUX6136 on its own ±15 V rail (E-12) | Agreed |
+| DC-2 | `CHANGED` Two dual lab supplies, each on a 3-pin terminal block (+V, GND, −V): J4 ±15 V (TMUX6136) and J5 ±5 V (analog rails and heaters). A series B5819W reverse-polarity diode in each input line. No regulators and no switching converters on the board (E-12) | Agreed |
+| DC-3 | `CHANGED` ±5VA from the J5 input through the diode and 1 Ω (R18, R19). J5 is set slightly above 5 V so that +5VA reads 5.0…5.2 V at TP3. Below 5.0 V the DAC80508 internal 2.5 V reference exceeds VDD/2 and trips the reference alarm. Above 5.5 V the DAC80508 and TMUX1109 leave their supply range. TMUX6136 supplied from J4 through the diode, with 1 µF at the pins and 10 µF + 100 nF at J4, VDD − VSS ≥ 10 V (SCDS397B §5.4; DI-01 in `simulations/design-issues.md`). Power-up order: J4 first, then J5. Power-down in reverse (E-12). Noise and regulation are those of the bench supplies | Agreed |
 | DC-4 | Digital parts (DAC80508 VDDIO, mux address logic) are supplied from the NUCLEO 3.3 V (E-4). Digital and analog grounds join at one point on the eval board | Agreed |
-| DC-5 | Heater rail +5VP from its own LDO, separate from +5VA, as LIA-Readout DC-4b | Agreed |
+| DC-5 | `CHANGED` Heater rail +5VP from the J5 input through its own 1 Ω (R32), so heater current does not flow in R18. Differs from LIA-Readout DC-4b (own LDO) (E-12) | Agreed |
 
 ## R.2 Interfaces
 
@@ -92,7 +93,7 @@ This file is the single source for the requirement IDs and target values of the 
 
 | ID | Requirement | Status |
 |----|-------------|--------|
-| AN-10 | Two identical channels X and Y, one schematic sheet used twice (`DEMODULATOR.kicad_sch`) | Agreed |
+| AN-10 | `CHANGED` Two identical channels X and Y on one sheet (`DEMODULATOR.kicad_sch`, sheet `Demod`), switched by the two channels of one TMUX6136 (U24) (E-13) | Agreed |
 | AN-11 | Demodulator gain and accuracy as LIA-Readout AN-24, AN-25 for FE-B | Agreed |
 | AN-12 | Post-demodulation filter: second-order Sallen-Key low-pass, non-inverting, output centred on 0 V, no reference divider (E-9). Differs from LIA-Readout AN-26. Values and gain options in [component_selection.md §C.8](component_selection.md#c8-demodulator-sheet-demodulator-used-twice). For fast bench tests smaller capacitors may be fitted by assembly; this is a rework, not an option on the board | Agreed |
 
@@ -119,8 +120,8 @@ Answered questions stay in this table with their answer and the requirement they
 | Q | Block | Question | Proposal | Answer |
 |---|-------|----------|----------|--------|
 | Q-1 | 2 Power and I/O | Coaxial output connector: SMA or BNC? (both were named in session 1) | BNC (scope inputs are BNC, no adapters) | SMA (IF-3) |
-| Q-2 | 2 Power and I/O | Power input: which bench supply, voltages, connector? | Dual lab supply ±9 V + LDOs | As proposed (DC-2) |
-| Q-3 | 2 Power and I/O | TMUX6136 on ±5 V or ±7 V? | From the filtered ±9 V input | As proposed (DC-3) |
+| Q-2 | 2 Power and I/O | Power input: which bench supply, voltages, connector? | Dual lab supply ±9 V + LDOs | As proposed (DC-2); replaced by E-12 (two bench inputs, no LDOs) |
+| Q-3 | 2 Power and I/O | TMUX6136 on ±5 V or ±7 V? | From the filtered ±9 V input | As proposed (DC-3); replaced by E-12 (own ±15 V input) |
 | Q-4 | 2 Power and I/O | NUCLEO model and connection | NUCLEO-U575ZI-Q by cable | NUCLEO-F303RE, by cable to the IF-5 header (IF-2) |
 | Q-5 | 2 Power and I/O | Drain-sense and heater-current readbacks to the NUCLEO ADC? | Yes | Yes (IF-4) |
 | Q-6 | 2 Power and I/O | Heaters on this board? | Yes, with readbacks | Yes (AN-5, DC-5) |

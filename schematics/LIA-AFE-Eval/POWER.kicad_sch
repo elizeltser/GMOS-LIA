@@ -1604,6 +1604,17 @@
 		)
 		(uuid "9b19bde6-dd72-5577-aedf-19134df474e3")
 	)
+	(text "Bench supply note: J5 is set slightly above 5 V so that +5VA (TP3) reads 5.0 V to 5.2 V after the B5819W drop\n(about 0.3 V to 0.45 V) and R18. Below 5.0 V the DAC80508 internal 2.5 V reference exceeds VDD/2 and trips the\nreference alarm (all DAC outputs 0 V). Do not let +5VA exceed 5.5 V (DAC80508, TMUX1109).\nPower-up order: J4 (+/-15 V, TMUX6136) on first, then J5 (+/-5 V). Power-down in the reverse order."
+		(exclude_from_sim no)
+		(at 35.56 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4f6a2c1e-8b3d-4e57-9a10-2b7c5d8e9f31")
+	)
 	(junction
 		(at 86.36 45.72)
 		(diameter 0)
@@ -2620,7 +2631,7 @@
 		)
 		(uuid "3d75debc-b935-42c8-9b71-8fe11223df65")
 	)
-	(label "VIN_P"
+	(label "VLIN_P"
 		(at 43.18 85.09 0)
 		(effects
 			(font
@@ -2630,7 +2641,7 @@
 		)
 		(uuid "9e325af1-d43c-4875-b380-3ae0ed9090ec")
 	)
-	(label "VIN_N"
+	(label "VHIN_N"
 		(at 43.18 50.8 0)
 		(effects
 			(font
@@ -2640,7 +2651,7 @@
 		)
 		(uuid "b38e32e7-0b7a-503c-bd8d-58d43f0e10ef")
 	)
-	(label "VIN_P"
+	(label "VHIN_P"
 		(at 43.18 45.72 0)
 		(effects
 			(font
@@ -2680,7 +2691,7 @@
 		)
 		(uuid "ea5c4a16-1c55-4cf3-ae88-48bf95502c9d")
 	)
-	(label "VIN_N"
+	(label "VLIN_N"
 		(at 43.18 90.17 0)
 		(effects
 			(font

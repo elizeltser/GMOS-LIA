@@ -18,11 +18,10 @@ Rules applied: thin-film 0.1 % resistors wherever a ratio or a DC level matters;
 | Function | Part | LCSC | Stock | Qty | Notes |
 |----------|------|------|-------|-----|-------|
 | Input terminal (+V, GND, −V) | Kangnex WJ500V-5.08-03P | C72334 | 167 970 | 1 | 5.08 mm screw terminal |
-| Reverse-polarity protection | B5819W (MDD) | C64885 | 738 935 | 2 | Series diode in each input. ≈ 0.4 V drop at the load current, leaves ≥ 2.6 V LDO headroom at ±8 V in |
-| +5VA, +5VP | ADP7118ACPZN5.0-R7 | C659349 | 2745 | 2 | As LIA-Readout DC-4, DC-4b; C_OUT ≥ 2.2 µF X7R, C_IN 1 µF + 100 nF |
-| −5VA | LT3094EMSE#PBF | C498217 | 405 | 1 | As LIA-Readout; R_SET 49.9 kΩ 0.1 % (C705780), C_SET 4.7 µF, C_OUT 10 µF |
-| Rail clamps | B5819W (MDD) | C64885 | — | 2 | +5VA → GND and GND → −5VA (LIA-Readout DC-4a) |
-| TMUX6136 supply filter | 10 Ω + 1 µF X7R per supply pin | — | — | 4 + 4 | From the protected ±9 V input (DC-3) |
+| Second input terminal J5 (±5 V) | Kangnex WJ500V-5.08-03P | C72334 | 167 970 | 1 | J4 carries ±15 V, J5 ±5 V (E-12) |
+| Reverse-polarity protection D4, D5, D9, D10 | B5819W (MDD) | C64885 | 738 935 | 4 | Series diode in each input line (E-12). About 0.3…0.45 V drop at the load current: set J5 so that +5VA = 5.0…5.2 V (DC-3) |
+| Rail resistors R18, R19, R32 | 1 Ω | — | — | 3 | +5VA, −5VA, +5VP from the J5 input (E-12) |
+| TMUX6136 supply decoupling | 1 µF X7R per supply pin at U24 (C95, C96), 10 µF + 100 nF at J4 (C52…C55) | — | — | — | No series resistors (E-12). The ADP7118 and LT3094 regulators and the rail clamps were removed by E-12 |
 
 ## C.3 Connectors and Test Points (sheet Connectors)
 
@@ -87,24 +86,24 @@ All resistors in the drain path are thin film, 0.1 %, ±10 ppm/°C (AN-4a).
 
 ## C.8 Demodulator (sheet DEMODULATOR, used twice)
 
-Parts per instance. One TMUX6136 per channel, the second switch of the chip is unused (E-7).
+`CHANGED` (E-13): one `Demod` sheet holds both channels, and one TMUX6136 (U24) switches both. The table lists the parts of one channel, except the switch. Designators: X channel U26, R78, R79, R14, R15, C13, C15, R88, R89, R80; Y channel U27, R83, R84, R16, R17, C14, C16, R93, R92, R85.
 
 | Function | Part | LCSC | Stock | Qty per sheet | Notes |
 |----------|------|------|-------|---------------|-------|
-| Switch | TMUX6136PWR | C2673380 | 145 | 1 | Supply per DC-3 |
+| Switch | TMUX6136PWR | C2673380 | 145 | 1 for both channels | Supply per DC-3 (±15 V from J4) |
 | Op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | Section A: ±1 demodulator; section B: post-filter |
 | R_i, R_f 10.0 kΩ 0.1 % | RESI PTFR0603B10K0N9 | C394535 | 231 492 | 2 | Gain ±1 |
 | Post-filter R14, R15 200 kΩ 0.1 % | Yageo RT0603BRD07200KL | C728585 | 229 605 | 2 | Sallen-Key series resistors (E-9) |
 | Post-filter C13, C15 1.5 µF film ±20 % | Rubycon 16MU155MA23216 (1206, acrylic) | C3776792 | 1813 | 2 | C13 feedback, C15 to GND |
 | Gain placeholder R88 0 Ω | General purpose | — | — | 1 | Output to −IN. `ASSUMPTION` to be replaced when a gain is chosen |
-| Gain placeholder R89 10 kΩ (DNP) | General purpose | — | — | 0 | −IN to GND. `ASSUMPTION` to be replaced when a gain is chosen |
+| Gain placeholder R89 10 kΩ | General purpose | — | — | 1 | −IN to GND. Fitted in the netlist of 2026-11-07. With R88 = 0 Ω the gain stays 1. `ASSUMPTION` to be replaced when a gain is chosen |
 | Output series | 100 Ω | — | — | 1 | To SMA and header |
 
 Post-filter response, K = 1 + R88/R89:
 
 | Build | R88 / R89 | K | Cut-off | Q | Overall scale at `X_OUT` |
 |-------|-----------|---|---------|---|--------------------------|
-| As entered | 0 Ω / DNP | 1 | 0.53 Hz | 0.50 | 25.5 |
+| As entered | 0 Ω / 10 kΩ | 1 | 0.53 Hz | 0.50 | 25.2 (G = 9.897) |
 | Scale as LIA-Readout | 5 kΩ / 10 kΩ | 1.5 | 0.53 Hz | 0.67 | 38.2 |
 
 With equal R and equal C, Q = 1 / (3 − K), so the stage is unstable at K = 3. The DC gain does not depend on the film capacitors; their ±20 % moves the cut-off only.
