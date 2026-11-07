@@ -3,7 +3,7 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "fe2b9acc-5053-492e-ad92-34c7794d2854")
-	(paper "A4")
+	(paper "A5")
 	(title_block
 		(title "Bias DAC: DAC80508 (AN-6)")
 		(rev "0.1")
