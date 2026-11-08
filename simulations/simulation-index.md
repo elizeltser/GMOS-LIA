@@ -4,7 +4,7 @@
 
 This file lists every simulation of the project, finished or planned. Each entry states the goal, the schematic that runs, the simulation parameters and the expected results. Below those it records the status, the result and the grade. The workflow that fills these entries is described in `ti-pspice/CLAUDE.md` under "Simulation workflow".
 
-Identifiers: `C-xx` are completed simulations, `P-xx` are planned ones. A planned entry keeps its identifier when it is completed. The detailed results of each run are in `simulations/ti-pspice/docs/sim-results/<ID>.md`.
+Identifiers: `C-xx` are completed simulations, `P-xx` are planned ones. A planned entry keeps its identifier when it is completed. A planned entry that is no longer required has the status "deprecated" with the reason and its replacement. It stays listed. The detailed results of each run are in `simulations/ti-pspice/docs/sim-results/<ID>.md`.
 
 ## Common definitions for the LIA tests
 
@@ -357,7 +357,7 @@ Setting a non-default parameter: PSpice allows one `.STEP` per run. Other non-de
 
 ### Batch 3: tests proposed by the batch-2 design review
 
-Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_batch2.md](design-review/2026-10-27_batch2.md), taken over by the judge on 27 October 2026 with the reviewer's expected values. Circuit names were renamed from R-0n to the P numbers. P-21 also depends on the switch decision of DI-01 and uses assumed TMUX1136 parameters (CS = 10 pF is not from the datasheet).
+Entries P-18 to P-22 (deprecated on 7 November 2026, see Batch 4) are the tests R-01 to R-05 of [design-review/2026-10-27_batch2.md](design-review/2026-10-27_batch2.md), taken over by the judge on 27 October 2026 with the reviewer's expected values. Circuit names were renamed from R-0n to the P numbers. P-21 also depends on the switch decision of DI-01 and uses assumed TMUX1136 parameters (CS = 10 pF is not from the datasheet).
 
 ### P-18 Sensor source impedance, gain loading and noise
 
@@ -375,7 +375,7 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
   | 100 kOhm | 5.537 | 0.5000 | 88.6 | 198 |
 
   Pass: gain within 0.2 % of the table and noise within 5 %. The noise of the INA828 model for the current-noise term is not known, so the analyst reports the 1 kOhm and 10 kOhm rows against the table and states the difference. A_min uses fold = 0.9014 from P-15 for every row. The Thevenin noise of Rs is added without correlation.
-- **Status:** planned.
+- **Status:** deprecated, 7 November 2026. Not required for LIA-AFE-Eval: single-rail chain with 100 kOhm bias resistors. On LIA-AFE-Eval the drains are fed through R_D = 330 kOhm and the sensor loading and noise are in P-29 and P-30.
 
 ### P-19 Reference tracking with a shared reference node
 
@@ -389,7 +389,7 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
   - P19a: V(VSAMPLE) - V(VREF) for a 1 V AC ripple is below 2e-3 in magnitude. (For comparison, an isolated demodulator reference would give 1.) Pass: below 2e-3.
   - P19b: delta VX (pref = 0) and delta VY (pref = 90 deg) relative to mean Vref are below 0.005 mV for a 1 mV ripple. The separate-reference result of P-10 is 0.6366 mV, so the improvement factor is at least 127. Pass: both below 0.005 mV, and the ratio to 0.6366 mV is reported.
   - If P19a gives more than 2e-3, the analyst identifies the stage (V(VDIFF) - V(VREF), V(HPF) - V(VREF), V(VSAMPLE) - V(VREF)).
-- **Status:** planned.
+- **Status:** deprecated, 7 November 2026. Not required for LIA-AFE-Eval: the board has no 2.5 V reference node. The in-amp REF, the filter returns and the demodulator zero are all GND.
 
 ### P-20 Origin of the -0.055 % and -0.13 deg front-end deficit
 
@@ -402,7 +402,7 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
 - **Expected:** P20c reproduces the analytic values 11.0793 V/V and +1.6300 deg within 0.001 %. P20a gives 11.0794 V/V and +1.570 deg (the INA828 gain of 11.000074 V/V and phase of -0.060 deg from P-09). P20b changes P20a by -0.058 % and -0.034 deg (`simulations/design-review/scripts/batch2_calc4.py`), so 11.0730 V/V and +1.536 deg. The measured P-14 nominal is 11.0732 V/V and +1.518 deg.
   - If P20a is already at 11.0732 V/V and +1.52 deg, the OPA192 model causes the deficit. If P20a is at 11.0794 V/V and +1.57 deg and P20b is within 0.02 deg of P-14, the follower input capacitance is the cause.
   Pass: P20c within 0.001 %. The result for P20a and P20b is reported, not judged.
-- **Status:** planned.
+- **Status:** deprecated, 7 November 2026. Not required for LIA-AFE-Eval: the deficit belongs to the unity-gain OPAx192 front end. The board front end (K = 2, OPA2196) is measured in P-24.
 
 ### P-21 Switch with 5 V part parameters and reference impedance
 
@@ -418,7 +418,7 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
   | 5 kOhm | 31 uV | 2.1 uV |
 
   Pass: the VX and VY shifts relative to the rrefs = 1 mOhm step stay within the bound (+10 %) or 0.002 mV, whichever is larger. The analyst reports the measured value over the bound. The spike at node N00695 is not resolved with the 5 us step and is reported as not measurable. A finding of more than the bound means the charge model of SPDT_PREC differs from the assumption.
-- **Status:** planned.
+- **Status:** deprecated, 7 November 2026. Not required for LIA-AFE-Eval: the board runs the TMUX6136 on ±15 V (DI-01 is resolved by the separate ±15 V input) and its demodulator zero is GND. P-28 covers the switch.
 
 ### P-22 DC step at the sensor input
 
@@ -434,6 +434,274 @@ Entries P-18 to P-22 are the tests R-01 to R-05 of [design-review/2026-10-27_bat
   | 300 mV | 3.3 V, so VDIFF would reach 5.8 V | about 0.67 V (VDIFF clipped near 4.85 V, 2.35 V step x 0.285) | about 5.6 ms |
 
   The mean of VX and VY returns to the dvstep = 0 value within 0.01 mV from 240 ms after the step (24 tau). A DC input is rejected by the demodulator mean (0.5 v + 0.5 (2 Vref - v) = Vref). During the transient the VX ripple at f_osc is about 39 mV per volt of VSAMPLE excursion (tau = 10 ms), so 12 mV at the 0.314 V peak. Pass: the VSAMPLE peak within 15 % of the table (the 300 mV row within 30 %), recovery time within 1 ms of the table, and the final VX and VY within 0.01 mV. The analyst reports if the INA828 model clips the step at a value other than 4.85 V.
+- **Status:** deprecated, 7 November 2026. Not required for LIA-AFE-Eval: single-rail chain. The board version is P-32.
+
+---
+
+## Batch 4: LIA-AFE-Eval schematic (requested 7 November 2026)
+
+The user asked to simulate the current LIA-AFE-Eval topology as closely as possible. Entries P-23 to P-34 replace the planned single-rail entries P-18 to P-22, which are deprecated below. The comparison of the board netlist with the earlier circuits is in [`schematics/LIA-AFE-Eval/docs/reviews/2026-11-07_schematic_rev0.2.md`](../schematics/LIA-AFE-Eval/docs/reviews/2026-11-07_schematic_rev0.2.md) §2.
+
+**Value sources.** The values in these entries come from the LIA-AFE-Eval netlist exported on 7 November 2026 (commit 3429288, A-01 and A-02 fixed afterwards in the working copy, connectivity checked) and from [`schematics/LIA-AFE-Eval/docs/requirements.md`](../schematics/LIA-AFE-Eval/docs/requirements.md) rev E. `simulations/design-context.md` was moved to this board on the same day. Every expected value below is from `simulations/ti-pspice/docs/sim-results/scripts/afe_eval_expected.py` (run with `--mc`) unless stated. The bench ±5 V input is set slightly above 5 V so that +5VA is 5.0 V to 5.2 V (DC-3, E-12). The circuit default is v5 = v5n = 5.3 V. The smoke runs below used 5.0 V.
+
+**Circuits.**
+
+| Circuit | Content |
+|---|---|
+| `circuits/afe_eval.cir` | The whole analog chain of the board, element names as the KiCad designators: bench inputs through B5819W and the 1 Ohm rail resistors, excitation MFB (U1B, R59, gate load), drain bias (U10A/B, R60/C74, R25/R31), TMUX1109 on-path, pixel stand-ins, heater drivers (U9A/B, 15 Ohm shunts, INA190 stand-ins), INA828 and the K = 2 band-pass (U2, U3), TMUX6136 on ±15 V with U26/U27 and the Sallen-Key post-filters. OPA2196 uses the TI model `OPAx196` from `nom_pspti.lib`. Deviations from the netlist are listed in its header. |
+| `circuits/afe_demod.cir` | The demodulator sheet alone, driven at BPF_OUT by an ideal sine, with ideal rails `vpa`, `vna`, `v15`. |
+| `circuits/gen_exc_stair.py` | Writes `circuits/afe_eval_stair.cir`, in which the NUCLEO DAC sine is a 128-sample, 12-bit staircase. |
+
+**Smoke test (7 November 2026, not graded).** Runs `smoke_afe_op` (`.AC DEC 20 100 5k`, bias point) and `smoke_afe_tran` (`.TRAN 0 80m 0 5u`, cpf = 15 nF) of `afe_eval.cir`, and `smoke_afe_demod` (`.TRAN 0 60m 0 2u`) of `afe_demod.cir`, all with status done. Bias point: +5VA 4.820 V, GATE 0.99460 V (hand value 0.99458 V), VSUP_A 2.63252 V, DRN_A 0.15745 V. Transient: gate 5.003 mVpp, BPF_OUT 394.87 mV pk at 167.12 deg, X_OUT -244.99 mV, Y_OUT -55.98 mV, settled within 0.01 mV from 30 ms. Against the ideal chain (drain 9.9914 mV pk, front end 39.587 V/V at +0.014 deg) the front end with vendor models reads -0.17 % in gain and -1.53 deg in phase. The demodulator alone gave X_OUT 254.69 mV for 400 mV pk (ideal 254.65 mV). These numbers are a first look. P-24 and P-27 measure them properly.
+
+**Conventions of `afe_eval.cir`.** INA828 VIN+ is DRN_B and VIN- is DRN_A, so the active pixel (side A) enters with a minus sign. More pixel current lowers the drain. TMUX6136 SEL = 1 connects SxA (BPF_OUT), so the demodulator output is +BPF_OUT while REF_X is high. With REF_X high in the first half period and REF_Y delayed by T/4, a BPF_OUT sine A sin(wt + phi) gives X_OUT = (2/pi) A cos(phi) and Y_OUT = -(2/pi) A sin(phi). Parameters are changed with a one-value `.STEP PARAM <name> LIST <value>`, because `--extra ".PARAM"` cannot redefine them (`docs/simulation-quirks.md`).
+
+**Fast settings for this batch.** `.STEP PARAM cpf LIST 15n` sets C13 to C16 to 15 nF, so each post-filter pole has tau = 3 ms instead of 0.3 s. The filter settles to 1e-6 in 50 ms. The 2f0 ripple at X_OUT is then 2.6e-3 of the 2f0 component at X_DEM_OUT, about 1.1 mV pp at 250 mV. Measure means over 20 whole periods (38.61 ms at 518 Hz) from 60 ms, in a `.TRAN 0 0.1 0 5u` run (2u where an entry asks for it). Use `.OPTIONS NUMDGT=8`.
+
+### Applicability of the earlier entries to LIA-AFE-Eval
+
+| Entries | Still valid for LIA-AFE-Eval | Superseded by |
+|---|---|---|
+| C-01 | Yes. The SPDT_PREC model is the TMUX6136 stand-in in `afe_eval.cir`. | — |
+| C-02 | The INA828 gain formula, yes. The value 11 V/V, no (board RG = 5.62 kOhm). | P-24 |
+| C-03 to C-07, P-01 to P-08 | Method only: time step, `.IC`, settling windows, ripple and slew models. The circuit is the single-rail OPAx192 demodulator with an RC filter. | P-27, P-28 |
+| P-09, P-14 to P-17 | No. Single 5 V rail, unity-gain filters, OPAx192, 100 kOhm bias resistors. | P-24, P-25, P-30, P-32, P-27 |
+| P-10 | No. The board demodulator is referred to GND, not to a 2.5 V reference. | P-23 (rails) |
+| P-11 to P-13 | The mechanisms carry over (R78/R79 mismatch, driver impedance, 2 vos). The numbers do not. | P-28 |
+
+### P-23 Operating point and rails of the board
+
+- **Goal:** check the DC operating point of every stage on the real rails, and the margins to the rails and to the DAC80508 reference limit.
+- **Schematic:** `circuits/afe_eval.cir`, defaults (v5 = v5n = 5 V, v15 = 15 V, vgdac = 1.0 V, vdrc_a = vdrc_b = 2.4 V, ida = idb = 7.5 uA, vda = 0, heaters off), then heaters on.
+- **Parameters:** run P23a: `.OP` with `.STEP PARAM vda LIST 0`. Run P23b: `.OP` with `.STEP PARAM vh_a LIST 1.25 2.0` (heater A at 2.5 V and 4.0 V, AN-14 via LIA-Readout). Run P23c: `.DC LIN PARAM v5 4.6 5.6 0.05` with probes V(P5VA), V(P5VP), V(X_OUT), V(GATE), V(VSUP_A). The node voltages are in the `.out` bias table.
+- **Expected:**
+  - GATE = (1 + R5/R6) x 1.0 V - (R5/R6) x 1.65 V = 0.99458 V within 0.3 mV (OPA2196 offset ±100 uV max, SBOS869 as read in the 2026-10-29 review).
+  - VSUP_A = 1.1 x 2.4 V - 1 kOhm x 7.5 uA = 2.6325 V, DRN_A = VSUP_A - 330 kOhm x 7.5 uA = 0.1575 V, both within 1 mV. Same for side B.
+  - INA_OUT = 9.897 x (DRN_B - DRN_A) plus offset, below 2 mV at equal drains. HPF_OUT and BPF_OUT below 1 mV (the high-pass blocks the INA828 offset). X_OUT and Y_OUT below 0.5 mV (2 Vos of U26A plus Vos of U26B).
+  - +5VA = v5 - V_F(D5) - 1 Ohm x I(+5VA). The diode model is generic, so the analyst reports the rail and current and compares V_F with the B5819W datasheet curve, marked not verified if the curve is not read. With +5VA below 5.0 V, VDD/2 is below the 2.5 V internal reference of the DAC80508 (finding F-01 of the 2026-10-29 review). The analyst states, from P23c, which bench voltage v5 gives +5VA = 5.0 V.
+  - P23b: HFB_A = 2 x DAC1 = 2.5 V and 4.0 V within 1 mV. U9A output = HFB_A + 15 Ohm x I_htr, with I_htr = 4.0 V / 604.5 Ohm = 6.62 mA, so 4.099 V at 4.0 V. +5VP is 4.82 V in the smoke run without heater current. With 6.6 mA more it drops by about 7 mV in R32 plus the diode change. Pass: the U9A output stays at least 0.2 V below +5VP (Draft headroom margin, `simulations/design-context.md` §7), HSENSE_B = 25 x 15 Ohm x 6.62 mA = 2.48 V within 2 %.
+  - Pass for all runs: every op amp output and input at least 0.2 V inside its rails, and no input of U26A, U27A, U3A, U3B in the OPA2196 transition region (V+ - 3 V to V+ - 1.5 V) at DC.
+- **Status:** done, 7 November 2026
+- **Result:** GATE 0.99460 V, VSUP_A 2.6325 V and the drains at 0.1575 V match the expected values, with +5VA at 5.12 V for v5 = 5.3 V and 5.0 V for v5 = 5.18 V, and the heater at 4.0 V keeps 0.99 V of headroom to +5VP. The zero-signal X_OUT is about -0.05 mV analytic, because the .OP leaves the post-filter unsettled. [sim-results/P-23.md](ti-pspice/docs/sim-results/P-23.md)
+- **Grade:** A (main session, 7 November 2026). Four rounds with the Opus judge agent (C, C, C, B). The rounds found that the printed .OP of `afe_eval.cir` is a pseudo-transient that leaves the post-filter and the OPAx196 internal MID nodes unsettled (options.inc PTRAN tolerances), so the zero-signal X_OUT values of the bias tables are artefacts and the settled value (about -0.05 mV) is analytic. A tight-tolerance .OP did not finish in 23 min. All other checks are on settled nodes, within 0.12 uV. The last B items (settling table, INA828 model bias explaining the drain difference, chain-offset bound with a datasheet worst case of 0.91 mV, wording) were applied and checked by the main session, which also fixed one unit slip (150 pA).
+
+### P-24 Front-end AC response with vendor models
+
+- **Goal:** measure the in-amp and K = 2 band-pass response of the board with the INA828 and OPAx196 models, and the extra gain and phase error of the finite amplifier bandwidth.
+- **Schematic:** `circuits/afe_eval.cir`, defaults, acexc = 1 (AC through the excitation and the pixel stand-in).
+- **Parameters:** `.AC DEC 200 50 20k` with `.STEP PARAM acexc LIST 1`, probes `V(DRN_A)`, `V(DRN_B)`, `V(INA_OUT)`, `V(HPF_OUT)`, `V(BPF_OUT)`. The analyst divides each node by V(DRN_B) - V(DRN_A). A second run P24b replaces `X_U2`, `X_U3A`, `X_U3B` by ideal blocks (edited copy `afe_eval_P24b.cir`: `E_U2 INA_OUT 0 VALUE {9.8968*(V(DRN_B)-V(DRN_A))}` and ideal op amps as `E` sources with gain 1e7). P24b is the wiring check.
+- **Expected:** ideal front end: peak 39.587 V/V at 518.03 Hz, |H(518 Hz)| = 39.587 V/V at +0.014 deg, -3 dB band 377.5 Hz to 710.9 Hz, phase slope -0.4424 deg/Hz, |H(50 Hz)| = 0.3722, |H(1036 Hz)| = 12.18, |H(1554 Hz)| = 4.881, |H(5 kHz)| = 0.4295 V/V. INA828 stage 9.8968 V/V. Pass: P24b within 0.01 % and 0.01 deg of these values. With vendor models the smoke run gave -0.17 % and -1.53 deg at 518 Hz. The analyst reports the vendor-model gain and phase at 518 Hz per stage (INA_OUT, HPF_OUT, BPF_OUT), and the phase change for a ±30 % change of the op amp gain-bandwidth (estimated by scaling, marked as an estimate), because a phase that moves with temperature reads as an X error.
+- **Status:** done, 7 November 2026
+- **Result:** the ideal-block wiring check P24b matches the closed form within 0.0002 % and 0.00001 deg at every check point (peak 39.587 V/V at 518.03 Hz, band 377.49 Hz to 710.90 Hz). With the INA828 and OPAx196 models the front end is -0.024 % and -0.177 deg off the ideal at 518 Hz, -0.25 deg at 2f0 and -0.36 deg at 3f0, and the stop band above 10 kHz rises above the ideal (+90 % at 20 kHz). A ±30 % op-amp GBW change moves the 518 Hz phase by -0.050 deg to +0.027 deg (scaling estimate). The front end explains only -0.18 deg of the -1.53 deg smoke-run lag; the 10 pF cmux adds -0.62 deg, and -0.74 deg is left for P-27. See [sim-results/P-24.md](ti-pspice/docs/sim-results/P-24.md).
+- **Grade:** A (main session, 7 November 2026). The Opus judge agent graded C, then B after one revision. The B listed four last-digit and label corrections (analytic band edges 377.492 Hz and 710.894 Hz with -0.002 Hz and +0.004 Hz differences, remainder -0.078 %, slope difference +0.08 %, one row label), which the main session applied as specified. Every other number was reproduced by the judge.
+
+### P-25 Band-pass tolerance Monte Carlo (SIM-14 for the board)
+
+- **Goal:** find the gain and phase spread at 518 Hz for the first build (C0G ±5 %, decision E-5) and for the ±1 % rework.
+- **Schematic:** `circuits/afe_mc.cir`, a copy of the front end of `afe_eval.cir` (U2, U3 and their parts, ideal differential source at the INA828 inputs, 1 V AC) with `.MODEL RTOL RES(R=1 DEV=0.1%)` on R9 to R13, R70 to R73 and R10, and `.MODEL CTOL CAP(C=1 DEV=5%)` on C9 to C12 (the literal tolerance form of `docs/simulation-quirks.md`). Copy P25b with `DEV=1%`.
+- **Parameters:** `.AC LIN 1 518 518`, `.MC 500 AC VP([BPF_OUT]) YMAX OUTPUT ALL SEED=17`, `.OPTIONS NUMDGT=8`. Two runs.
+- **Expected:** numpy with the same uniform tolerances (200 000 samples):
+
+  | C tolerance | Gain error mean | Gain std | Gain 2.5 % to 97.5 % | Phase std | Phase 2.5 % to 97.5 % |
+  |---|---|---|---|---|---|
+  | 5 % | +0.24 % | 7.13 % | -12.2 % to +14.7 % | 3.31 deg | -6.3 deg to +6.6 deg |
+  | 1 % | +0.01 % | 1.43 % | -2.6 % to +2.8 % | 0.67 deg | -1.3 deg to +1.3 deg |
+
+  Pass: each std within ±10 % of the table (500 samples). SIM-14 asks for gain 4.00 ± 1 % and phase 0 ± 2 deg per band-pass. The 5 % build is expected to fail it, and the 1 % rework to pass it for phase and to fail it for gain on about half of the boards (gain std 1.43 % against a ±1 % limit, numpy yield 47.6 %). (Corrected by the main session on 7 November 2026: the first version said 2.5 % of the boards, which mixed up the 95 % interval of ±2.6 % with the yield.) The analyst states this against SIM-14. The spread is calibrated out per board, so the result decides whether the filter can be used without a per-board calibration.
+- **Status:** done, 7 November 2026
+- **Result:** Both builds reproduce the numpy gain and phase spread within ±10 % (gain std 7.00 % and 1.41 %, phase std 3.36 deg and 0.68 deg), and about half of the 1 % boards fail the SIM-14 gain limit (48.1 % pass), see [sim-results/P-25.md](ti-pspice/docs/sim-results/P-25.md)
+- **Grade:** A (main session, 7 November 2026). The Opus judge agent graded B. Its five items (unexplained 0.019 deg nominal difference with the ruled-out causes and the BPF_OUT load as the remaining candidate, the absolute-phase yields, the corrected SIM-14 wording, the uniform default distribution cited from the PSpice Reference Guide, and a scripted numpy yield) were applied by the analyst. The main session re-ran P-25_mc.py and checked each item. PSpice spreads match numpy within 2 %: gain std 7.00 % and 1.41 %, phase std 3.36 deg and 0.68 deg.
+
+### P-26 Excitation chain (SIM-19 for the board)
+
+- **Goal:** verify the gate amplitude, phase, distortion, DAC image and the stability of U1B with the gate load.
+- **Schematic:** `circuits/afe_eval.cir` (P26a, P26c) and `circuits/afe_eval_stair.cir` from `python circuits/gen_exc_stair.py --periods 60` (P26b).
+- **Parameters:**
+  - P26a: `.AC DEC 100 10 1MEG`, `.STEP PARAM cgate LIST 50p 1n`, acexc = 1 set by an edited copy, probe `V(GATE)`, `V(GOUT)`.
+  - P26b: `.TRAN 0 0.1 0 1u`, probes `V(GATE)`, `V(EXC_DAC)`. FFT of the last 40 periods.
+  - P26c: step response. Edited copy with `V_EXC EXC_DAC 0 PULSE(1.65 1.95 1m 10n 10n 5m 10m)`, `.TRAN 0 4m 0 50n`, `.STEP PARAM cgate LIST 50p 1n`, probe `V(GOUT)`, `V(GATE)`.
+- **Expected:**
+  - P26a: |H(518 Hz)| = 1/119.93 V/V, phase +171.73 deg (8.27 deg behind the ideal -1/120). MFB f0 = 4.95 kHz, Q = 0.728. The 1 nF load changes the gate phase at 518 Hz by about R59 x C x w = 0.019 deg. DAC image at 65.786 kHz: the MFB gives -44.9 dB relative to 518 Hz.
+  - P26b: gate amplitude 5.0 mVpp within 1 % (vexc_a = 0.3 V pk, AN-4 default), THD at most 0.3 % (AN-7b via LIA-Readout), image at 65.786 kHz at most -40 dBc. The ZOH image is -42.08 dBc before the filter (sinc ratio 1/127) and -87.0 dBc at the gate with the ideal MFB. (Corrected by the judge on 7 November 2026: the first version gave -84.2 dBc and -129 dBc from an extra factor in the script.) Pass for the image is "below -80 dBc". The ZOH adds a half-sample delay of 1.41 deg to the phase of P26a.
+  - P26c: GATE step = -0.3 V / 120 = -2.5 mV. A second-order low-pass with Q = 0.728 overshoots by 5.1 %. Pass: overshoot at most 6.1 % at 50 pF and at 1 nF, and no ringing above 100 kHz (which would mean low phase margin of U1B). The 2026-10-29 review estimated 79 deg at 100 pF and 55 deg at 1 nF.
+- **Status:** done, 7 November 2026
+- **Result:** gate 5.00194 mVpp (target 5.0 mVpp), MFB 1/119.92 V/V at +171.70 deg at 518 Hz, THD 0.027 % (limit 0.3 %), DAC image -83.3 dBc at the gate (limit -40 dBc), ZOH lag 1.416 deg, step overshoot 5.23 % (limit 6.1 %), no ringing. The vendor MFB passes the 66 kHz image 4 dB more than the ideal (op-amp output impedance feedthrough, not verified). See [sim-results/P-26.md](ti-pspice/docs/sim-results/P-26.md).
+- **Grade:** A (main session, 7 November 2026). The Opus judge agent graded C, then B after one revision. The four B items (residual identified as higher ZOH images, 5.00194 mVpp arithmetic, grid dependence of the EXC_DAC harmonics, the 0.29 dB transient-against-AC image gap with its limit) were fixed by the analyst and checked by the main session. The entry's ZOH image values were wrong in the expected-value script (extra factor) and were corrected by the judge.
+
+### P-27 Full chain: scale factor and phase over a full turn (SIM-13 for the board)
+
+- **Goal:** measure the X/Y transfer of the whole board from the gate to X_OUT and Y_OUT, with vendor models, over the excitation phase.
+- **Schematic:** `circuits/afe_eval.cir`, vda = 10 mV (drain amplitude at nominal gate drive), fast settings.
+- **Parameters:** `.TRAN 0 0.1 0 5u`, `.STEP LIN PARAM pexc 0 315 45` (8 steps). PSpice allows one `.STEP` per run, so cpf = 15n is set in an edited copy `afe_eval_fast.cir`. Probes `V(X_OUT)`, `V(Y_OUT)`, `V(BPF_OUT)`, `V(GATE)`. Mean over 20 periods from 60 ms.
+- **Expected:** the drain amplitude is 10 mV x 1.00055 (MFB) x 0.99858 (R_D with 50 pF) = 9.9914 mV pk. R = sqrt(X^2 + Y^2) = 25.202 x 9.9914 mV = 251.80 mV with the ideal front end. The phase at BPF_OUT is phi = pexc + 171.73 - 3.07 + 0.01 = pexc + 168.67 deg (ideal). X_OUT = R cos(phi) and Y_OUT = -R sin(phi). With vendor models the smoke run at pexc = 0 gave R = 251.30 mV and phi = 167.13 deg. Pass: R constant over pexc within 0.2 %, phi - pexc constant within 0.2 deg (X/Y orthogonality, AN-25 via LIA-Readout), R within 0.5 % of the P-24 vendor-model gain times 2/pi times 9.9914 mV. The analyst reports the scale factor X_OUT / v_drain in V/V (ideal 25.202) for comparison with E-9 (25.5 at G = 10).
+- **Judge note (7 November 2026, after P-24):** the expected phase above used 50 pF at the drain. `afe_eval.cir` also has the TMUX1109 drain capacitance cmux = 10 pF on DRN_A and DRN_B, so the node has 60 pF. With 60 pF the R_D lag is 3.687 deg and the amplitude factor 0.99793, so the drain amplitude is 10 mV x 1.00055 x 0.99793 = 9.9848 mV pk and phi = pexc + 171.73 - 3.69 + 0.01 deg (ideal front end). P-24 measured the vendor-model front end at -0.024 % and -0.177 deg against the ideal. Together these predict phi = pexc + 167.87 deg. The smoke run gave 167.13 deg, so about -0.7 deg is not explained yet. The analyst measures the phase at GATE, DRN_A, DRN_B, INA_OUT and BPF_OUT separately (add these probes) and locates it.
+- **Status:** done, 7 November 2026
+- **Result:** R constant to 0.054 % and phi - pexc constant to 0.0026 deg over the turn. R is 251.366 mV, which matches 2/pi x 39.5775 x 9.9765 mV (the measured differential drain amplitude) to 0.000 %, and 251.368 mV with the closed-form MFB and 71 pF (-0.001 %). The scale factor R / |DRN_A| is 25.194 V/V, 0.033 % below the ideal 25.202 V/V. The drain stage carries the judge's remainder. The INA828 model adds 10 pF and 1 pF at the drain nodes, so the node is 71 pF and the chain phase is pexc + 167.11 deg (the judge note's 167.87 deg assumed 60 pF). See [sim-results/P-27.md](ti-pspice/docs/sim-results/P-27.md).
+- **Grade:** A (main session, 7 November 2026). The Opus judge agent graded B. Its eight corrections were applied by the analyst (two-node 71 pF drain model in the script, E-9 scale-factor split -0.022 % front end, -0.008 % feedthrough, -0.003 % demodulator, gate amplitudes, max step, whole-period settling windows). The one disputed number (251.347 mV) was settled by the main session: the analyst had used the single-ended drain factor. The remaining -0.7 deg of the smoke run is the INA828 model input capacitance (10 pF per input, 1 pF across), so DRN_A sees 71 pF. A run without these capacitances was not made.
+
+### P-28 Demodulator linearity, offset and OPA2196 transition region (SIM-10, SIM-11 for the board)
+
+- **Goal:** measure the demodulator gain and offset from 1 mV to full scale on the real ±5VA rails, and the error when the U26A input enters the OPA2196 input transition region.
+- **Schematic:** `circuits/afe_demod.cir`.
+- **Parameters:** `.TRAN 0 0.1 0 2u`, cpf = 15n (default of this circuit). Run P28a: `.STEP PARAM ain LIST 1m 10m 100m 0.4 1 1.5 2 2.5 3`, p = 0, vpa = vna = 4.6 V. Run P28b: same steps with vpa = 5.0 V (edited copy). Run P28c: `.STEP PARAM ain LIST 0`, then `.STEP PARAM vos_in LIST -0.1 0 0.1` (DC at BPF_OUT, zero signal). Run P28d: p = 90 deg, ain = 0.4 V and 2 V. Probes `V(X_OUT)`, `V(Y_OUT)`, `V(D1)`, `V(X_DEM)`.
+- **Expected:**
+  - X_OUT = (2/pi) ain cos(p): 0.6366 mV at 1 mV, 254.65 mV at 0.4 V, 1273.2 mV at 2 V. Linearity within 0.1 % from 10 mV to the largest amplitude that keeps U26A +IN out of the transition region (AN-25 via LIA-Readout).
+  - The transition region starts at V+ - 3 V, so at 1.6 V for +5VA = 4.6 V and at 2.0 V for 5.0 V. The +IN of U26A carries BPF_OUT in the +1 state, so the first ain inside the region is 2 V at 4.6 V and 2.5 V at 5.0 V. The analyst reports the X error at each ain in both runs. Full scale at the AN-23a drain level (50 mV pk) is 1.979 V pk at BPF_OUT (P-24 ideal gain), so this is the error at full scale.
+  - Clipping: X_DEM swings ±ain. U26A clips when ain approaches +5VA minus its output swing. The analyst reports the first ain where X departs from linear by more than 1 %.
+  - P28c: X_OUT and Y_OUT at zero signal below 0.5 mV (2 Vos of U26A plus Vos of U26B, OPA2196 ±100 uV max) and independent of the DC at BPF_OUT within 0.01 mV per 100 mV (the square reference averages a DC to zero).
+  - P28d: X_OUT below 0.2 % of R, Y_OUT = -(2/pi) ain.
+- **Status:** done, 7 November 2026
+- **Result:** with the 0.048 mV zero-signal offset removed, the demodulator gain is linear to 0.002 % from 10 mV to 3 V at 4.6 V and 5.0 V, and the full-scale quadrature error is 0.084 % of R (0.048 deg), but the OPA2196 transition region is not tested by the model and needs a bench check. See [sim-results/P-28.md](ti-pspice/docs/sim-results/P-28.md).
+- **Grade:** A (judge agent, 7 November 2026, third round after C and B). Re-run of P-28_linearity.py reproduces every scripted number. Linearity (-0.00065 % offset-corrected, 10 mV to 3 V at 4.6 V and 5.0 V), the zero-signal offset and DC rejection, and the full-scale quadrature error (0.084 % of R, 0.048 deg) pass. The OPA2196 transition region is correctly reported as not tested, because the OPAx196 model has no common-mode offset step. The decomposition of the edge error into delay, slew and recovery terms is not unique, and the summary says so.
+
+### P-29 System CMRR with node capacitance (SIM-12 for the board)
+
+- **Goal:** find the leakage of a common-mode drain signal into X and Y from the R_D and node-capacitance mismatch.
+- **Schematic:** `circuits/afe_cmrr_mc.cir`, a copy of the drain and front-end part of `afe_eval.cir` with one common AC current source driving both pixel nodes (`I_CM` of 1 V / 330 kOhm into each drain), R25 and R31 on `.MODEL RD RES(R=1 DEV=0.1%)`, C_PIXA and C_PIXB on `.MODEL CN CAP(C=1 DEV=10%)` (cnode = 50 pF), ideal TMUX1109 path.
+- **Parameters:** `.AC LIN 1 518 518`, `.MC 200 AC VM([BPF_OUT]) YMAX OUTPUT ALL SEED=5`, `.OPTIONS NUMDGT=8`, probes `V(DRN_A)`, `V(DRN_B)`, `V(BPF_OUT)`. CMRR = |common-mode drain amplitude| / |differential at the in-amp|.
+- **Expected:** numpy, same uniform tolerances: median 49.8 dB, 5 % point 41.5 dB, 95 % point 63.9 dB. With the capacitance matched, median 64.6 dB. The INA828 CMRR (at least 100 dB at G = 10, AN-23 via LIA-Readout) is far below this. Pass: median within 1.5 dB of 49.8 dB, which meets the 48 dB median of SIM-12 with a margin of only 1.8 dB. The analyst reports the split of the leakage into X and Y (the capacitance part is in quadrature, so it goes mainly into Y after the phase calibration).
+- **Status:** done, 7 November 2026
+- **Result:** The median system CMRR is 49.3 dB against 49.7 dB expected with the corrected board model, which meets the SIM-12 target of at least 48 dB, and about 97 % of the leakage power goes to Y, the quadrature output, see [sim-results/P-29.md](ti-pspice/docs/sim-results/P-29.md).
+- **Grade:** A (main session, 7 November 2026). The Opus judge agent graded B. Its four items (X/Y phase reference corrected by the 4.30 deg drain lag, normal .MC pass counting, script-quoted 41.6 dB, analyst limits and the unexplained 0.015 deg) were applied by the analyst. The main session re-ran P-29_mc.py: median CMRR 49.28 dB (SE 0.56 dB) against 49.7 dB expected and the 48 dB SIM-12 target, X std 0.081 % and Y std 0.445 % of the common mode, 96.8 % of the leakage power in Y.
+
+### P-30 Noise at X_OUT (SIM-16 for the board)
+
+- **Goal:** find the input-referred noise of the board and check that the amplifiers add at most 10 % of the noise power (AN-23 via LIA-Readout).
+- **Schematic:** `circuits/afe_eval.cir` with two noise sources added in an edited copy `afe_eval_P30.cir`: the shot noise of each pixel as `I` sources is not available in `.NOISE`, so each pixel gets a resistor of 2 kT/(q I_D) (thermal current noise equal to 2qI_D, 6.894 kOhm at 7.5 uA) in parallel with the current sink, and a noiseless behavioural source G = -V/R across it that cancels its DC and AC load, so the bias and the drain impedance are unchanged. (Corrected by the main session on 7 November 2026: the first version said 6.9 MOhm and had no compensation, the P-30 analyst found it.) AC input on V_EXC (acexc = 1).
+- **Parameters:** `.AC LIN 1 518 518` and `.AC DEC 50 10 100k`, each with `.NOISE V([BPF_OUT]) V_EXC 1`, `.OPTIONS NUMDGT=8`. The noise tables are in the `.out` file.
+- **Expected:** shot noise 511.6 nV/sqrt(Hz) and R_D thermal 73.9 nV/sqrt(Hz) per side at the drain, 731.0 nV/sqrt(Hz) differential. The amplifier budget for 10 % of the power is 243.7 nV/sqrt(Hz) input-referred. The INA828 (7 nV/sqrt(Hz), P-15) and RG are far below it. The VSUP filter (R60, C74) passes DAC noise with 0.0307 at 518 Hz. Square-wave fold-down factor 0.9011. Post-filter ENBW 0.4167 Hz (two poles of 0.3 s). X_OUT noise from the sensor alone: 16.83 uV rms. Pass: input-referred total at 518 Hz within 2 % of 731 nV/sqrt(Hz) plus the amplifier terms, and the amplifier share at most 10 % of the power. Pixel 1/f noise and the GMOS model are TBD and not included.
+- **Status:** done, 7 November 2026
+- **Result:** Drain-referred sensor noise 729.0 nV/sqrt(Hz) matches the corrected expectation (0.00 %). The largest amplifier term is the INA828 input current noise (1.2 % of the power), and the amplifier share is 2.1 % of the power. The fold-down factor is 0.9011. The summary is [sim-results/P-30.md](ti-pspice/docs/sim-results/P-30.md).
+- **Grade:** A (main session, 7 November 2026). The Opus judge agent graded C, then B. The C round found that the full .NOISE tables were in the .out and that the largest amplifier term is the INA828 input current noise in the 329 kOhm drain impedance (80.8 nV/sqrt(Hz), 1.20 % of the power), which the entry expectation had omitted. The four B items (X_OUT gain explanation, unrounded comparison values, grouped-table details, a heading) were applied and checked by the main session. Drain-referred sensor noise 729.0 nV/sqrt(Hz) as expected, amplifier share 2.1 % of the power against the 10 % budget, X_OUT 16.78 uV rms from the sensor and 16.96 uV rms in total. The entry's first noise-source description (6.9 MOhm, no load compensation) was wrong and was corrected after the analyst found it.
+
+### P-31 Power-up with the ±15 V input first (SIM-18 for the board)
+
+- **Goal:** show that no op amp latches or stays at a rail when the board is switched on in the specified order, J4 (±15 V) first and J5 (±5 V) second (DC-3, E-12), and that the TMUX6136 ESD path carries no current in that order.
+- **Schematic:** `circuits/afe_eval_P31.cir`, a copy of `afe_eval.cir` with u15 = u5 = 0, cpf = 15n, and with the TMUX6136 ESD path added as stand-ins: a `DSCHOTTKY` diode from each of BPF_OUT, D1, D2, REF_X, REF_Y to P15V and from M15V to each of them (the real ESD cells are not modelled). The references and EXC_DAC run from t = 0, as from a NUCLEO that is already on.
+- **Parameters:** `.TRAN 0 0.3 0 5u`, t15 = 10 ms, t5 = 50 ms, `.STEP PARAM tramp LIST 1m 5m 20m`. vda = 10 mV. Probes `V(P15V)`, `V(M15V)`, `V(P5VA)`, `V(M5VA)`, `V(BPF_OUT)`, `V(X_OUT)`, `V(Y_OUT)`, `V(GATE)`, `V(VSUP_A)`, and the current of each ESD stand-in.
+- **Expected:** before 50 ms only the TMUX6136 rails are up. BPF_OUT is 0 V and the references swing 0 V to 3.3 V inside ±15 V, so no ESD stand-in conducts more than 1 nA. After the ±5 V ramp X_OUT and Y_OUT reach the P-27 value at pexc = 0 within 1 mV. The slowest part is the post-filter. With cpf = 15n it is a double pole at tau = 200 kOhm x 15 nF = 3 ms, so X_OUT and Y_OUT settle within 1 mV about 25 ms after the end of the ramp. VSUP_A follows the R60/C74 filter (tau 10 ms), but the drain DC is removed by the high-pass and does not set the X and Y settling. At the board value cpf = 1.5u (tau 0.3 s per pole) the settling would take about 2.3 s and fail the 250 ms limit, which applies to cpf = 15n only (corrected 8 November 2026, the first text expected about 100 ms from 10 tau of R60/C74). Note (8 November 2026): REF_X and REF_Y are the SEL1 and SEL2 logic inputs, rated to VDD + 0.3 V (SCDS397B section 5.1), so with the references on before J4 the expectation of no conduction cannot hold. No op amp output stays at a rail after the ramp. Pass: settled within 1 mV by 250 ms for every tramp, and ESD stand-in current below 1 nA throughout. The other order (±5 V first) is excluded by the bench procedure and is not simulated. Power-down is not simulated.
+- **Status:** done, 8 November 2026
+- **Result:** X_OUT and Y_OUT settle within 1 mV of their final values 74 ms to 86 ms after the start (12 ms to 26 ms after the ramp end, set by the 3 ms post-filter, not by VSUP_A) for every tramp with no rail latch. The ESD check fails for a real reason: REF_X drives SEL1 into the unpowered +15 V rail before J4 (diode forward 0.55 V, 32.0 uC, rail at 3.24 V, peak 2.45 A through the 1 Ohm placeholder), and the board has no series resistor. After the rails are up every stand-in is reverse biased, and the -5 uA DC and the edge spikes are DSCHOTTKY artifacts, see [sim-results/P-31.md](ti-pspice/docs/sim-results/P-31.md)
+- **Grade:** A, 8 November 2026: numbers recomputed from the raw CSDF points (charge balance closes within 0.1 uC), forward conduction separated from the CJO and -IS artifacts by the diode voltage, pin type and decoupling checked against the KiCad netlist and SCDS397B (peaks, charge and bias-point explanation corrected by the judge).
+
+### P-32 Overload and DC step at the drains
+
+- **Goal:** measure the recovery after a large drain signal and after a step of the drain DC (DAC trim, pixel switching).
+- **Schematic:** `circuits/afe_eval.cir`, fast settings. Copy `afe_eval_P32.cir` adds `V_DSTEP` in series with V_DAC2 (`PULSE(0 {dstep} 50m 1u 1u 1 2)`), so VSUP_A steps by 1.1 dstep through the R60/C74 filter (tau 10 ms).
+- **Parameters:** `.TRAN 0 0.3 0 2u` (2 us as P-16). Run P32a: `.STEP PARAM vda LIST 10m 50m 100m`. Run P32b: `.STEP PARAM dstep LIST 0 20m 100m` with vda = 10 mV. Probes `V(INA_OUT)`, `V(BPF_OUT)`, `V(X_OUT)`, `V(Y_OUT)`, `V(DRN_A)`.
+- **Expected:** P32a: 50 mV gives BPF_OUT = 1.979 V pk and X_OUT about 1.26 V (AN-23a linear input). 100 mV gives 3.96 V pk. On the bench rails of this circuit (+5VA = 5.12 V, -5VA = -5.13 V, P-23) nothing clips at 100 mV. The OPAx196 output limit at about 1 mA load (about 60 mV from the rail) puts the first clipping at U3B (BPF_OUT about 5.06 V pk) at about 128 mV drain amplitude (corrected 8 November 2026, the first text assumed the ±4.6 V rails of P-28). The analyst reports the clipping margin and the X error. P32b: a step of 1.1 dstep at VSUP_A reaches the drain with the 10 ms R60/C74 time constant. INA_OUT moves by -9.897 x 1.1 x dstep (DRN_A is the inverting input), so -0.218 V at 20 mV and -1.09 V at 100 mV. The band-pass rejects the slow step. X_OUT and Y_OUT return to their baseline within 0.1 mV within 30 ms of the end of the R60/C74 settling. The 100 mV step is half of the AN-12b mismatch range and must not clip.
+- **Status:** done, 8 November 2026
+- **Result:** The chain to BPF_OUT is linear in gain to 0.01 % up to 100 mV drain amplitude. R stays within 0.022 % of linear scaling and the phase of (X, Y) turns by -0.099 deg at 100 mV, from the falling slew (6.63 V/us, OPAx196 model) of U27A at the Y edges. This is the -0.78 % Y_OUT error. Nothing clips on the 5.12 V bench rails (margin 1.09 V at X_DEM), and the first clipping is estimated at about 128 mV drain amplitude at U3B. The 100 mV drain DC step gives a peak X_OUT disturbance of 3.8 mV that is back within 0.1 mV after 23 ms and does not clip. See [sim-results/P-32.md](ti-pspice/docs/sim-results/P-32.md)
+- **Grade:** A, 8 November 2026: numbers recomputed from the CSDF files and the script re-run, the Y_OUT error explained as a -0.099 deg phase rotation by the U27A falling slew (model within 4 %), the cross-check difference traced to edge-spike sampling on diverging time grids, and the recovery by the post-filter impulse model (corrections applied by the judge).
+
+### P-33 Heater driver and drain bias amplifier (SIM-8, SIM-20 for the board)
+
+- **Goal:** check the heater driver headroom from +5VP and its stability with cable capacitance, and the range and noise of the drain bias amplifier.
+- **Schematic:** `circuits/afe_eval.cir`. The heater feedback node is connected to the switch in this circuit, but not in the netlist (finding A-02 of the 2026-11-07 review). The result is valid only after that fix.
+- **Parameters:** P33a: `.DC LIN PARAM vh_a 0 2.3 0.05` with rhtr = 300, 600 and 1.2 kOhm (three edited copies), probes `V(HSH_A)`, `V(HFB_A)`, `V(HSENSE_B)`, `V(P5VP)`, `V(HPIX_A)`. P33b: `.TRAN 0 2m 0 50n` with vh_a stepped by an edited `V_DAC1 DAC1 0 PULSE(1.5 1.6 0.5m 1u 1u 1 2)`, `.STEP PARAM chtr LIST 100p 1n 10n`. P33c: `.DC LIN PARAM vdrc_a 0.4 3.3 0.05` (run with a 0.05 V step instead of the planned 0.01 V, which would take about 2.7 h. The 0.05 V grid resolves a step in the deviation, see the summary), probes `V(VSUP_A)`, `V(U10AO)`, `V(DRN_A)`. P33d: `.NOISE V([VSUP_A]) V_DAC2 1` at 518 Hz with a 100 nV/sqrt(Hz) DAC noise source in series with V_DAC2 (SIM-20).
+- **Expected:**
+  - P33a: HFB_A = 2 x vh_a until U9A saturates. U9A must give HFB_A + 15 Ohm x I. At 4.0 V on 600 Ohm (I = 6.62 mA) it needs 4.10 V. The analyst reports the largest HFB_A for each heater, and the margin to +5VP. AN-14 asks for 4.0 V. With 300 Ohm (13.3 mA) the INA190 output reaches 25 x 0.2 V = 5 V, so HSENSE clips at 3.3 V above 8.8 mA (finding F-09 of the 2026-10-29 review).
+  - P33b: overshoot below 10 % and no oscillation at 10 nF.
+  - P33c: VSUP_A = 1.1 x vdrc_a - 7.5 mV, linear within 1 mV from 0.5 V to 3.5 V (AN-9 via LIA-Readout). The +IN of U10A crosses the transition region (V+ - 3 V = 1.8 V at 4.82 V). The analyst reports the largest step in the deviation from linear (finding F-08 of the 2026-10-29 review).
+  - P33d: DAC noise at VSUP_A 1.1 x 100 nV/sqrt(Hz) x 0.0307 = 3.4 nV/sqrt(Hz), plus R60 thermal (4.07 nV/sqrt(Hz) x 0.0307). Pass: at most 50 nV/sqrt(Hz) (AN-10 via LIA-Readout).
+- **Status:** done, 7 November 2026
+- **Result:** The heater driver reaches HFB_A equal to 2 vh_a within 1 mV up to 4.60 V on the 600 Ohm and 1.2 kOhm heaters, but the 300 Ohm heater is limited by the output swing of the OPAx196 model to 4.27 V, the heater step passes at 100 pF with 1.8 % overshoot and fails at 1 nF and 10 nF with 22.5 % and 58.4 % overshoot (poorly damped, no sustained oscillation), the drain bias follows 1.1 vdrc_a - 7.5 mV within 0.02 mV over the whole window, and the VSUP_A noise is 3.4 nV/sqrt(Hz) at 518 Hz, see [sim-results/P-33.md](ti-pspice/docs/sim-results/P-33.md)
+- **Grade:** A, 8 November 2026: numbers recomputed from the CSDF files, the 300 Ohm limit is explained by the OPAx196 output swing curve (ceiling 4.267 V against 4.275 V simulated), the overshoot by the 1.47 kOhm model output impedance, and the scripts reproduce every number.
+
+### P-34 Interference and harmonic rejection with the Sallen-Key post-filter (SIM-15 for the board)
+
+- **Goal:** measure the rejection of mains, mains harmonics and signal harmonics at X_OUT with the board filters.
+- **Schematic:** `circuits/afe_demod.cir` (demodulator and post-filter, interferer at BPF_OUT scaled by the front-end gain at its frequency) and a check with `circuits/afe_eval.cir` for 3f0.
+- **Parameters:** cpf = 1.5u is needed for the beat products. To avoid the 3 s settling of the two 0.3 s poles, start the post-filters at their settled state: `.IC V(X_OUT)=0.25465 V(NC13)=0.25465 V(U26BP)=0.25465 V(Y_OUT)=0 V(NC14)=0 V(U27BP)=0` (p = 0, ain = 0.4 V gives X = (2/pi) x 0.4 V). `.TRAN 0 1 0 5u SKIPBP`, measure the beat amplitude by a least-squares fit at the beat frequency over the last 0.5 s, ain = 0.4 V, `.STEP PARAM fi LIST 50 500 550 1036 1554` with ai = 0.4 V x |H(fi)| / |H(f0)| per step (edited copies, one per fi, because ai changes with fi). Probes `V(X_OUT)`, `V(Y_OUT)`.
+- **Expected:** relative to an f0 signal of equal amplitude at the drains, the largest beat product at X_OUT is -158 dB at 50 Hz, -61 dB at 500 Hz (18 Hz beat), -71 dB at 550 Hz (32 Hz beat), -127.3 dB at 1036 Hz (coherent sum of n = 1 and n = 3, factor 8/(3 pi); the earlier -130 dB omitted the n = 3 product), and the 3f0 term is demodulated to DC with -27.7 dB (weight 1/3 times the band-pass). SIM-15 asks for 50 Hz at least 60 dB, 500 and 550 Hz at least 30 dB, 2f0 at least 40 dB and 3f0 at least 25 dB. Pass: each measured value within 2 dB of the prediction, or below the numerical floor where the prediction is under -100 dB. The 2f0 ripple at X_OUT is 0.4244 x ain x 2.6e-7, below 0.1 uV.
+- **Status:** done, 8 November 2026
+- **Result:** All SIM-15 limits pass (50 Hz -155 dB, 500 Hz -61 dB, 550 Hz -71 dB, 2f0 -123 dB, 3f0 -27.7 dB), and every product matches the prediction with the Sallen-Key feedthrough within 0.6 dB, but the 50 Hz and 518 Hz terms fail the ideal-post-filter prediction and the 2f0 ripple of 453 nV fails the 0.1 uV check, [sim-results/P-34.md](ti-pspice/docs/sim-results/P-34.md)
+- **Grade:** A, 8 November 2026: all SIM-15 limits pass, every product and the 2f0 ripple agree within 0.6 dB with the Sallen-Key feedthrough model (L = 81.6 uH from the reference run), and the script reproduces every number (three wording errors corrected by the judge).
+
+## Batch 5: proposals of the Batch 4 design review (planned 8 November 2026)
+
+P-35 to P-43 are the proposals R-06 to R-14 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md). Circuit paths are relative to `simulations/ti-pspice/`. P-37, P-40 and P-41 are bench entries for the owner. P-35 depends on the owner's decision on the series resistors of findings F-01 and F-02. One change to the reviewer's text: P-35 keeps the P-31 stand-ins without an area factor, because the area factor also scales RS.
+
+### P-35 Series resistors on the switch pins and the power sequences
+
+- **Source:** proposal R-06 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** show that 1 kOhm in series with REF_X, REF_Y (SEL1, SEL2) and with BPF_OUT (S1A, S2A) keeps every switch pin current below 10 % of the 30 mA rating in the power-up, power-down and fault orders, without changing the demodulator result.
+- **Precondition:** the owner accepts the 1 kOhm series resistors of F-01 and F-02. The circuit copy models them before the schematic changes.
+- **Schematic:** `circuits/afe_eval_R06.cir`, a copy of `afe_eval_P31.cir` with `R_SELX KEX_PIN REF_X_S 1k`, the same for Y, 1 kOhm between BPF_OUT and the S1A and S2A pins, a 25 Ohm source resistance in V_REFX and V_REFY (assumed STM32F303 output resistance, not verified), the stand-ins as in P-31 (one `DSCHOTTKY` model, area 1), and V_DAC0 to V_DAC7 gated by a ramp that follows P5VA (a `VALUE` source with `limit`). Do not give the stand-ins an area factor. It divides RS by the area (0.08 Ohm / 1e-6 = 80 kOhm), so it acts as a series resistor (P-31 judge). Forward conduction is read from the diode voltage, as in P-31.
+- **Parameters:** `.TRAN 0 1.2 0 5u`, cpf = 15n. Orders: (a) references from t = 0, J4 at 10 ms, J5 at 50 ms (as P-31). (b) Power-down: J5 off at 0.6 s, J4 off at 0.7 s. (c) Fault: J4 off at 0.6 s with J5 on, vda = 50 mV. Probes: stand-in currents, P15V, BPF_OUT, X_OUT, Y_OUT.
+- **Expected:** peak SEL current (3.3 - 0.55) / (1 kOhm + 25 Ohm) = 2.7 mA (calc1: 2.6 mA with 0.6 V). The +15 V rail reaches 2.7 V with a time constant of 11.4 ms, so about 1.6 V at 10 ms before J4. The fault case (c): BPF_OUT at 1.98 V gives (1.98 - 0.55) / 1.01 kOhm = 1.4 mA, and 3.4 mA at the 4 V of 100 mV drain. The edge delay is 9.5 ns at SEL and 14 ns at the S pins, so X_OUT and Y_OUT final values differ from P-27 by less than 0.2 mV (delta term 4 f0 A delta: 4 x 518 x 2 V x 12 ns = 0.05 mV at A = 2 V, 5 uV at 0.2 V). Pass: all forward stand-in currents below 3 mA (capacitive edge current and the -IS reverse current of the stand-in model excluded, as in P-31), forward conduction only in the first 40 ms, final values within 0.2 mV of P-27.
+- **Status:** planned.
+
+### P-36 Heater loop compensation
+
+- **Source:** proposal R-07 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** find the smallest change that gives at most 10 % overshoot at 1 nF and 25 % at 10 nF, and measure the phase margin with `.AC`.
+- **Schematic:** `circuits/afe_eval_P33b.cir` copies: (a) Cf across R20 of 10, 22 and 47 pF, (b) Rs of 10 and 22 Ohm between HFB_A and the switch (outside the feedback), (c) U9A from the OPAx192 model of `vendor/sbom862f/`. Loop-gain copy: the feedback broken at R20 with a 1 GH and 1 GF pair.
+- **Parameters:** transient as P-33b (0.1 V step on DAC1, `.STEP chtr LIST 100p 1n 10n`, 50 ns step). `.AC DEC 50 1k 10Meg` for the loop gain, probes `V(HFB_A)` and the loop node.
+- **Expected:** the baseline reproduces P-33b (1.8 %, 22.5 %, 58.4 % within 1 point) and gives about 19 deg phase margin at 10 nF. No value is predicted for the options: the hand model of calc2 gave 46 deg to 59 deg and failed to reproduce the baseline. A zero at 1/(2 pi R20 Cf) is 319 kHz, 145 kHz and 68 kHz for the three Cf, next to the observed rings of 370 kHz and 122 kHz, which is why they are tested. A smaller Zo is not testable with the black-box model, so the result is an upper bound on the ring. Pass: the baseline reproduces P-33b within 1 point. The best option gives overshoot of at most 10 % at 1 nF and at most 25 % at 10 nF, and a phase margin of at least 55 deg at 1 nF and at least 40 deg at 10 nF (the overshoot limits correspond to zeta 0.59 and 0.40, phase margin about 59 deg and 43 deg). The `.AC` phase margin agrees with the transient overshoot within 10 deg.
+- **Status:** planned.
+
+### P-37 Heater swing on the bench
+
+- **Source:** proposal R-08 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** measure the real heater output swing and the headroom with 300 Ohm and 600 Ohm dummy heaters.
+- **Schematic:** the board, dummy heater of 300 Ohm 0.1 % 1 W and of 600 Ohm in the calibration position (component_selection lists a 1.00 kOhm dummy heater, wiring not re-read, a socket card with the resistors is an alternative). DMM on TP3, +5VP, HFB_A, HSH_A (the shunt input).
+- **Parameters:** DAC1 from 0 V to 2.3 V in 0.1 V steps with J5 set for +5VA = 5.00 V and again at 5.20 V.
+- **Expected (calc2):** HFB_A follows 2 x DAC1 within 1 mV up to 4.56 V (600 Ohm, +5VP 5.09 V) or 4.45 V (4.97 V), and up to 4.14 V or 4.04 V on 300 Ohm. Below these, the typical part follows. Pass: ceiling at least 4.0 V + 0.2 V = 4.2 V on the heater actually used. The 300 Ohm result is expected to fail that (4.04 V to 4.14 V), which is the F-05 finding.
+- **Status:** planned.
+
+### P-38 Drain compliance and the TMUX1109 clamp
+
+- **Source:** proposal R-09 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** show the drain voltage and the INA_OUT behaviour when VSUP_A is swept through the range 0.5 V to 3.5 V at 7.5 uA.
+- **Schematic:** `circuits/afe_eval.cir` with an ESD diode from DRN_A to ground (`.MODEL DESD D(IS=1p N=1)`, anode at ground) and the pixel stand-in unchanged.
+- **Parameters:** `.DC LIN PARAM vdrc_a 0.4 3.3 0.05` as P33c. Probes `V(DRN_A)`, `V(INA_OUT)`, `I(D_ESD)`.
+- **Expected:** DRN_A = 1.1 x vdrc_a - 7.5 mV - 2.475 V for vdrc_a above about 1.99 V (drain above -0.3 V). Below it the diode carries the part of the pixel current that R_D cannot supply: at vdrc_a = 0.46 V the supply gives (0.5 - (-0.4)) / 330 kOhm = 2.7 uA, the diode gives 4.8 uA, and the drain sits at 0.0259 x ln(4.8 uA / 1 pA) = -0.40 V. INA_OUT leaves the linear relation 9.897 x (DRN_B - DRN_A) below that point. Pass: the model reproduces the clamp and the analyst reports the DAC2 value where DRN_A crosses -0.5 V (calc4: 1.80 V).
+- **Status:** planned.
+
+### P-39 Phase-sweep calibration on simulated data
+
+- **Source:** proposal R-10 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** check the ellipse fit of section 5 against known errors before it is used on the board.
+- **Schematic:** (a) the P-27 data (`sim-runs/P27_phase`, 8 phases) with no new run. (b) `circuits/afe_eval_fast.cir` with three injected errors: `dly` = 2 us on REF_Y (eps = 360 x 518 Hz x 2 us = 0.373 deg), R84 +0.2 %, and a 0.3 mV offset source in series with the U26A +IN.
+- **Parameters:** `.STEP LIN PARAM pexc 0 315 45` as P-27, `.TRAN 0 0.1 0 5u`, cpf = 15n. Fit from the last 20 periods of 60 ms to 100 ms.
+- **Expected:** (a) centre within 10 uV of zero, b / a within 0.1 % of 1 (P-27: R spread 0.054 %), eps within 0.03 deg (P-27: phi_XY - phi_BPF from -0.008 deg to +0.023 deg). (b) eps = 0.37 deg + the (a) value within 0.003 deg, b / a differs from (a) by +0.1 % (R84 +0.2 % gives a scale error of 0.1 % in Y), the centre moves by 0.3 mV x 2 = 0.6 mV in the channel of the offset (gain 2 for U26A input offset in the -1 state, the same weight as P-23). Pass: recovered values within 3 uV, 20 ppm and 0.002 deg of the injected ones.
+- **Status:** planned.
+
+### P-40 Calibration procedure on the board
+
+- **Source:** proposal R-11 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** run section 5 on the first board and record the residuals.
+- **Schematic:** the board with the sequence of step 0, DMM 6.5 digits on X_OUT and Y_OUT through 10 MOhm, generator on TP15.
+- **Parameters:** steps 0 to 6 of section 5.3. Repeat step 2 four times over 2 h at constant temperature, and once with a 10 K change (hair dryer on the board, logging TP temperature).
+- **Expected:** step 2 and step 3 centres agree within 5 uV if there is no excitation-synchronous pickup. Repeatability of step 2 is 2 uV to 6 uV (calc3 for 10 s). Offsets between 0 and 0.5 mV (RSS of Vos at the maximum 0.5 mV). Step 4 gain within the P-25 limits. Linearity to 0.05 % up to 90 mV. Supply ripple response below 10 uV for 20 mV at 518 Hz. The drift over 10 K is at most 45 uV (4.5 uV/K worst case). Pass: (1) the four repeats of step 2 agree within 6 uV (1 sigma, calc3 for 10 s averaging). (2) the sweep centre of step 3 differs from the step 2 zero by at most 5 uV, or the difference is explained as excitation-synchronous pickup. (3) the fit residual is at most 10 uV rms. (4) b / a is within 0.2 % of 1 and |eps| is at most 0.05 deg. (5) the step 4 gain is within the P-25 limits and the X/Y beat phase is 90 deg ± 0.05 deg and agrees with 90 deg + eps of step 3 within 0.01 deg. (6) R / amplitude is constant to 0.05 % from 10 mV to 90 mV. (7) a 20 mV ripple at 518 Hz on +5VA moves X_OUT by less than 10 uV. (8) the offset change over 10 K is at most 45 uV.
+- **Status:** planned (bench).
+
+### P-41 Post-filter capacitor leakage and settling
+
+- **Source:** proposal R-12 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** measure the insulation resistance of C13 to C16 through the DC gain of the post-filter.
+- **Schematic:** the board, DMM on X_DEM (demodulator output test loop) and X_OUT, with a DC-like X value (excitation at 10 mV drain and p = 0).
+- **Parameters:** wait 12 s, 10 readings each of X_DEM and X_OUT with the same meter on the same range. Repeat for Y. Then a step of excitation phase and 20 min of X_OUT logging after it.
+- **Expected:** X_OUT = X_DEM x (1 - 400 kOhm / R_IR). For R_IR of 1 GOhm the difference is 0.04 % (100 uV at 245 mV), for 400 MOhm 0.10 % (245 uV). Meter accuracy 0.002 % allows 5 uV. Pass: R_IR above 400 MOhm for all four capacitors. The settling log shows the two-pole decay with tau = 0.3 s ±20 % and no tail above 1 uV after 20 s (dielectric absorption).
+- **Status:** planned (bench).
+
+### P-42 Output impedance of the post-filter op amp and the stopband floor
+
+- **Source:** proposal R-13 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** find how much of the 2f0 ripple and the comb depends on the op-amp model, and check the model against the datasheet ZO.
+- **Schematic:** `circuits/afe_demod_P34_f1036.cir` with U26B (and U27B) unchanged as the baseline, and a copy in which they use the OPAx192 model of `vendor/sbom862f/`. The OPAx196 output resistance cannot be changed in the black-box model, so the OPAx192 copy is a sensitivity case only.
+- **Parameters:** as P-34 for the 1036 Hz run (`.IC`, `.TRAN 0 1 0 5u SKIPBP`, cpf = 1.5u), fit the 1036 Hz and 2072 Hz lines.
+- **Expected:** the OPAx196 case reproduces 453 nV and 180 nV. The datasheet ZO scaling (calc4) predicts 216 nV to 281 nV and 87 nV to 112 nV for an OPAx196 with the datasheet ZO. The OPAx192 case is reported and has no prediction. Pass: the analyst reports L from the quadrature part and the ratio to 81.6 uH.
+- **Status:** planned.
+
+### P-43 BPF_OUT clipping threshold
+
+- **Source:** proposal R-14 of [design-review/2026-11-08_batch4.md](design-review/2026-11-08_batch4.md), taken over on 8 November 2026 with the reviewer's expected values.
+- **Goal:** confirm the clipping drain amplitude of U3B (open point 1 of P-32).
+- **Schematic:** `circuits/afe_eval_P32a.cir`.
+- **Parameters:** `.STEP PARAM vda LIST 110m 120m 130m 140m`, `.TRAN 0 0.3 0 2u`, probes as P-32a plus `V(Y_DEM)`.
+- **Expected:** BPF_OUT peak 39.571 x 0.1097 V = 4.34 V at the 110 mV step (measured drain 109.7 mV). The model clips at about 5.06 V (60 mV swing), which is a drain amplitude of 128 mV. Between 120 mV and 130 mV the peak stops growing linearly. The datasheet maximum swing (500 mV, 4.62 V, 117 mV drain) is not in the model. Pass: first clipping between 125 mV and 132 mV.
 - **Status:** planned.
 
 ---

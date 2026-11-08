@@ -1,0 +1,51 @@
+* afe_demod_P28d.cir: afe_demod.cir with p = 90 deg (P-28 run d, quadrature input).
+* Run: python tools/run_sim.py circuits/afe_demod_P28d.cir --name P28d_quad --analysis ".TRAN 0 0.1 0 2u" --analysis ".STEP PARAM ain LIST 0.4 2" --extra ".OPTIONS NUMDGT=8" --probe "V(X_OUT)" "V(Y_OUT)" "V(D1)" "V(X_DEM)" --timeout 2700
+* afe_demod.cir: the LIA-AFE-Eval demodulator sheet alone (U24 TMUX6136 on +/-15 V, U26/U27 OPA2196, Sallen-Key post-filters),
+* driven at BPF_OUT by an ideal sine. Netlist of 2026-11-07 (commit 3429288). Same element names as circuits/afe_eval.cir.
+* Used by P-28 (linearity, zero-input offset, OPA2196 input transition region at the actual +5VA) and P-34.
+* Rails are ideal sources: vpa = +5VA, vna = -5VA (magnitude), v15 = TMUX6136 supply.
+* Run: python tools/run_sim.py circuits/afe_demod.cir --name <ID> --analysis "<line>" --extra ".OPTIONS NUMDGT=8" --probe ...
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.TRAN 0 0.1 0 2u
+.OPTIONS ADVCONV
+.OPTIONS FILEMODELSEARCH
+V_P5VA       P5VA 0 {vpa}
+V_M5VA       0 M5VA {vna}
+V_P15        P15V 0 {v15}
+V_M15        0 M15V {v15}
+* Input at BPF_OUT: offset + fundamental (phase p) + interferer at fi (amplitude ai)
+V_IN         BPF_OUT NIN1 SIN({vos_in} {ain} {f0} 0 0 {p})
+V_INT        NIN1 0 SIN(0 {ai} {fi} 0 0 0)
+V_REFX       REF_X 0 PULSE(0 3.3 0 {t_slope} {t_slope} {0.5/f0-t_slope} {1/f0})
+V_REFY       REF_Y 0 PULSE(0 3.3 {0.25/f0} {t_slope} {t_slope} {0.5/f0-t_slope} {1/f0})
+X_U24A       0 BPF_OUT D1 REF_X P15V M15V SPDT_PREC PARAMS: RON=120 CS=4P CD=6P QINJ={qinj} TAU=30N ILK=0.5P
+X_U24B       0 BPF_OUT D2 REF_Y P15V M15V SPDT_PREC PARAMS: RON=120 CS=4P CD=6P QINJ={qinj} TAU=30N ILK=0.5P
+X_U26A       D1 U26AM P5VA M5VA X_DEM OPAx196
+R_R78        BPF_OUT U26AM 10k
+R_R79        U26AM X_DEM 10k
+R_R14        X_DEM NC13 200k
+R_R15        NC13 U26BP 200k
+C_C13        NC13 X_OUT {cpf}
+C_C15        U26BP 0 {cpf}
+X_U26B       U26BP U26BM P5VA M5VA X_OUT OPAx196
+R_R88        U26BM X_OUT 1m
+R_R89        U26BM 0 10k
+R_R80        X_OUT X_SMA 100
+R_LX         X_SMA 0 {rload}
+X_U27A       D2 U27AM P5VA M5VA Y_DEM OPAx196
+R_R83        BPF_OUT U27AM 10k
+R_R84        U27AM Y_DEM 10k
+R_R16        Y_DEM NC14 200k
+R_R17        NC14 U27BP 200k
+C_C14        NC14 Y_OUT {cpf}
+C_C16        U27BP 0 {cpf}
+X_U27B       U27BP U27BM P5VA M5VA Y_OUT OPAx196
+R_R93        U27BM Y_OUT 1m
+R_R92        U27BM 0 10k
+R_R85        Y_OUT Y_SMA 100
+R_LY         Y_SMA 0 {rload}
+.PARAM vpa=4.6 vna=4.6 v15=15 f0=518 ain=0.4 p=90 vos_in=0 ai=0 fi=50 t_slope=10n qinj=0.4P cpf=15n rload=1MEG
+.END

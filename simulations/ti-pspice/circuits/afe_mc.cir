@@ -1,0 +1,34 @@
+* afe_mc.cir: front end of afe_eval.cir (U2 INA828, U3A/U3B K = 2 Sallen-Key, ideal 1 V AC differential input, ideal +/-5.12 V rails) with literal tolerances for the P-25 Monte Carlo: R 0.1 % on R9 R10 R11 R12 R13 R70 R71 R72 R73, C 5 % on C9 C10 C11 C12 (C0G first build, decision E-5). Copy P25b: afe_mc_P25b.cir (C 1 %).
+* Run: python tools/run_sim.py circuits/afe_mc.cir --name P25a_mc5 --analysis ".AC LIN 1 518 518" --extra ".MC 500 AC VP([BPF_OUT]) YMAX OUTPUT ALL SEED=17" --extra ".OPTIONS NUMDGT=8" --probe "V(BPF_OUT)" --timeout 3600
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.MODEL RTOL RES(R=1 DEV=0.1%)
+.MODEL CTOL CAP(C=1 DEV=5%)
+* Ideal supplies and drain levels (DC of the drains as afe_eval.cir: 0.1575 V). 1 V AC differential: VIN+ = DRN_B, VIN- = DRN_A.
+V_P5VA       P5VA 0 DC 5.12
+V_M5VA       M5VA 0 DC -5.12
+V_DP         DRN_B 0 DC 0.1575 AC 0.5
+V_DN         DRN_A 0 DC 0.1575 AC -0.5
+* Front end (U2, U3) as in afe_eval.cir
+X_U2         DRN_B DRN_A P5VA M5VA INA_OUT 0 RGP RGN INA828
+R_R10        RGP RGN RTOL 5.62k
+* Sallen-Key high-pass, K = 2
+C_C10        INA_OUT NC10 CTOL 33n
+C_C11        NC10 U3AP CTOL 33n
+R_R13        U3AP 0 RTOL 9.31k
+R_R9         NC10 HPF_OUT RTOL 9.31k
+X_U3A        U3AP U3AM P5VA M5VA HPF_OUT OPAx196
+R_R70        HPF_OUT U3AM RTOL 10k
+R_R71        U3AM 0 RTOL 10k
+* Sallen-Key low-pass, K = 2
+R_R11        HPF_OUT NC9 RTOL 9.31k
+R_R12        NC9 U3BP RTOL 9.31k
+C_C12        U3BP 0 CTOL 33n
+C_C9         NC9 BPF_OUT CTOL 33n
+X_U3B        U3BP U3BM P5VA M5VA BPF_OUT OPAx196
+R_R72        BPF_OUT U3BM RTOL 10k
+R_R73        U3BM 0 RTOL 10k
+.OPTIONS ADVCONV
+.END

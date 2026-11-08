@@ -1,0 +1,49 @@
+* afe_cmrr_mc.cir: system CMRR of the LIA-AFE-Eval drain stage and front end (P-29, SIM-12). Drain bias, R_D, node capacitance,
+* ideal mux path, vendor INA828 and the K = 2 band-pass (nominal) to BPF_OUT. One common AC current per drain (1 V per 330 kOhm, in phase).
+* Tolerances: R_D 0.1 % (RD model), pixel node capacitance 50 pF 10 % (CN model), both literal in the .MODEL lines (quirks log).
+* Run (MC and nominal, the nominal is the section 0 of the MC run and needs no separate run): python tools/run_sim.py circuits/afe_cmrr_mc.cir --name P29_mc --analysis ".AC LIN 1 518 518" --extra ".MC 200 AC VM([BPF_OUT]) YMAX OUTPUT ALL SEED=5" --extra ".OPTIONS NUMDGT=8" --probe "V(DRN_A)" "V(DRN_B)" "V(BPF_OUT)" --timeout 3600
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.MODEL RD RES(R=1 DEV=0.1%)
+.MODEL CN CAP(C=1 DEV=10%)
+* Ideal rails and drain supplies (DC of the drains: 2.6325 V - 330 kOhm x 7.5 uA = 0.1575 V, as afe_eval.cir)
+V_P5VA       P5VA 0 DC 5.12
+V_M5VA       M5VA 0 DC -5.12
+V_SUPA       VSUP_A 0 DC 2.6325
+V_SUPB       VSUP_B 0 DC 2.6325
+R_R25        VSUP_A DRN_A RD 330k
+R_R31        VSUP_B DRN_B RD 330k
+* DC pixel sinks (7.5 uA each, current from the drain to ground)
+I_SA         DRN_A 0 DC 7.5u
+I_SB         DRN_B 0 DC 7.5u
+* Common-mode AC drive: 1 V per 330 kOhm into each drain, both in phase (no differential signal)
+I_CMA        DRN_A 0 DC 0 AC {1/330k}
+I_CMB        DRN_B 0 DC 0 AC {1/330k}
+* Pixel node capacitance (50 pF, 10 % uniform, PSpice default distribution) and fixed TMUX1109 capacitance (10 pF, ideal mux path)
+C_PIXA       DRN_A 0 CN 50p
+C_PIXB       DRN_B 0 CN 50p
+C_CMUXA      DRN_A 0 10p
+C_CMUXB      DRN_B 0 10p
+* Front end (U2, U3) as afe_eval.cir: VIN+ = DRN_B, VIN- = DRN_A, REF = GND, RG 5.62k
+X_U2         DRN_B DRN_A P5VA M5VA INA_OUT 0 RGP RGN INA828
+R_R10        RGP RGN 5.62k
+* Sallen-Key high-pass, K = 2 (nominal)
+C_C10        INA_OUT NC10 33n
+C_C11        NC10 U3AP 33n
+R_R13        U3AP 0 9.31k
+R_R9         NC10 HPF_OUT 9.31k
+X_U3A        U3AP U3AM P5VA M5VA HPF_OUT OPAx196
+R_R70        HPF_OUT U3AM 10k
+R_R71        U3AM 0 10k
+* Sallen-Key low-pass, K = 2 (nominal)
+R_R11        HPF_OUT NC9 9.31k
+R_R12        NC9 U3BP 9.31k
+C_C12        U3BP 0 33n
+C_C9         NC9 BPF_OUT 33n
+X_U3B        U3BP U3BM P5VA M5VA BPF_OUT OPAx196
+R_R72        BPF_OUT U3BM 10k
+R_R73        U3BM 0 10k
+.OPTIONS ADVCONV
+.END

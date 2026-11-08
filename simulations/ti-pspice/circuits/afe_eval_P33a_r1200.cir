@@ -1,0 +1,208 @@
+* afe_eval_P33a_r1200.cir: copy of afe_eval.cir for P-33a with rhtr = 1.2 kOhm (heater DC sweep)
+* Run: python tools/run_sim.py circuits/afe_eval_P33a_r1200.cir --name P33a_r1200 --analysis ".DC LIN PARAM vh_a 0 2.3 0.05" --extra ".OPTIONS NUMDGT=8" --probe "V([HSH_A])" "V([HFB_A])" "V([HSENSE_B])" "V([P5VP])" "V([HPIX_A])" --timeout 3600
+* afe_eval.cir: analog chain of the LIA-AFE-Eval board, written by hand from the KiCad netlist of 2026-11-07 (commit 3429288,
+* schematics/LIA-AFE-Eval). Designators in the element names are the KiCad ones (R_R25 = R25). Index entries P-23 to P-34.
+* Contents: Power (bench inputs, B5819W, 1 Ohm rail resistors), Excitation (MFB U1B, R59, gate load), Sensor (drain bias U10A/B,
+* R60/C74, R_D R25/R31, TMUX1109 on-path, pixel stand-ins, heater drivers U9A/B with R24/R30 shunts and INA190 stand-ins),
+* Front_End (INA828 U2, K = 2 Sallen-Key HPF U3A and LPF U3B), Demod (TMUX6136 U24 on +/-15 V, U26A/U27A +/-1 stages,
+* unity-gain Sallen-Key post-filters U26B/U27B, R80/R85 to the SMA loads).
+* Deviations from the schematic (deliberate, see the index entries):
+*  - J4 (+/-15 V) and J5 (+/-5 V) are separate inputs (VHIN_P/N, VLIN_P/N), as in the fixed netlist. J5 default 5.3 V (DC-3).
+*  - Heater nodes HFB_A/HFB_B are the netlist nets HTR_A (R24 side, U20 DB) and HTR_B (R30 side, U21 DB).
+*  - TMUX1109 is a resistor plus capacitors (no TI PSpice model). INA190 is an ideal gain-25 block clipped to 0..3.3 V.
+*  - DAC80508 outputs and the NUCLEO DAC are ideal sources. The pixel is a current sink (GMOS model TBD, design-context.md section 1).
+*  - B5819W is the generic Schottky model DSCHOTTKY (V_F about 0.18 V at 3.4 mA, 0.21 V at 10 mA), not a vendor model. The B5819W curve was not read.
+* TMUX6136: SEL = 1 connects SxA (BPF_OUT), SEL = 0 connects SxB (GND) (review 2026-10-29, SCDS397B). SPDT_PREC: S1 at SEL low.
+* Run: python tools/run_sim.py circuits/afe_eval.cir --name <ID> --analysis "<line>" --extra ".OPTIONS NUMDGT=8" --probe ...
+* Fast runs: --extra ".PARAM cpf=15n" (post-filter tau 3 ms instead of 0.3 s).
+.LIB "../vendor/tmux6136/tmux6136_beh.lib"
+.INC "../options.inc"
+.lib "nom_pspti.lib"
+.lib "nom.lib"
+.TRAN 0 0.1 0 5u
+.OPTIONS ADVCONV
+.OPTIONS FILEMODELSEARCH
+*
+* ---------------- Power ----------------
+* Bench inputs. With u15 = 0 (u5 = 0) the input ramps from 0 V at t15 (t5) over tramp. Defaults u15 = u5 = 1: rails present at t = 0.
+* Override parameters with a one-value .STEP PARAM (an --extra .PARAM cannot redefine them, docs/simulation-quirks.md).
+V_J4P        VIN15P 0 PULSE({v15*u15} {v15} {t15} {tramp} 1 10 20)
+V_J4N        0 VIN15N PULSE({v15*u15} {v15} {t15} {tramp} 1 10 20)
+V_J5P        VIN5P 0 PULSE({v5*u5} {v5} {t5} {tramp} 1 10 20)
+V_J5N        0 VIN5N PULSE({v5n*u5} {v5n} {t5} {tramp} 1 10 20)
+R_SRC15P     VIN15P VIN15P1 {rsrc}
+R_SRC15N     VIN15N VIN15N1 {rsrc}
+R_SRC5P      VIN5P VIN5P1 {rsrc}
+R_SRC5N      VIN5N VIN5N1 {rsrc}
+D_D4         VIN15P1 P15V DSCHOTTKY
+D_D9         M15V VIN15N1 DSCHOTTKY
+D_D5         VIN5P1 P5VIN DSCHOTTKY
+D_D10        M5VIN VIN5N1 DSCHOTTKY
+* Bulk and decoupling, lumped per rail (C52 C53 C96 / C54 C55 C95 / C56 C57 / C58 C59)
+C_P15        P15V 0 11.1u
+C_M15        M15V 0 11.1u
+C_P5IN       P5VIN 0 10.1u
+C_M5IN       M5VIN 0 10.1u
+R_R18        P5VIN P5VA 1
+R_R19        M5VIN M5VA 1
+R_R32        P5VIN P5VP 1
+* +5VA: C67 10u + ten 100 nF; -5VA: seven 100 nF; +5VP: C82 100 nF
+C_P5VA       P5VA 0 11u
+C_M5VA       M5VA 0 0.7u
+C_P5VP       P5VP 0 0.1u
+* Quiescent loads not modelled by the sources: DAC80508 (IDD about 1 mA typ, not verified), TMUX1109 x2, INA190 on +3V3 (ideal)
+R_IQDAC      P5VA 0 {5/1m}
+*
+* ---------------- DAC80508 and NUCLEO sources (ideal) ----------------
+V_DAC0       DAC0 0 {vh_b}
+V_DAC1       DAC1 0 {vh_a}
+V_DAC2       DAC2 0 {vdrc_a}
+V_DAC3       DAC3 0 {vdrc_b}
+V_DAC4       GATE_DC 0 {vgdac}
+V_DAC6       DAC6 0 {vdrf_a}
+V_DAC7       DAC7 0 {vdrf_b}
+* NUCLEO excitation DAC (EXC_DAC): DC level plus sine. Replace by the staircase include for P-26b (circuits/gen_exc_stair.py).
+V_EXC        EXC_DAC 0 SIN({vexc_dc} {vexc_a} {f0} 0 0 {pexc}) AC {acexc}
+* NUCLEO timer references, 0 / 3.3 V, X high in the first half period, Y delayed T/4 (+ dly)
+V_REFX       REF_X 0 PULSE(0 3.3 {dly0} {t_slope} {t_slope} {0.5/f0-t_slope} {1/f0})
+V_REFY       REF_Y 0 PULSE(0 3.3 {dly0+0.25/f0+dly} {t_slope} {t_slope} {0.5/f0-t_slope} {1/f0})
+*
+* ---------------- Excitation (U1) ----------------
+R_R6         EXC_DAC NC7 120k
+C_C7         NC7 0 47n
+R_R5         NC7 GOUT 1k
+R_R7         NC7 U1BM 1k
+C_C6         U1BM GOUT 22n
+R_R8         GATE_DC U1BP 10k
+C_C8         U1BP 0 1u
+X_U1B        U1BP U1BM P5VA M5VA GOUT OPAx196
+X_U1A        0 U1AO P5VA M5VA U1AO OPAx196
+R_R59        GOUT GATE 100
+* Gate load: six gates, socket and cable (SIM-19: about 50 pF)
+C_GATE       GATE 0 {cgate}
+* DC level of the gate used by the pixel stand-in: (1 + R5/R6) GATE_DC - (R5/R6) EXC_DC
+.PARAM vgdc={(1+1k/120k)*vgdac - vexc_dc*1k/120k}  vga={vexc_a/120}
+*
+* ---------------- Sensor: drain bias (U10) ----------------
+X_U10A       DAC2 U10AM P5VA M5VA U10AO OPAx196
+R_R23        DAC6 U10AM 100k
+R_R21        U10AO U10AM 10k
+R_R60        U10AO VSUP_A 1k
+C_C74        VSUP_A 0 10u
+R_R25        VSUP_A DRN_A {330k*(1+dra)}
+X_U10B       DAC3 U10BM P5VA M5VA U10BO OPAx196
+R_R29        DAC7 U10BM 100k
+R_R27        U10BO U10BM 10k
+R_R61        U10BO VSUP_B 1k
+C_C75        VSUP_B 0 10u
+R_R31        VSUP_B DRN_B {330k*(1+drb)}
+* TMUX1109 bank A on-path (U20 DA -> S1A, U21 DA -> S1A): RON, drain-side and source-side capacitance, leakage
+C_U20DA      DRN_A 0 {cmux}
+R_U20A       DRN_A PIX_D1 {ronmux}
+C_U21DA      DRN_B 0 {cmux}
+R_U21A       DRN_B PIX_D4 {ronmux}
+I_LKA        DRN_A 0 {ilk}
+I_LKB        DRN_B 0 {ilk}
+* Pixel stand-ins (active = side A, blind = side B): DC sink plus a gate-modulated part that gives vda/vdb pk across R_D
+* at the nominal gate amplitude, and the pixel/socket capacitance. AC sweep: acpix sets an AC drive current (V per 330 kOhm).
+G_PIXA       PIX_D1 0 VALUE {ida + (vda/330k)*(V(GATE)-vgdc)/vga}
+G_PIXB       PIX_D4 0 VALUE {idb + (vdb/330k)*(V(GATE)-vgdc)/vga}
+C_PIXA       PIX_D1 0 {cnode*(1+dca)}
+C_PIXB       PIX_D4 0 {cnode*(1+dcb)}
+* Drain test loops TP15/TP16 behind R90/R91 100 kOhm (probe capacitance only when cprobe > 0)
+R_R90        DRN_A TP15 100k
+C_TP15       TP15 0 {cprobe}
+R_R91        DRN_B TP16 100k
+C_TP16       TP16 0 {cprobe}
+*
+* ---------------- Sensor: heater drivers (U9) ----------------
+* U9A: DAC1 -> R24 15 Ohm shunt (IC3) -> HFB_A (TP19 "HTR_A") -> TMUX1109 bank B -> heater. Kelvin feedback R20/R22 at HFB_A.
+X_U9A        DAC1 U9AM P5VP M5VA HSH_A OPAx196
+R_R24        HSH_A HFB_A 15
+R_R20        HFB_A U9AM 49.9k
+R_R22        U9AM 0 49.9k
+R_U20B       HFB_A HPIX_A {ronh}
+R_HTRA       HPIX_A 0 {rhtr}
+C_HTRA       HPIX_A 0 {chtr}
+X_U9B        DAC0 U9BM P5VP M5VA HSH_B OPAx196
+R_R30        HSH_B HFB_B 15
+R_R26        HFB_B U9BM 49.9k
+R_R28        U9BM 0 49.9k
+R_U21B       HFB_B HPIX_B {ronh}
+R_HTRB       HPIX_B 0 {rhtr}
+C_HTRB       HPIX_B 0 {chtr}
+* INA190A1 stand-ins (G = 25, output 0..3.3 V), R68/R69 1 kOhm + C84/C86 100 nF. Note: IC3 (U9A side) drives HSENSE_B in the netlist.
+E_IC3        IC3O 0 VALUE {limit(25*(V(HSH_A)-V(HFB_A)),0,3.3)}
+R_R69        IC3O HSENSE_B 1k
+C_C86        HSENSE_B 0 100n
+E_IC1        IC1O 0 VALUE {limit(25*(V(HSH_B)-V(HFB_B)),0,3.3)}
+R_R68        IC1O HSENSE_A 1k
+C_C84        HSENSE_A 0 100n
+*
+* ---------------- Front end (U2, U3) ----------------
+* INA828 pin order IN+ IN- VCC VEE OUT REF RG+ RG-. Netlist: VIN+ (pin 3) = DRN_B, VIN- (pin 2) = DRN_A, REF = GND.
+X_U2         DRN_B DRN_A P5VA M5VA INA_OUT 0 RGP RGN INA828
+R_R10        RGP RGN 5.62k
+* Sallen-Key high-pass, K = 2
+C_C10        INA_OUT NC10 33n
+C_C11        NC10 U3AP 33n
+R_R13        U3AP 0 9.31k
+R_R9         NC10 HPF_OUT 9.31k
+X_U3A        U3AP U3AM P5VA M5VA HPF_OUT OPAx196
+R_R70        HPF_OUT U3AM 10k
+R_R71        U3AM 0 10k
+* Sallen-Key low-pass, K = 2
+R_R11        HPF_OUT NC9 9.31k
+R_R12        NC9 U3BP 9.31k
+C_C12        U3BP 0 33n
+C_C9         NC9 BPF_OUT 33n
+X_U3B        U3BP U3BM P5VA M5VA BPF_OUT OPAx196
+R_R72        BPF_OUT U3BM 10k
+R_R73        U3BM 0 10k
+*
+* ---------------- Demodulators (U24 TMUX6136 on +/-15 V, U26, U27) ----------------
+* SPDT_PREC pins S1 S2 D SEL VDD VSS. S1 (SEL low) = SxB = GND, S2 (SEL high) = SxA = BPF_OUT.
+X_U24A       0 BPF_OUT D1 REF_X P15V M15V SPDT_PREC PARAMS: RON=120 CS=4P CD=6P QINJ={qinj} TAU=30N ILK=0.5P
+X_U24B       0 BPF_OUT D2 REF_Y P15V M15V SPDT_PREC PARAMS: RON=120 CS=4P CD=6P QINJ={qinj} TAU=30N ILK=0.5P
+* X channel
+X_U26A       D1 U26AM P5VA M5VA X_DEM OPAx196
+R_R78        BPF_OUT U26AM 10k
+R_R79        U26AM X_DEM 10k
+R_R14        X_DEM NC13 200k
+R_R15        NC13 U26BP 200k
+C_C13        NC13 X_OUT {cpf}
+C_C15        U26BP 0 {cpf}
+X_U26B       U26BP U26BM P5VA M5VA X_OUT OPAx196
+R_R88        U26BM X_OUT 1m
+R_R89        U26BM 0 10k
+R_R80        X_OUT X_SMA 100
+R_LX         X_SMA 0 {rload}
+* Y channel
+X_U27A       D2 U27AM P5VA M5VA Y_DEM OPAx196
+R_R83        BPF_OUT U27AM 10k
+R_R84        U27AM Y_DEM 10k
+R_R16        Y_DEM NC14 200k
+R_R17        NC14 U27BP 200k
+C_C14        NC14 Y_OUT {cpf}
+C_C16        U27BP 0 {cpf}
+X_U27B       U27BP U27BM P5VA M5VA Y_OUT OPAx196
+R_R93        U27BM Y_OUT 1m
+R_R92        U27BM 0 10k
+R_R85        Y_OUT Y_SMA 100
+R_LY         Y_SMA 0 {rload}
+*
+.MODEL DSCHOTTKY D(IS=5u N=1.05 RS=0.08 CJO=100p BV=40 IBV=1m)
+* Supplies: v15 (J4, +/-), v5 / v5n (J5 + and - magnitudes), rsrc bench source resistance, u15/u5 = 1 rail present from t = 0,
+* 0 = ramps from 0 V at t15/t5 over tramp.
+.PARAM v15=15 v5=5.3 v5n=5.3 rsrc=10m u15=1 u5=1 t15=1m t5=1m tramp=5m
+* Excitation and references
+.PARAM f0=518 vexc_dc=1.65 vexc_a=0.3 pexc=0 acexc=0 t_slope=10n dly0=0 dly=0
+* Bias DAC channels: gate DC, drain coarse/fine (A, B), heaters (A = DAC1, B = DAC0). Heaters off by default.
+.PARAM vgdac=1.0 vdrc_a=2.4 vdrc_b=2.4 vdrf_a=0 vdrf_b=0 vh_a=0 vh_b=0
+* Sensor stand-in: DC drain currents, AC drain amplitude (pk, across R_D at the nominal gate amplitude), node capacitance and mismatch
+.PARAM ida=7.5u idb=7.5u vda=10m vdb=0 cnode=50p dca=0 dcb=0 dra=0 drb=0 ronmux=4.5 cmux=10p ilk=0 cprobe=0 cgate=50p
+* Heater path
+.PARAM ronh=4.5 rhtr=1200 chtr=100p
+* Demodulator and outputs
+.PARAM qinj=0.4P cpf=1.5u rload=1MEG
+.END

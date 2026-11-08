@@ -20,7 +20,7 @@ Single place for every simulation: what it must show, how it is set up, pass cri
 | SIM-1 | Analog quadrature oscillator transient | ngspice | Rev A oscillator | Obsolete (D-3) |
 | SIM-2 | System CMRR Monte-Carlo (50 000 trials, C_node = 20 pF) | Python | [§2.7](../schematics/documents/measurement_principles.md#27-common-mode-rejection) | Done; **re-run needed with C_node = 50–60 pF** (SIM-12) |
 | SIM-3 | CMRR SPICE cross-check (60 runs) | ngspice | §2.7 | Done |
-| SIM-4 | Band-pass tolerance Monte-Carlo (unity-gain SK, 4:1 ratios) | Python | [§2.8](../schematics/documents/measurement_principles.md#28-band-pass-filter-design) | Done; superseded by SIM-14 if the K = 2 band-pass is chosen |
+| SIM-4 | Band-pass tolerance Monte-Carlo (unity-gain SK, 4:1 ratios) | Python | [§2.8](../schematics/documents/measurement_principles.md#28-band-pass-filter-design) | Done; **deprecated** (2026-11-07): the K = 2 band-pass is used on LIA-AFE-Eval (E-1), see SIM-14 |
 | SIM-8 | Heater driver with Kelvin feedback driving 600 Ω (and 300 Ω): stability, headroom from +5VP | ngspice | AN-13, AN-14 | TODO (not decision-relevant for D-18) |
 | SIM-D1 | Discrete switch demodulator, topology check: ideal SPDT + OPA192, single 5 V, V_REF = 2.5 V, input 2 V pk at 517 Hz, phase swept 0–180° | PSpice (user, 2026-10-26) | Switch-demodulator principle ([§2.16](../schematics/documents/measurement_principles.md#216-switch-based-synchronous-demodulator)) | **Pass (topology).** X = 2.5 − 1.273·cos θ V, Y = 2.5 + 1.273·sin θ V, matching (2/π)·2 V = 1.273 V. Generic switch model, max() plotting; must be repeated with vendor models (SIM-10…SIM-13) |
 
@@ -48,6 +48,19 @@ Simulations marked **all** are run for every candidate still under consideration
 | SIM-18 | Power-up / sequencing | all (C: LM7705 + REF3325) | Ramp each rail in all orders (5 ms ramps), references off | No latch-up, no op-amp output stuck at a rail after all rails are up, demodulator recovers within 1 s |
 | SIM-19 | Excitation chain | all | DAC1 sample-and-hold source (128 samples/period, 12-bit quantization) → MFB stage (gain −1/120) → gate capacitance (3 pixels + socket ≈ 50 pF) | Gate amplitude 5.0 mVpp ± 1 %; THD ≤ 0.3 %; image at 66 kHz ≤ −40 dBc at the gate; phase lag at f₀ recorded (≈ 8°); A/B stage mismatch ≤ 0.2 % / 0.1° in Monte-Carlo |
 | SIM-20 | Drain bias difference amplifier | all | U10A: V_out = (1+k)·V_DAC2 − k·V_DAC6, k = 0.1, with 1 kΩ + 10 µF output filter, DAC noise source 100 nV/√Hz | Output range 0.5–3.5 V; noise at the drain node ≤ 50 nV/√Hz at f₀ (≤ 1 % of the shot-noise power) |
+
+### 7.2a LIA-AFE-Eval coverage (2026-11-07)
+
+LIA-AFE-Eval is fixed to FE-B (decision E-1 in [README.md](../schematics/LIA-AFE-Eval/docs/README.md)). For that board the FE-A and FE-C columns of this plan and the D-18 matrix of §7.4 are not required. They stay for LIA-Readout until D-18 is closed. The board runs of each requirement are these index entries in [simulation-index.md](simulation-index.md) (Batch 4). The board differs from the setups above in three ways: its post-filter is a Sallen-Key low-pass centred on 0 V (E-9), there is no ADC (SIM-13 ADC criteria do not apply), and the TMUX6136 runs on ±15 V.
+
+| SIM | Board entry | SIM | Board entry |
+|-----|-------------|-----|-------------|
+| SIM-8 | P-33 | SIM-15 | P-34 |
+| SIM-10, SIM-11 | P-28 | SIM-16 | P-30 |
+| SIM-12 | P-29 | SIM-17 | P-28 (zero-input offset); drift by datasheet worst case, not simulated |
+| SIM-13 | P-27, P-32 | SIM-18 | P-31 |
+| SIM-14 | P-25 | SIM-19 | P-26 |
+| — | P-23 (operating point), P-24 (front-end AC) | SIM-20 | P-33 |
 
 ### 7.3 Simulation Results (fill in)
 
