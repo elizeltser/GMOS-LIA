@@ -704,6 +704,50 @@ P-35 to P-43 are the proposals R-06 to R-14 of [design-review/2026-11-08_batch4.
 - **Expected:** BPF_OUT peak 39.571 x 0.1097 V = 4.34 V at the 110 mV step (measured drain 109.7 mV). The model clips at about 5.06 V (60 mV swing), which is a drain amplitude of 128 mV. Between 120 mV and 130 mV the peak stops growing linearly. The datasheet maximum swing (500 mV, 4.62 V, 117 mV drain) is not in the model. Pass: first clipping between 125 mV and 132 mV.
 - **Status:** planned.
 
+## Batch 6: gate filter with the NUCLEO-F303RE DAC (requested 8 November 2026)
+
+The user asked how well the gate filter (MFB U1B with R59 and the gate load) turns the stepped DAC sine of the NUCLEO-F303RE into a clean sine, including THD. The first NUCLEO of LIA-AFE-Eval is the NUCLEO-F303RE (requirements rev E, IF-2). Its DAC is 12-bit, with VREF+ tied to VDDA = 3.3 V on the NUCLEO. Circuit paths are relative to `simulations/ti-pspice/`. Expected values are from `docs/sim-results/scripts/P-44_expected.py` (closed form: exact DFT of the codes, zero-order hold, ideal MFB with R59 and 50 pF). Note: `firmware/firmware_requirements.md` describes the STM32U575 production firmware, not the F303. The sample count N = 128 is taken from it (FW table, "Samples per period"), as in P-26.
+
+### P-44 DAC staircase through the gate filter: waveform, THD and images
+
+- **Goal:** show how close the gate signal is to a pure sine for the F303 DAC staircase, and which part of the remaining distortion the filter can and cannot remove. Measure the gate amplitude, THD, THD+N to 20 kHz, the ZOH images and the residual from a fitted sine, for several sample counts, the 8-bit mode, the maximum amplitude, a realistic DAC output (settling, buffer off) and DAC code errors.
+- **Schematic:** `circuits/afe_eval.cir` (reference run with the ideal `SIN` source) and staircase copies written by `python circuits/gen_exc_stair.py --periods 32 --n <N> --bits <b> --amp <A> --out afe_eval_P44_<tag>.cir`. Realistic DAC (P44b): edited copies of the N = 128 file with an RC between the PWL source and EXC_DAC (`V_EXC` drives node `EXC_IDEAL`, `R_DAC EXC_IDEAL EXC_DAC 1k`, `C_DAC EXC_DAC 0 {tau/1k}`) for tau = 0.5 us and 1 us, and a buffer-off copy with `R_DAC` = 15 kOhm and no capacitor. STM32F303 DAC data assumed from the STM32F303xD/E datasheet (DocID026415, DAC table): settling 3 us typical and 4 us maximum for a full-scale step, buffer output range 0.2 V to VDDA - 0.2 V, DNL ±2 LSB, INL ±4 LSB, output impedance 15 kOhm with the buffer off. These values were not read from the PDF in this session (st.com did not respond), so they are marked not verified until the owner checks them.
+- **Parameters:** `.TRAN 0 60m 0 1u`, `.OPTIONS NUMDGT=8`, probes `V(EXC_DAC)`, `V(GOUT)`, `V(GATE)`. Window: the last 20 whole periods of 518 Hz before 30 T (19.305 ms to 57.915 ms). Runs:
+
+  | Run | Source | N | Bits | Amplitude (V pk at the DAC) | Other |
+  |---|---|---|---|---|---|
+  | P44_ref | `afe_eval.cir`, ideal SIN | — | — | 0.3 | numerical floor of the THD measurement |
+  | P44a_N32, N64, N128, N256 | staircase | 32, 64, 128, 256 | 12 | 0.3 (5 mVpp gate, AN-4) | |
+  | P44a_8b | staircase | 128 | 8 | 0.3 | DAC 8-bit mode |
+  | P44a_max | staircase | 128 | 12 | 1.2 (20 mVpp gate, firmware maximum) | |
+  | P44b_tau05, tau1 | staircase + RC | 128 | 12 | 0.3 | DAC settling |
+  | P44b_off | staircase + 15 kOhm | 128 | 12 | 0.3 | buffer off |
+  | P44c_ac | `afe_eval.cir`, acexc = 1 (edited copy) | — | — | — | `.AC DEC 100 10 1MEG`, probes `V(GATE)`, `V(EXC_DAC)` |
+
+  Analysis (script `docs/sim-results/scripts/P-44_analysis.py`): least-squares fit of DC and of k f0 for k = 1 to 20 and of the images at N f0 ± f0 and 2 N f0 ± f0 on a uniform 0.1 us grid over the window. THD = rss of h2 to h20 divided by h1. THD+N = rms of the gate minus DC and fundamental, after a 20 kHz brick-wall filter (FFT of the window), divided by the fundamental rms. Residual = rms of the gate minus DC and fundamental, without a filter. Plots: (1) one period of EXC_DAC scaled by -1/120 and of GATE minus DC, overlaid with the fitted sine, (2) the residual, (3) the line spectra of EXC_DAC and GATE in dBc, for N = 32 and N = 128. P44c: the code-error Monte Carlo of `P-44_expected.py` repeated with the measured H(f) of P44c_ac instead of the ideal MFB, 2000 boards.
+- **Expected (`P-44_expected.py`, ideal MFB):** |H(518 Hz)| = 1/119.93 V/V at +171.73 deg. Relative to 518 Hz the filter is flat (within 0.2 dB) up to 2.6 kHz (5th harmonic), -3.2 dB at 5.18 kHz, -20.4 dB at 16.06 kHz, -45.0 dB at 65.79 kHz and -57.1 dB at 132.1 kHz. So the filter removes the ZOH images but not the low harmonics.
+
+  | N | Bits | DAC amplitude | Gate amplitude | DAC image at (N-1) f0 | Gate image | THD (h2 to h20) | THD+N to 20 kHz | Residual |
+  |---|---|---|---|---|---|---|---|---|
+  | 32 | 12 | 0.3 V pk | 4.9936 mVpp | -29.83 dBc | -50.27 dBc | 0.066 % | 0.404 % | 7.19 uV rms |
+  | 64 | 12 | 0.3 V pk | 5.0000 mVpp | -35.99 dBc | -68.75 dBc | 0.034 % | 0.036 % | 1.09 uV rms |
+  | 128 | 12 | 0.3 V pk | 5.0015 mVpp | -42.08 dBc | -87.02 dBc | 0.031 % | 0.033 % | 0.59 uV rms |
+  | 256 | 12 | 0.3 V pk | 5.0023 mVpp | -48.13 dBc | -105.19 dBc | 0.020 % | 0.021 % | 0.38 uV rms |
+  | 128 | 8 | 0.3 V pk | 5.0156 mVpp | -42.08 dBc | -87.02 dBc | 0.609 % | 0.616 % | 10.93 uV rms |
+  | 128 | 12 | 1.2 V pk | 20.0077 mVpp | -42.08 dBc | -87.02 dBc | 0.007 % | 0.008 % | 0.70 uV rms |
+
+  The ideal 12-bit THD at N = 128 is set by the quantization error (0.320 LSB rms for these codes), which is periodic and appears as harmonics. P-26 measured 0.027 % for h2 to h10 with the same codes. DAC code errors (assumed model, not a datasheet shape: independent code errors uniform in ±1 LSB, so adjacent-code DNL stays within ±2 LSB, plus an INL bow or S-curve of 4 LSB peak) at N = 128 and 0.3 V pk: THD 0.087 % median and 0.120 % at the 95th percentile. At 1.2 V pk: 0.058 % and 0.088 %. A 4 LSB bow alone gives 0.036 % at 0.3 V pk and 0.072 % at 1.2 V pk. P44b: an RC of tau is linear, so it adds no harmonic. It delays the fundamental by 360 x 518 Hz x tau = 0.093 deg at 0.5 us and 0.186 deg at 1 us, and lowers the first image by 20 log10 |1 + j 2 pi (N-1) f0 tau| = -0.18 dB at 0.5 us. The buffer-off 15 kOhm adds to R6 = 120 kOhm, so the gate amplitude falls to 5.0 mVpp x 120 / 135 = 4.44 mVpp (-11 %) and the MFB response changes. The analyst computes the expected gain, phase and corner from the closed form with R6 = 135 kOhm and reports them.
+- **Pass:**
+  - P44_ref: the THD of the ideal SIN run is the numerical floor. It must be at least 10 dB below the expected staircase THD (below 0.010 % for N = 128). If not, the dispatcher tightens the solver options (RELTOL, VNTOL, maximum step) and records the change in `docs/simulation-quirks.md`.
+  - P44a: gate amplitude and the image within 1 % and 1 dB of the table, and THD within ±20 % of the table, or within the floor of P44_ref.
+  - Requirements: N = 128 at 12 bit meets gate THD at most 0.3 % (AN-7b via LIA-Readout), 5.0 mVpp within 1 % (AN-4) and image at most -80 dBc (P-26). The analyst states the same for every run, including the code-error Monte Carlo at the 95th percentile.
+  - P44b: phase shift within 0.02 deg and image change within 0.5 dB of the expected values. Buffer off: gate amplitude within 1 % of the closed form.
+  - P44c: the measured |H| within 0.5 dB of the ideal MFB up to 100 kHz. P-26 found the vendor MFB passes the 66 kHz image 4 dB more than the ideal, so above 100 kHz the measured H is used and the difference is reported.
+  - Settling: the fundamental amplitude differs by less than 0.01 % between the two halves of the window.
+- **Status:** done, 8 November 2026.
+- **Result:** Gate amplitude, phase, THD, settling, the RC runs and the buffer-off run pass. The gate image at N = 128 is -83.1 dBc and meets the -80 dBc requirement. Against the ideal-MFB entry values it fails the 1 dB limit at N = 64 to 256, 8 bit and 1.2 V, but it matches the closed form with the simulated MFB within 0.22 dB (feedthrough into a rising output impedance above 20 kHz, fitted values, as in P-26). The 8-bit mode fails the 0.3 % THD requirement (0.61 %). See [sim-results/P-44.md](ti-pspice/docs/sim-results/P-44.md).
+- **Grade:** A (Opus judge, 8 November 2026). All numbers reproduced by the script and checked independently (N = 128 gate 5.0019 mVpp, THD 0.0309 %, image -83.09 dBc, buffer off 4.4462 mVpp). The image FAILs are shown to be ideal-MFB expectation errors (GOUT output-stage feedthrough), and the EXC_DAC, window and floor differences are explained.
+
 ---
 
 ## Manual actions needed before the planned runs

@@ -343,3 +343,11 @@ Entry format: a short title, then **Symptom**, **Cause**, **Workaround** and **S
 - **Cause:** the closed-loop output impedance of the OPA2196 stage in U26B is inductive, L = 81.6 uH (0.531 Ohm at 1036 Hz). Above the corner, C13 passes the current V(X_DEM) / R14 into this output, so X_OUT = X_DEM(f) (H_post(f) + j w L / R14). The feedthrough gain is 2.56e-9 f, -111 dB at 1 kHz, rising 20 dB/decade. With this model the 2f0 ripple, the 4f0 ripple and the sidebands agree with the simulation within 0.05 dB. The lines are physical, not numerical.
 - **Workaround:** none needed for the sidebands. Use the feedthrough model of `docs/sim-results/scripts/P-34_interference.py` for any product of this entry, and do not compare such products with the ideal post-filter prediction.
 - **Source:** P34_ref, P34_f500, P34_f550 and P34_f1036, 8 November 2026, verified from the CSDF and the feedthrough model of the judge notes (the reference 2f0 ripple gives L, the other lines agree within 0.05 dB). The OPA2196 output impedance has not been checked against the datasheet.
+
+## Batch 6 circuits (P-44, staircase through the gate filter)
+
+### Runner stops with TimeoutExpired after the job has finished
+- **Symptom:** run P44a_N64 printed `subprocess.TimeoutExpired: ... pspice.exe -r P44a_N64.cir timed out after 10 seconds` from `tools/run_sim.py` at `proc.wait(10)`. The runner printed no status line, exited with code 1 and did not remove `sim-runs/.pspice.lock`. The `.out` had `Total job time (using Solver 1) = 868.24` and no ERROR line, and the `.csd` was complete.
+- **Cause:** `pspice.exe` did not exit within 10 s after the job ended. The runner calls `proc.wait(10)` without catching `subprocess.TimeoutExpired`, so the exception ends the script before its cleanup. The next run (P44a_N128) then took over the lock, because the lock PID was dead.
+- **Workaround:** check the `.out` for `Total job time` and for no ERROR line, and check that the `.csd` is complete. Then the result can be used. The runner should catch the exception, stop its own `pspice.exe` by handle, and release the lock (not done here, tools are not edited by the dispatcher).
+- **Source:** P44a_N64, 8 November 2026, verified from the traceback and the `.out`. The leftover-server state was checked only by the process list.
