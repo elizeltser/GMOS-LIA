@@ -5,7 +5,7 @@
 	(uuid "291126e2-3ad3-4399-9d69-93f406664930")
 	(paper "A4")
 	(title_block
-		(title "Front end FE-B: INA828 G = 9.90, Sallen-Key band-pass 518 Hz")
+		(title "Front end :G = 9.90, SK BPF 518 Hz")
 		(rev "0.1")
 		(comment 1 "LIA-AFE-Eval")
 	)

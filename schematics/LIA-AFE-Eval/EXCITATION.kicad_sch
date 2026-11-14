@@ -5,7 +5,7 @@
 	(uuid "ff19463e-fc06-4822-97a6-74505d9e2777")
 	(paper "A5")
 	(title_block
-		(title "Excitation: split-gate MFB summing stages (AN-3)")
+		(title "Excitation: split-gate MFB summing stages")
 		(rev "0.1")
 		(comment 1 "LIA-AFE-Eval")
 	)

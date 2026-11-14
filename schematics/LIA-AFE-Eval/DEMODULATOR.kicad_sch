@@ -5,7 +5,7 @@
 	(uuid "bf26664e-8a7d-4e0e-b498-8d7eb84da36d")
 	(paper "A4")
 	(title_block
-		(title "Demodulator (Demod_X, Demod_Y): TMUX6136 + OPA2196, gain ±1, post-filter -1.5, τ = 0.45 s")
+		(title "Demodulator : Gain ±1, Post-filter -1.5, τ = 0.45 s")
 		(rev "0.1")
 		(comment 1 "LIA-AFE-Eval")
 	)

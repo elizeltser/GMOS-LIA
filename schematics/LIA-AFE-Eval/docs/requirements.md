@@ -1,50 +1,31 @@
 # LIA-AFE-Eval — Requirements
 
-This file is the single source for the requirement IDs and target values of the evaluation board. Where a circuit is shared with the production board, the requirement points to the LIA-Readout requirement ([requirements.md](../../LIA-Readout/docs/requirements.md)) instead of copying its value. A reference such as "LIA-Readout AN-21" means that requirement, as it stands in that file. Decisions `E-n` are in [README.md §9.1](README.md#91-decision-log).
-
-**Status of each requirement:** `Agreed` = answered by the owner; `Proposed` = taken from LIA-Readout or suggested, still to be confirmed; `Open` = question in §R.9 not answered yet.
+This file is the single source for the requirement IDs and target values of the evaluation board. Where a circuit is shared with the production board, the requirement points to the LIA-Readout requirement ([requirements.md](../../LIA-Readout/docs/requirements.md)) instead of copying its value. A reference such as "LIA-Readout AN-21" means that requirement, as it stands in that file. 
 
 **Change log**
 
 | Rev | Date | Changes |
 |-----|------|---------|
-| A | 2026-10-29 | Initial set from the first requirements session (block 1: bench use and scope; block 2: power and I/O; block 3: signal chain; block 4: usability) |
-| B | 2026-10-29 | Carry-over requirements confirmed; low-drift drain path (AN-4a); control header pinout (IF-5); parts in [component_selection.md](component_selection.md) |
-| C | 2026-10-31 | `CHANGED`: post-filter is a Sallen-Key low-pass with optional gain, output centred on 0 V, VMID and VMID_PF removed (AN-7, AN-12, E-9) |
-| D | 2026-10-31 | `CHANGED`: drain-sense amplifiers removed, drain test loops through series resistors (IF-4, IF-5, AN-4a, E-10); one gate net and one gate drive (AN-3, AN-6, E-11) |
-| E | 2026-11-07 | `CHANGED`: two bench inputs (±15 V for the TMUX6136, ±5 V for the analog rails), no LDOs, bench voltage and power-up order (DC-1…DC-3, DC-5, E-12); one demodulator sheet with both channels on one TMUX6136 (AN-10, E-13) |
+| A | 2026-10-29 | Initial set from the first requirements session |
+| B | 2026-10-29 | Carry-over requirements confirmed; low-drift drain path, control header pinout,  parts in [component_selection.md](component_selection.md) |
+| C | 2026-10-31 | `CHANGED`: post-filter is a Sallen-Key low-pass with optional gain, output centred on 0 V, VMID and VMID_PF removed |
+| D | 2026-10-31 | `CHANGED`: drain-sense amplifiers removed, drain test loops through series resistors, one gate net and one gate drive |
+| E | 2026-11-07 | `CHANGED`: two bench inputs (±15 V for the TMUX6136, ±5 V for the analog rails), no LDOs, bench voltage and power-up order, one demodulator sheet with both channels on one TMUX6136 |
 
 ---
 
 ## R.0 Purpose and Scope
 
-| ID | Requirement | Status |
-|----|-------------|--------|
-| BU-1 | The board debugs the analog chain of LIA-Readout on the lab bench before the production board is built. Circuits shared with LIA-Readout are built the same way, so the results transfer | Agreed |
-| BU-2 | Front end FE-B only (E-1): ±5 V analog, INA828 in-amp, Sallen-Key band-pass, switch demodulator TMUX6136 + OPA2196, as defined for FE-B in LIA-Readout [schematic_overview §4.9](../../LIA-Readout/docs/schematic_overview.md#49-front-end-architecture-options-decision-d-18). No assembly variants | Agreed |
-| BU-3 | No MCU and no ADC on the board. An external NUCLEO board generates the excitation and references and controls the board (E-2) | Agreed |
-| BU-4 | No jumper-selectable signal sources. Every function has one fixed signal path | Agreed |
-| BU-5 | The board is comfortable to use on the bench: every stage observable with a scope probe, outputs on coaxial connectors, clear silkscreen labels | Agreed (details in R.8) |
+The board debugs the analog chain of LIA-Readout on the lab bench before the production board is built. Circuits shared with LIA-Readout are built the same way, so the results transfer. Analog circuit to de-modulate the measured signal consists of an instrumentation amplifier INA828, Sallen-Key BPF and a switch based demodulator implemented using a TMUX6136 and an OPA2196 op-amp. There is no ADC, DC circuitry or an MCU on the board. Sampling will be done by connecting a scope to the appropriate SMA connections on board. Digital controls of the on-board DAC will be using an external MCU (EVB) and a connector.
 
 ## R.1 DC (Power)
 
-| ID | Requirement | Status |
-|----|-------------|--------|
-| DC-1 | Analog rails positive and negative (±5 V analog for FE-B, E-4). TMUX6136 on its own ±15 V rail (E-12) | Agreed |
-| DC-2 | `CHANGED` Two dual lab supplies, each on a 3-pin terminal block (+V, GND, −V): J4 ±15 V (TMUX6136) and J5 ±5 V (analog rails and heaters). A series B5819W reverse-polarity diode in each input line. No regulators and no switching converters on the board (E-12) | Agreed |
-| DC-3 | `CHANGED` ±5VA from the J5 input through the diode and 1 Ω (R18, R19). J5 is set slightly above 5 V so that +5VA reads 5.0…5.2 V at TP3. Below 5.0 V the DAC80508 internal 2.5 V reference exceeds VDD/2 and trips the reference alarm. Above 5.5 V the DAC80508 and TMUX1109 leave their supply range. TMUX6136 supplied from J4 through the diode, with 1 µF at the pins and 10 µF + 100 nF at J4, VDD − VSS ≥ 10 V (SCDS397B §5.4; DI-01 in `simulations/design-issues.md`). Power-up order: J4 first, then J5. Power-down in reverse (E-12). Noise and regulation are those of the bench supplies | Agreed |
-| DC-4 | Digital parts (DAC80508 VDDIO, mux address logic) are supplied from the NUCLEO 3.3 V (E-4). Digital and analog grounds join at one point on the eval board | Agreed |
-| DC-5 | `CHANGED` Heater rail +5VP from the J5 input through its own 1 Ω (R32), so heater current does not flow in R18. Differs from LIA-Readout DC-4b (own LDO) (E-12) | Agreed |
+The boards supply DC will be an external lab-bench PSU. Board requires ±5V for the analog amplification chain and ±15V for the TMUX6136. Digital parts (DAC80508 VDDIO, mux address logic) are supplied from the NUCLEO 3.3 V. Digital and analog grounds join at one point on the eval board. Heater rail +5VP from the J5 input through its own 1Ω , so heater current does not flow.
 
 ## R.2 Interfaces
 
-| ID | Requirement | Status |
-|----|-------------|--------|
-| IF-1 | NUCLEO connection carries: excitation sine (MCU DAC output), X and Y references (timer outputs), SPI to the on-board DAC, mux address/enable lines, 3.3 V and GND | Agreed (signal list) |
-| IF-2 | The board does not depend on one NUCLEO model. It has one control header with a fixed pinout (IF-5), connected to the NUCLEO by a cable. The first NUCLEO is the **NUCLEO-F303RE** (STM32F303RET6; ST product page https://www.st.com/en/evaluation-tools/nucleo-f303re.html). Its pin mapping is a cable/firmware matter, not a board change. The excitation firmware on the F303 differs from the STM32U575 production firmware (no GPDMA) | Agreed |
-| IF-3 | X and Y demodulator outputs on SMA connectors for the scope, and on a header | Agreed |
-| IF-4 | Analog readback to NUCLEO ADC pins: heater current of both sides (INA190 as LIA-Readout AN-18). The drains have no continuous readback. They are checked once, at DC, at test loops TP15 and TP16 (E-10) | Agreed |
-| IF-5 | Control header: keyed 2 × 13 IDC box header, 2.54 mm, pinout in the table below. Ground wires sit next to the excitation and reference lines in the ribbon | Agreed |
+The MCU is responsible for generating the excitation sine, X and Y references (timer outputs), SPI to the on-board DAC, mux address/enable lines, 3.3 V and GND.
+The board does not depend on one NUCLEO model. It has one control header with a fixed pinout, connected to the NUCLEO by a cable. Readback to NUCLEO ADC pins of the heater current of both sides via INA190 is measured using the MCUs ADC.
 
 **IF-5 control header pinout** (ribbon wire n = pin n)
 

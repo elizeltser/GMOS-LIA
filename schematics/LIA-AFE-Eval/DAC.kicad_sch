@@ -5,7 +5,7 @@
 	(uuid "fe2b9acc-5053-492e-ad92-34c7794d2854")
 	(paper "A5")
 	(title_block
-		(title "Bias DAC: DAC80508 (AN-6)")
+		(title "Bias DAC: DAC80508")
 		(rev "0.1")
 		(comment 1 "LIA-AFE-Eval")
 	)
