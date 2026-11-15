@@ -71,7 +71,7 @@ DI-01 to DI-09 come from an external review of P-01 to P-07 on 27 October 2026. 
 ### DI-17 TMUX6136 SEL pins are driven above VDD + 0.3 V when the NUCLEO runs before J4
 
 - **Severity:** Critical (part outside its absolute rating, in an order that the owner's power rule does not cover).
-- **Evidence:** SCDS397B section 5.1: digital pins GND - 0.3 V to VDD + 0.3 V, ±30 mA. REF_X and REF_Y connect J7, TP8 or TP9 and U24 pins 1 and 9 with no resistor (P-31, KiCad netlist of commit 16ad253). P-31: SEL1 forward biases, the +15 V rail floats to 3.24 V, 32 uC flow (the 2.45 A peak is the 1 Ohm placeholder). Estimate with a 25 Ohm MCU output resistance (assumed): 108 mA, 3.6 times the rating (batch 4 review F-01, calc1).
+- **Evidence:** SCDS397B section 5.1: digital pins GND - 0.3 V to VDD + 0.3 V, ±30 mA. REF_X and REF_Y connect J7, TP7 or TP8 and U24 pins 1 and 9 with no resistor (P-31, KiCad netlist of commit 16ad253). P-31: SEL1 forward biases, the +15 V rail floats to 3.24 V, 32 uC flow (the 2.45 A peak is the 1 Ohm placeholder). Estimate with a 25 Ohm MCU output resistance (assumed): 108 mA, 3.6 times the rating (batch 4 review F-01, calc1).
 - **Recommendation:** 1 kOhm in series at U24 pins 1 and 9 (peak 2.6 mA, edge delay 9.5 ns, 0.0018 deg, equal in X and Y). Firmware and procedure rule: references off until J4 is on and stopped before J4 is switched off. Test R-06.
 - **Status:** open.
 
@@ -86,7 +86,7 @@ DI-01 to DI-09 come from an external review of P-01 to P-07 on 27 October 2026. 
 
 - **Severity:** Major at 1 mV to 10 mV drain signal, Minor at 50 mV (Draft threshold 0.1 % or 1 deg). Targets for accuracy and resolution are TBD.
 - **Evidence:** offset at X_OUT 125 uV RSS typical, 0.5 mV RSS and 0.91 mV worst case at the maximum Vos (36 uV at the drain, 54 times the drain noise). It is 0.36 % of the output at 10 mV drain and gives 0.21 deg, at 1 mV drain 3.6 % and 2.1 deg. Common gain std 7.0 % (C 5 %) and 1.41 % (C 1 %), common phase std 3.36 deg and 0.68 deg (P-25). Drift 2.5 uV/K RSS to 4.5 uV/K worst case against 17 uV noise.
-- **Recommendation:** the procedure of review section 5: a zero reading with the references and excitation running, an 8-point excitation phase sweep with an ellipse fit (offset 2 uV, gain ratio 16 ppm, orthogonality 0.001 deg), and a gain reading with a known tone at TP15. Tests R-10 (simulation) and R-11 (bench).
+- **Recommendation:** the procedure of review section 5: a zero reading with the references and excitation running, an 8-point excitation phase sweep with an ellipse fit (offset 2 uV, gain ratio 16 ppm, orthogonality 0.001 deg), and a gain reading with a known tone at TP14. Tests R-10 (simulation) and R-11 (bench).
 - **Status:** open.
 
 ### DI-20 Drain supply window against 7.5 uA through 330 kOhm and the TMUX1109 range

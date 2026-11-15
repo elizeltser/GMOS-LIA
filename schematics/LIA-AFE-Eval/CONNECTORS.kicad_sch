@@ -2079,34 +2079,22 @@
 		(uuid "cd2e8007-1f2b-5dac-a182-99c0ff2d4ac4")
 	)
 	(junction
-		(at 46.99 73.66)
+		(at 27.94 45.72)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "06849ec9-5166-4761-bca1-b5cf21e7450e")
+		(uuid "0d783202-8ac0-462c-848c-23f122265dd5")
 	)
 	(junction
-		(at 88.9 50.8)
+		(at 62.23 58.42)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "14e4e735-2f1f-4bcd-9a7a-c3559c1790a5")
-	)
-	(junction
-		(at 46.99 53.34)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1fc55336-b3d7-44e9-8800-42a42e6753cd")
+		(uuid "1498f77b-dc5b-4b58-9f52-47a17c866ff2")
 	)
 	(junction
 		(at 81.28 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "255a47f1-c3c2-46a9-a71b-f3a691ca0a82")
-	)
-	(junction
-		(at 71.12 45.72)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3127bae6-d23e-4973-babb-3e63437b8c78")
 	)
 	(junction
 		(at 115.57 43.18)
@@ -2121,34 +2109,28 @@
 		(uuid "386f7eab-0066-4d59-a8d7-1096748d4306")
 	)
 	(junction
-		(at 46.99 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5888a395-0577-4f46-ab3a-943b8a46ac8c")
-	)
-	(junction
-		(at 80.01 48.26)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5b856bec-427c-48f8-8cc6-4ed4971ef406")
-	)
-	(junction
 		(at 115.57 53.34)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "62070954-04e2-4ea8-8083-ad06857311e2")
 	)
 	(junction
-		(at 46.99 48.26)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6a4bf932-3556-425e-b469-e22630b84062")
-	)
-	(junction
 		(at 62.23 73.66)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6ddc8746-8265-4b02-b7d2-5bb4a090a621")
+	)
+	(junction
+		(at 43.18 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "29ab9d76-437e-4ffa-99fc-16045f109a8f")
+	)
+	(junction
+		(at 36.83 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7c7ca161-b69c-4e68-9780-19280a45e7f0")
 	)
 	(junction
 		(at 146.05 77.47)
@@ -2163,10 +2145,28 @@
 		(uuid "91589c68-bc8a-443c-981a-3098b88f8674")
 	)
 	(junction
+		(at 62.23 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "940c3ede-3fdf-427d-b1d1-c6bb1e0af7da")
+	)
+	(junction
 		(at 46.99 80.01)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a353c53c-33ef-4e70-87b1-cdc5f21eea2f")
+		(uuid "7af5d933-b4b2-4ef6-91a3-327cc40c47a1")
+	)
+	(junction
+		(at 62.23 53.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e7bc667d-dd50-4c83-b405-d1f7375e9605")
+	)
+	(junction
+		(at 62.23 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f0df25af-15e4-4607-b18f-c217a974bb9a")
 	)
 	(no_connect
 		(at 60.96 68.58)
@@ -2179,16 +2179,6 @@
 	(no_connect
 		(at 144.78 80.01)
 		(uuid "59315a0a-d7a9-40fe-a8f6-7be58e9b1e11")
-	)
-	(wire
-		(pts
-			(xy 80.01 48.26) (xy 91.44 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0182ff1d-e046-4803-8294-e76c152c94e2")
 	)
 	(wire
 		(pts
@@ -2208,7 +2198,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "045a71be-dcc4-4c59-bc08-4b03ca961748")
+		(uuid "cd098a0d-2963-450a-9328-4892ecaa488f")
 	)
 	(wire
 		(pts
@@ -2222,7 +2212,17 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 53.34) (xy 66.04 53.34)
+			(xy 36.83 45.72) (xy 43.18 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07b2c378-5e4a-4b7b-8731-1f082271f2fc")
+	)
+	(wire
+		(pts
+			(xy 60.96 53.34) (xy 62.23 53.34)
 		)
 		(stroke
 			(width 0)
@@ -2232,13 +2232,13 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 45.72) (xy 46.99 48.26)
+			(xy 43.18 48.26) (xy 48.26 48.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "138aa74c-2121-4f04-9713-b4ae169a8f6a")
+		(uuid "19beb472-fd25-46f1-b461-36bdcc452c1c")
 	)
 	(wire
 		(pts
@@ -2252,6 +2252,16 @@
 	)
 	(wire
 		(pts
+			(xy 62.23 45.72) (xy 62.23 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1f085f28-55d1-46d2-8b87-f2a8e6521297")
+	)
+	(wire
+		(pts
 			(xy 144.78 74.93) (xy 149.86 74.93)
 		)
 		(stroke
@@ -2259,16 +2269,6 @@
 			(type default)
 		)
 		(uuid "215e9427-def0-5233-b735-9e75fbb84af2")
-	)
-	(wire
-		(pts
-			(xy 60.96 45.72) (xy 71.12 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2538ca57-f721-4c5e-9d5c-ea32d3c2a676")
 	)
 	(wire
 		(pts
@@ -2289,6 +2289,16 @@
 			(type default)
 		)
 		(uuid "2dfe6185-cdb9-518b-9463-6ffee02eee6d")
+	)
+	(wire
+		(pts
+			(xy 34.29 48.26) (xy 43.18 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e0e7949-f664-4340-851c-444b5983c486")
 	)
 	(wire
 		(pts
@@ -2322,13 +2332,13 @@
 	)
 	(wire
 		(pts
-			(xy 48.26 53.34) (xy 46.99 53.34)
+			(xy 25.4 45.72) (xy 27.94 45.72)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4242303d-c8f1-591b-b4f5-fd48fcf028f1")
+		(uuid "41b98ab4-394e-48e7-af69-ab6f3693e24a")
 	)
 	(wire
 		(pts
@@ -2342,6 +2352,16 @@
 	)
 	(wire
 		(pts
+			(xy 34.29 50.8) (xy 36.83 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48c06d48-d9d6-4991-b670-2e81cedad964")
+	)
+	(wire
+		(pts
 			(xy 43.18 58.42) (xy 48.26 58.42)
 		)
 		(stroke
@@ -2352,13 +2372,23 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 44.45) (xy 80.01 48.26)
+			(xy 43.18 53.34) (xy 48.26 53.34)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4f03a1fc-333e-4b57-84ab-7a6395e0f7f7")
+		(uuid "4dc1bc14-23c4-4e71-9fac-d7fc3f4e6ab5")
+	)
+	(wire
+		(pts
+			(xy 43.18 45.72) (xy 48.26 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e797b62-d1d2-4a79-b48d-e0173278d362")
 	)
 	(wire
 		(pts
@@ -2412,16 +2442,6 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 45.72) (xy 91.44 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "678b61f8-ff82-48db-9ea0-0ca663bc005a")
-	)
-	(wire
-		(pts
 			(xy 81.28 76.2) (xy 91.44 76.2)
 		)
 		(stroke
@@ -2438,17 +2458,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6aeb95d7-cd5f-5483-86b3-4e6032441e90")
-	)
-	(wire
-		(pts
-			(xy 46.99 48.26) (xy 46.99 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "748431ea-566e-4a4f-9607-db1caa413396")
+		(uuid "74f671a9-b4f8-4c42-b5a5-1e22ce8fbdb6")
 	)
 	(wire
 		(pts
@@ -2469,16 +2479,6 @@
 			(type default)
 		)
 		(uuid "7c7ae13e-6877-4347-8818-0d4819d2b3c8")
-	)
-	(wire
-		(pts
-			(xy 46.99 53.34) (xy 46.99 73.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7ebd9f5b-0238-43c4-afb7-e8365c24437f")
 	)
 	(wire
 		(pts
@@ -2522,36 +2522,6 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 50.8) (xy 46.99 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8832eb48-be4e-4121-87e0-bcd1b64d4edb")
-	)
-	(wire
-		(pts
-			(xy 71.12 44.45) (xy 71.12 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "924bd958-5505-5c82-8338-4665be2ba332")
-	)
-	(wire
-		(pts
-			(xy 48.26 50.8) (xy 46.99 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "944b60d2-f189-54c7-8915-4b3bfecba0e3")
-	)
-	(wire
-		(pts
 			(xy 60.96 71.12) (xy 66.04 71.12)
 		)
 		(stroke
@@ -2592,16 +2562,6 @@
 	)
 	(wire
 		(pts
-			(xy 48.26 45.72) (xy 46.99 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aceb4153-979e-51d8-a052-9ea510fb1670")
-	)
-	(wire
-		(pts
 			(xy 172.72 43.18) (xy 170.18 43.18)
 		)
 		(stroke
@@ -2609,6 +2569,16 @@
 			(type default)
 		)
 		(uuid "b1abc1ed-18e7-5fd0-ac26-29699ad0423f")
+	)
+	(wire
+		(pts
+			(xy 27.94 45.72) (xy 36.83 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b26353f8-8394-4fb0-a53e-97e96fecd10f")
 	)
 	(wire
 		(pts
@@ -2632,16 +2602,6 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 48.26) (xy 48.26 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bbbd580c-f68b-4dd3-b1c3-9c5a3717dcd2")
-	)
-	(wire
-		(pts
 			(xy 43.18 71.12) (xy 48.26 71.12)
 		)
 		(stroke
@@ -2652,6 +2612,16 @@
 	)
 	(wire
 		(pts
+			(xy 62.23 48.26) (xy 62.23 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c47af9b9-58f5-4290-b529-50709509214c")
+	)
+	(wire
+		(pts
 			(xy 60.96 76.2) (xy 81.28 76.2)
 		)
 		(stroke
@@ -2659,26 +2629,6 @@
 			(type default)
 		)
 		(uuid "c48f80d4-5f55-4052-84d3-c2597f4dbb64")
-	)
-	(wire
-		(pts
-			(xy 60.96 50.8) (xy 88.9 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c589b218-166f-4666-bf5e-f81f532ea897")
-	)
-	(wire
-		(pts
-			(xy 88.9 44.45) (xy 88.9 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c95c30a1-0488-445b-bb44-2cbc5c613c15")
 	)
 	(wire
 		(pts
@@ -2699,6 +2649,16 @@
 			(type default)
 		)
 		(uuid "ce897199-22dd-471d-a22b-3ce7f74d5904")
+	)
+	(wire
+		(pts
+			(xy 62.23 53.34) (xy 62.23 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d03ab10f-f28a-4f97-b2ea-38f584a4e10f")
 	)
 	(wire
 		(pts
@@ -2732,13 +2692,23 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 48.26) (xy 80.01 48.26)
+			(xy 60.96 48.26) (xy 62.23 48.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "dd190764-3ae3-4026-8680-09d0d04254a1")
+	)
+	(wire
+		(pts
+			(xy 60.96 50.8) (xy 62.23 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "de6d565d-ae6a-43c0-acfe-7d49726d7f02")
 	)
 	(wire
 		(pts
@@ -2772,6 +2742,16 @@
 	)
 	(wire
 		(pts
+			(xy 62.23 50.8) (xy 62.23 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e4bd947c-de00-4a26-b0bc-803f2a1095c4")
+	)
+	(wire
+		(pts
 			(xy 146.05 77.47) (xy 144.78 77.47)
 		)
 		(stroke
@@ -2782,16 +2762,6 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 50.8) (xy 91.44 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ece07199-8102-4dc8-a95a-8914aabfe717")
-	)
-	(wire
-		(pts
 			(xy 146.05 72.39) (xy 146.05 77.47)
 		)
 		(stroke
@@ -2799,6 +2769,26 @@
 			(type default)
 		)
 		(uuid "ee50e217-ded0-48c6-8b70-df2a790c1bcb")
+	)
+	(wire
+		(pts
+			(xy 36.83 50.8) (xy 48.26 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eeee9e64-2794-4f7c-8480-d5ac82b5110a")
+	)
+	(wire
+		(pts
+			(xy 60.96 45.72) (xy 62.23 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f96dba10-5a0c-4d11-a4ca-9a684bd57d15")
 	)
 	(wire
 		(pts
@@ -2872,27 +2862,16 @@
 		)
 		(uuid "09f10b9b-28c8-517e-8be2-aebfd3618a6b")
 	)
-	(hierarchical_label "REF_Y"
+	(hierarchical_label "SPI_SCLK"
 		(shape output)
-		(at 91.44 50.8 0)
+		(at 43.18 53.34 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
-		(uuid "0d09519f-faea-5fb7-af50-b1e1109cd895")
-	)
-	(hierarchical_label "EXC_DAC"
-		(shape output)
-		(at 91.44 45.72 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "2a3e87af-247d-558d-85d0-abe59df8a587")
+		(uuid "33936892-0f5a-470c-ba95-9b40ac20a488")
 	)
 	(hierarchical_label "Y_SMA"
 		(shape input)
@@ -2938,6 +2917,28 @@
 		)
 		(uuid "77375666-479b-50ed-9102-1df4d708cff9")
 	)
+	(hierarchical_label "REF_X"
+		(shape output)
+		(at 34.29 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "781496d5-6c96-4f12-8830-81c609ffd0b1")
+	)
+	(hierarchical_label "REF_Y"
+		(shape output)
+		(at 34.29 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "88adbc06-2a37-4173-99ec-dc3e008c1600")
+	)
 	(hierarchical_label "SPI_MOSI"
 		(shape output)
 		(at 43.18 55.88 180)
@@ -2959,17 +2960,6 @@
 			(justify left)
 		)
 		(uuid "98e6aa34-49ae-5302-b613-149f960141be")
-	)
-	(hierarchical_label "REF_X"
-		(shape output)
-		(at 91.44 48.26 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "9926ca2f-cd75-5744-8a6b-17124193f0f3")
 	)
 	(hierarchical_label "X_SMA"
 		(shape input)
@@ -3026,16 +3016,16 @@
 		)
 		(uuid "c3aea0c1-75ed-5735-a2d9-273820143241")
 	)
-	(hierarchical_label "SPI_SCLK"
+	(hierarchical_label "EXC_DAC"
 		(shape output)
-		(at 66.04 53.34 0)
+		(at 25.4 45.72 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
-		(uuid "cafb9aaa-671f-51eb-9f21-48d163c0d67a")
+		(uuid "c9a56ecf-6fd5-498c-901e-74abfc50b1b2")
 	)
 	(hierarchical_label "MUX_EN"
 		(shape output)
@@ -3231,7 +3221,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "10d5637f-499b-560c-924d-b67558c9989c")
-		(property "Reference" "TP31"
+		(property "Reference" "TP30"
 			(at 172.974 84.836 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3312,7 +3302,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP31")
+					(reference "TP30")
 					(unit 1)
 				)
 			)
@@ -3491,7 +3481,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "32eeb630-ef83-5e88-8356-c26bddfb32d7")
-		(property "Reference" "TP32"
+		(property "Reference" "TP31"
 			(at 172.974 72.136 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3572,7 +3562,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP32")
+					(reference "TP31")
 					(unit 1)
 				)
 			)
@@ -3589,7 +3579,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "3ff7023d-9d50-5eb3-999f-388bee6bbc6c")
-		(property "Reference" "TP10"
+		(property "Reference" "TP9"
 			(at 101.6 69.342 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3670,7 +3660,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP10")
+					(reference "TP9")
 					(unit 1)
 				)
 			)
@@ -4175,6 +4165,104 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
+		(at 27.94 45.72 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "80158e87-13bb-4c90-ad2a-63466e9f5cfa")
+		(property "Reference" "TP6"
+			(at 27.94 38.862 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "EXC_DAC"
+			(at 27.94 40.64 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 27.94 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 27.94 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 27.94 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "Keystone 5000"
+			(at 27.94 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5199900"
+			(at 27.94 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4cc51884-1237-488c-a3a9-3c55cd16b70b")
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
+					(reference "TP6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
 		(at 109.22 76.2 0)
 		(unit 1)
 		(body_style 1)
@@ -4184,7 +4272,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "8e8b0ab8-2ddd-5046-ab63-4bc4edbb88c1")
-		(property "Reference" "TP11"
+		(property "Reference" "TP10"
 			(at 109.22 69.342 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4265,7 +4353,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP11")
+					(reference "TP10")
 					(unit 1)
 				)
 			)
@@ -4684,6 +4772,104 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 43.18 48.26 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b3147d2e-4e57-4e51-829d-3447a897bcab")
+		(property "Reference" "TP7"
+			(at 43.18 41.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "REF_X"
+			(at 43.18 43.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 43.18 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 43.18 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 43.18 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "Keystone 5000"
+			(at 43.18 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5199900"
+			(at 43.18 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e7888c1c-0633-4f3b-ad95-c6c26ddb52a1")
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
+					(reference "TP7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 27.94 73.66 0)
 		(unit 1)
@@ -4838,202 +5024,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 88.9 44.45 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c4b887ff-08ee-5bf5-99e8-0a32f71aac79")
-		(property "Reference" "TP9"
-			(at 88.9 37.592 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "REF_Y"
-			(at 88.9 39.37 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
-			(at 88.9 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 88.9 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 88.9 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "Keystone 5000"
-			(at 88.9 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C5199900"
-			(at 88.9 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5280c52d-9c7d-5947-8388-ef6c5edc28c3")
-		)
-		(instances
-			(project "LIA-AFE-Eval"
-				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 71.12 44.45 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ca505bc6-1298-577c-a1dd-b8bdae3bcbde")
-		(property "Reference" "TP7"
-			(at 71.12 37.592 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "EXC_DAC"
-			(at 71.12 39.37 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
-			(at 71.12 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 71.12 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 71.12 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "Keystone 5000"
-			(at 71.12 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C5199900"
-			(at 71.12 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "2958c810-00f5-5a71-875d-c69b012f99b0")
-		)
-		(instances
-			(project "LIA-AFE-Eval"
-				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 115.57 54.61 0)
 		(unit 1)
@@ -5105,6 +5095,104 @@
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
 					(reference "#PWRCON0120")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 36.83 50.8 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d913e7a4-1526-40bf-a18f-b3351974b173")
+		(property "Reference" "TP8"
+			(at 36.83 43.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "REF_Y"
+			(at 36.83 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 36.83 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 36.83 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "Keystone 5000"
+			(at 36.83 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5199900"
+			(at 36.83 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d34e41b6-b9f9-40fc-ab1b-1209c5b2b828")
+		)
+		(instances
+			(project "LIA-AFE-Eval"
+				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
+					(reference "TP8")
 					(unit 1)
 				)
 			)
@@ -5386,104 +5474,6 @@
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
 					(reference "C65")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 80.01 44.45 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f7949e6b-9b53-5e80-9023-bf50a5d81543")
-		(property "Reference" "TP8"
-			(at 80.01 37.592 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "REF_X"
-			(at 80.01 39.37 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
-			(at 80.01 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 80.01 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 80.01 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "Keystone 5000"
-			(at 80.01 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C5199900"
-			(at 80.01 44.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "831b3368-3f52-520f-964e-4ac06d77514d")
-		)
-		(instances
-			(project "LIA-AFE-Eval"
-				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/07bda73c-62ca-4762-9cba-aa1a4b43b0eb"
-					(reference "TP8")
 					(unit 1)
 				)
 			)

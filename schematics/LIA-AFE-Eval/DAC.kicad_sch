@@ -1319,7 +1319,7 @@
 	)
 	(hierarchical_label "DAC1"
 		(shape output)
-		(at 132.08 53.34 0)
+		(at 132.08 50.8 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1341,7 +1341,7 @@
 	)
 	(hierarchical_label "DAC0"
 		(shape output)
-		(at 132.08 50.8 0)
+		(at 132.08 53.34 0)
 		(effects
 			(font
 				(size 1.27 1.27)

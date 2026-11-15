@@ -14,14 +14,14 @@ absent C80
 absent C81
 nc J7.19
 nc J7.20
-between R90 TP15.1 @DRN_A
-between R91 TP16.1 @DRN_B
+between R90 TP14.1 @DRN_A
+between R91 TP15.1 @DRN_B
 value R90 100k
 value R91 100k
 field R90 TCR 10ppm
 field R91 TCR 10ppm
-diff TP15.1 U20:DA
-diff TP16.1 U21:DA
+diff TP14.1 U20:DA
+diff TP15.1 U21:DA
 
 # --- One gate chain (E-11) ---
 absent R1

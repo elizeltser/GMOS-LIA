@@ -10,7 +10,7 @@ Rules applied: thin-film 0.1 % resistors wherever a ratio or a DC level matters;
 |------|-------|------------------|--------|
 | DAC80508ZRTET (C2863226) | 140 | 1 | Order or reserve early; USD 22.18, the most expensive part |
 | TMUX6136PWR (C2673380) | 145 | 2 | Order or reserve early |
-| TMUX1109RSVR (C2673348) | 209 | 2 | TSSOP version (TMUX1109PWR) has 1 piece left, so the UQFN-16 (1.8 × 2.6 mm, 0.4 mm pitch) version is used (E-6). Hard to rework by hand |
+| TMUX1109PWR (TSSOP-16) | LCSC 1 (2026-10-29); DigiKey 4429, Mouser 1882 (2026-11-14) | 2 | Sourced from DigiKey or Mouser, or consigned (E-14). UQFN-16 TMUX1109RSVR (C2673348) is the fallback |
 | DC3-2.54-26PAL (C5156669) | 91 | 1 | Fallback: straight 2 × 13 pin header C2894974 (3375 in stock, not keyed) |
 
 ## C.2 Power (sheet Power)
@@ -59,14 +59,14 @@ All resistors in the drain path are thin film, 0.1 %, ±10 ppm/°C (AN-4a).
 
 | Function | Part | LCSC | Stock | Qty | Notes |
 |----------|------|------|-------|-----|-------|
-| Pixel selection | TMUX1109RSVR | C2673348 | 209 | 2 | E-6 |
+| Pixel selection | TMUX1109PWR (TSSOP-16) | — | see C.1 | 2 | E-14 |
 | R_D 330 kΩ | Yageo RT0603BRB07330KL (±10 ppm) | C860332 | 2194 | 2 | Matched pair from one reel |
 | Drain supply op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | Difference amplifier, both sides |
 | R_F 10.0 kΩ | RESI PTFR0603B10K0N9 (±10 ppm) | C394535 | 231 492 | 2 | Same family as R_G (ratio k) |
 | R_G 100 kΩ | RESI PTFR0603B100KN9 (±10 ppm) | C394537 | 91 075 | 2 | |
 | Output filter 1 kΩ | RESI PTFR0603B1K00N9 (±10 ppm) | C394536 | 187 487 | 2 | In series with R_D; + 10 µF X7R to GND |
 | R_CAL 18.0 kΩ | RESI PTFR0603B18K0N9 (±10 ppm) | C2692864 | 2749 | 2 | Calibration position |
-| Drain test resistors R90, R91 100 kΩ | RESI PTFR0603B100KN9 (±10 ppm) | C394537 | 91 075 | 2 | In series with TP15, TP16 (E-10). `ASSUMPTION`: value to be confirmed |
+| Drain test resistors R90, R91 100 kΩ | RESI PTFR0603B100KN9 (±10 ppm) | C394537 | 91 075 | 2 | In series with TP14, TP15 (E-10). `ASSUMPTION`: value to be confirmed |
 | Heater driver op-amp | OPA2196IDGKR | C2057920 | 759 | 1 | On +5VP |
 | Heater gain resistors 49.9 kΩ 0.1 % | Yageo RT0603BRD0749K9L | C705780 | 209 908 | 4 | Replaces the non-standard 50 kΩ of LIA-Readout; gain stays exactly 2 |
 | Heater shunt 15 Ω 0.1 % | Yageo RT0603BRD0715RL | C705727 | 11 292 | 2 | |

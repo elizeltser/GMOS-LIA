@@ -1997,12 +1997,6 @@
 		(uuid "3a17a447-d9c4-4008-b974-b1e67b2ea29a")
 	)
 	(junction
-		(at 36.83 49.53)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3a17caee-598f-48dd-921e-c3f14eb82b86")
-	)
-	(junction
 		(at 85.09 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2608,16 +2602,6 @@
 	)
 	(wire
 		(pts
-			(xy 36.83 49.53) (xy 36.83 52.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ae42269a-bc59-4e82-a3e3-43082a9ad08b")
-	)
-	(wire
-		(pts
 			(xy 59.69 76.2) (xy 59.69 78.74)
 		)
 		(stroke
@@ -2848,16 +2832,6 @@
 	)
 	(wire
 		(pts
-			(xy 36.83 49.53) (xy 39.37 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e220d2bd-23d6-4a44-ae69-f9c9402273f9")
-	)
-	(wire
-		(pts
 			(xy 68.58 107.95) (xy 59.69 107.95)
 		)
 		(stroke
@@ -2908,7 +2882,7 @@
 	)
 	(wire
 		(pts
-			(xy 36.83 36.83) (xy 36.83 49.53)
+			(xy 36.83 36.83) (xy 36.83 52.07)
 		)
 		(stroke
 			(width 0)
@@ -4885,7 +4859,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "75e7aaab-8d62-4142-921b-df5d6b167d92")
-		(property "Reference" "TP25"
+		(property "Reference" "TP24"
 			(at 75.438 102.87 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4966,7 +4940,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/05d6826f-3646-4dc5-9fc6-d63813af7e35"
-					(reference "TP25")
+					(reference "TP24")
 					(unit 1)
 				)
 			)
@@ -4983,7 +4957,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "782fc630-9201-402d-85dc-00ee50531da9")
-		(property "Reference" "TP33"
+		(property "Reference" "TP32"
 			(at 75.438 107.95 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5064,7 +5038,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/05d6826f-3646-4dc5-9fc6-d63813af7e35"
-					(reference "TP33")
+					(reference "TP32")
 					(unit 1)
 				)
 			)
@@ -5266,104 +5240,6 @@
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/05d6826f-3646-4dc5-9fc6-d63813af7e35"
 					(reference "TP4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 39.37 49.53 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "88f68db1-6bab-5c39-8219-9318f6b414f7")
-		(property "Reference" "TP6"
-			(at 46.228 49.53 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 46.482 51.308 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
-			(at 39.37 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 39.37 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 39.37 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "Keystone 5001"
-			(at 39.37 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C238122"
-			(at 39.37 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "88bca329-8bc0-5732-a3f6-92485c621fd1")
-		)
-		(instances
-			(project "LIA-AFE-Eval"
-				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/05d6826f-3646-4dc5-9fc6-d63813af7e35"
-					(reference "TP6")
 					(unit 1)
 				)
 			)
@@ -6305,7 +6181,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "c2b8e57b-9952-4343-94c1-34ade591fa27")
-		(property "Reference" "TP13"
+		(property "Reference" "TP12"
 			(at 46.228 88.9 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6386,7 +6262,7 @@
 		(instances
 			(project "LIA-AFE-Eval"
 				(path "/871a649e-bf1f-4d79-9e39-83e1c860c62d/05d6826f-3646-4dc5-9fc6-d63813af7e35"
-					(reference "TP13")
+					(reference "TP12")
 					(unit 1)
 				)
 			)
